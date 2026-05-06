@@ -40,7 +40,10 @@ Information about WCAG compliance and accessibility features.
 
 ## How to Contact Us
 
-- (No contact details configured yet.)
+- Email: academy@hoshen-success.com
+- Phone: +972508804568
+- Phone (tel): tel:+972508804568
+- Address: שדרות נים 2, קניון עזריאלי ראשונים, ראשון לציון, מרכז, 7546302, ישראל
 
 ### Contact form
 - URL: https://example.com/contact
