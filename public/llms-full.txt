@@ -65,7 +65,7 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 
 
 
-צור קשר
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: rgb(255, 209, 102) !important; color: rgb(241, 193, 80) !important; background-color: rgb(255, 209, 102) !important; background-image: none !important;" data-text-color="rgb(241, 193, 80)">צור קשר
 
 
 
@@ -113,7 +113,7 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 
 
 
-אני רוצה להצטרף !
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="index-hero-btn-primary btn btn-primary" data-element-type="button" data-element-id="btn-1778068017138-outxb39ab" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(255, 255, 255) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(232, 201, 106), rgb(201, 168, 76)) !important;" target="_blank" rel="noopener noreferrer">אני רוצה להצטרף !
 לשיחת ייעוץ בוואטסאפ
 
 
@@ -154,12 +154,12 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 
 - ### ליווי אישי אחד על אחד ליווי אישי וממוקד לסוחרים שרוצים להתקדם מהר יותר עם תוכנית עבודה מקצועית ותמיכה מלאה.
 
-- ### הערך המוסף שלנו!!  מסחר לייב בזום   4 מפגשי לייב בשבוע בזמן אמת עם ניתוחים, עסקאות והסברים מקצועיים תוך כדי תנועה בשוק.
+- ### הערך המוסף שלנו!!  מסחר לייב בזום   4 מפגשי לייב בשבוע בזמן אמת עם ניתוחים, עסקאות והסברים מקצועיים תוך כדי תנועה בשוק.   🔥 4 מפגשי לייב בשבוע בזמן אמת 🔥 ניתוח שוק + עסקאות בלייב 🔥 עבודה בזמן אמת מול השוק האמריקאי
 
 
 
 
-קבע שיחת היכרות
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="iss-cta btn-primary" data-element-type="button" data-element-id="btn-1778068017138-snr2emxit" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(255, 255, 255) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(201, 168, 76), rgb(232, 201, 106)) !important;" target="_blank" rel="noopener noreferrer">קבע שיחת היכרות
 
 
 
@@ -187,7 +187,7 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 אקדמיית מסחר מקצועית המתמחה בלימוד מסחר בחוזים עתידיים, ניתוח שוק בזמן אמת וליווי אישי לסוחרים מתחילים ומתקדמים.
 
 
-גלה עוד ←
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="iss-card-link btn btn-ghost" data-native-element="true" data-element-id="btn-1778071209199-3cyunxxn1" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד ←
 
 
 
@@ -207,7 +207,7 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 תהליך ליווי אישי וממוקד הכולל בניית תוכנית עבודה מקצועית, ניהול סיכונים נכון והתאמה מלאה לסגנון המסחר שלך.
 
 
-גלה עוד ←
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="iss-card-link btn btn-ghost" data-native-element="true" data-element-id="btn-1778071299922-pnpseszid" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד ←
 
 
 
@@ -227,7 +227,7 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 לימוד מסחר מקצועי בשוק האמריקאי החל מהבסיס ועד עבודה עם אסטרטגיות מתקדמות ולייבים בזמן אמת.
 
 
-גלה עוד ←
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="iss-card-link btn btn-ghost" data-native-element="true" data-element-id="btn-1778071306533-xsln4qjw0" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד ←
 
 
 
@@ -248,15 +248,13 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 
 
 
-מספרים שמדברים
 
-## מסע של צמיחה, מדיד ואמיתי
+המספרים שמדברים
 
-
-אנו מאמינים שהתוצאות מדברות בעד עצמן. כל מספר כאן מייצג מחויבות אמיתית לפיתוח אישי ועסקי, לאימון אישי למנהלים בכירים, וליצירת שינוי מדיד בחיי לקוחותינו.
+## תוצאות אמיתיות בעולם המסחר
 
 
-
+התלמידים שלנו לומדים לסחור בצורה מקצועית, לעבוד עם אסטרטגיות מתקדמות ולהתמודד נכון עם השוק בזמן אמת.
 
 
 
@@ -269,29 +267,34 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 
 
 
-+15
+
+
+
++8
 שנות ניסיון
 
 
-### עומק מקצועי מוכח
+### ניסיון אמיתי בשוק ההון
 
 
-למעלה מחמישה עשר שנות עשייה בתחומי הקואצ'ינג, ייעוץ קריירה ופיתוח מנהיגות — ניסיון שמתורגם לתובנות חדות ולשיטות עבודה מדויקות.
-
-
-
+שמונה שנות ניסיון בעולם המסחר, ניתוח שוק בזמן אמת וליווי סוחרים מתחילים ומתקדמים בדרך למסחר מקצועי.
 
 
 
 
-500+
-מסעות מנהיגות
+
+
+
+192+
+
+
+שעות מסחר בלייב בשנה
 
 
 ### מנהלים שהתקדמו
 
 
-מאות מנהלים, יזמים ואנשי מקצוע עברו תהליכי ליווי אישי עמוקים — ויצאו ממנו עם בהירות, כיוון ומנוף אמיתי לצמיחה.
+4 מפגשי לייב בכל שבוע מול השוק האמריקאי עם ניתוחים מקצועיים, עסקאות בזמן אמת וליווי צמוד.
 
 
 
@@ -491,8 +494,8 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 בין אם אתם מחפשים ליווי אישי למנהלים בכירים, ייעוץ קריירה למשנה כיוון מקצועי, או רוצים להעמיק את הידע שלכם בשוק ההון — אנחנו כאן כדי להוביל אתכם קדימה. הצעד הראשון מתחיל בשיחה אחת.
 
 
-צרו קשר עכשיו
-לתוכניות שלנו
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="index-cta-btn-primary" data-element-type="button" data-element-id="btn-1778071114571-0jqjcxlzp" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(255, 255, 255) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(212, 181, 92), rgb(240, 212, 122)) !important;" target="_blank" rel="noopener noreferrer">צרו קשר עכשיו
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="index-cta-btn-secondary" data-element-type="button" data-element-id="btn-1778071114571-qz6gehhy0" data-native-element="true" style="outline: none; color: rgb(0, 212, 255) !important; border-color: rgb(0, 212, 255) !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">לתוכניות שלנו
 
 
 
@@ -525,15 +528,10 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 
 ### ניווט מהיר
 
-
 - בית
-
 - אימון ותוכניות
-
 - אודות
-
 - צור קשר
-
 
 
 
@@ -545,7 +543,7 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 
 - academy@hoshen-success.com
 
-- +972508804568
+- 050-8804568
 
 - שדרות נים 2, קניון עזריאלי ראשונים, ראשון לציון, מרכז, 7546302, ישראל
 
@@ -559,6 +557,7 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 
 
 קבעו שיחת היכרות חינמית וגלו איך Hoshen Success יכול לשנות את המסלול שלכם.
+
 
 קבע שיחה עכשיו
 
@@ -651,7 +650,7 @@ Description: מקורס מסחר בחוזים עתידיים ועד אימון �
 
 
 
-צור קשר
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: rgb(255, 209, 102) !important; color: rgb(241, 193, 80) !important; background-color: rgb(255, 209, 102) !important; background-image: none !important;" data-text-color="rgb(241, 193, 80)">צור קשר
 
 
 
@@ -1137,15 +1136,10 @@ Description: מקורס מסחר בחוזים עתידיים ועד אימון �
 
 ### ניווט מהיר
 
-
 - בית
-
 - אימון ותוכניות
-
 - אודות
-
 - צור קשר
-
 
 
 
@@ -1157,7 +1151,7 @@ Description: מקורס מסחר בחוזים עתידיים ועד אימון �
 
 - academy@hoshen-success.com
 
-- +972508804568
+- 050-8804568
 
 - שדרות נים 2, קניון עזריאלי ראשונים, ראשון לציון, מרכז, 7546302, ישראל
 
@@ -1171,6 +1165,7 @@ Description: מקורס מסחר בחוזים עתידיים ועד אימון �
 
 
 קבעו שיחת היכרות חינמית וגלו איך Hoshen Success יכול לשנות את המסלול שלכם.
+
 
 קבע שיחה עכשיו
 
@@ -1263,7 +1258,7 @@ Description: Hoshen Success נולדה מתוך שליחות עמוקה לעזו
 
 
 
-צור קשר
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: rgb(255, 209, 102) !important; color: rgb(241, 193, 80) !important; background-color: rgb(255, 209, 102) !important; background-image: none !important;" data-text-color="rgb(241, 193, 80)">צור קשר
 
 
 
@@ -1733,15 +1728,10 @@ Description: Hoshen Success נולדה מתוך שליחות עמוקה לעזו
 
 ### ניווט מהיר
 
-
 - בית
-
 - אימון ותוכניות
-
 - אודות
-
 - צור קשר
-
 
 
 
@@ -1753,7 +1743,7 @@ Description: Hoshen Success נולדה מתוך שליחות עמוקה לעזו
 
 - academy@hoshen-success.com
 
-- +972508804568
+- 050-8804568
 
 - שדרות נים 2, קניון עזריאלי ראשונים, ראשון לציון, מרכז, 7546302, ישראל
 
@@ -1767,6 +1757,7 @@ Description: Hoshen Success נולדה מתוך שליחות עמוקה לעזו
 
 
 קבעו שיחת היכרות חינמית וגלו איך Hoshen Success יכול לשנות את המסלול שלכם.
+
 
 קבע שיחה עכשיו
 
@@ -1859,7 +1850,7 @@ Description: מוכן לשנות כיוון ולהתחיל לצמוח? צור ק
 
 
 
-צור קשר
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: rgb(255, 209, 102) !important; color: rgb(241, 193, 80) !important; background-color: rgb(255, 209, 102) !important; background-image: none !important;" data-text-color="rgb(241, 193, 80)">צור קשר
 
 
 
@@ -2262,15 +2253,10 @@ Hoshen Success פועלת עם מנהלים בכירים, יזמים, ואנשי
 
 ### ניווט מהיר
 
-
 - בית
-
 - אימון ותוכניות
-
 - אודות
-
 - צור קשר
-
 
 
 
@@ -2282,7 +2268,7 @@ Hoshen Success פועלת עם מנהלים בכירים, יזמים, ואנשי
 
 - academy@hoshen-success.com
 
-- +972508804568
+- 050-8804568
 
 - שדרות נים 2, קניון עזריאלי ראשונים, ראשון לציון, מרכז, 7546302, ישראל
 
@@ -2296,6 +2282,7 @@ Hoshen Success פועלת עם מנהלים בכירים, יזמים, ואנשי
 
 
 קבעו שיחת היכרות חינמית וגלו איך Hoshen Success יכול לשנות את המסלול שלכם.
+
 
 קבע שיחה עכשיו
 
@@ -2512,15 +2499,10 @@ Hoshen Success ("החברה", "אנו", "שלנו") מחויבת להגן על �
 
 ### ניווט מהיר
 
-
 - בית
-
 - אימון ותוכניות
-
 - אודות
-
 - צור קשר
-
 
 
 
@@ -2532,7 +2514,7 @@ Hoshen Success ("החברה", "אנו", "שלנו") מחויבת להגן על �
 
 - academy@hoshen-success.com
 
-- +972508804568
+- 050-8804568
 
 - שדרות נים 2, קניון עזריאלי ראשונים, ראשון לציון, מרכז, 7546302, ישראל
 
@@ -2546,6 +2528,7 @@ Hoshen Success ("החברה", "אנו", "שלנו") מחויבת להגן על �
 
 
 קבעו שיחת היכרות חינמית וגלו איך Hoshen Success יכול לשנות את המסלול שלכם.
+
 
 קבע שיחה עכשיו
 
@@ -2771,15 +2754,10 @@ Hoshen Success מחויבת להנגיש את השירותים לכלל הציב
 
 ### ניווט מהיר
 
-
 - בית
-
 - אימון ותוכניות
-
 - אודות
-
 - צור קשר
-
 
 
 
@@ -2791,7 +2769,7 @@ Hoshen Success מחויבת להנגיש את השירותים לכלל הציב
 
 - academy@hoshen-success.com
 
-- +972508804568
+- 050-8804568
 
 - שדרות נים 2, קניון עזריאלי ראשונים, ראשון לציון, מרכז, 7546302, ישראל
 
@@ -2805,6 +2783,7 @@ Hoshen Success מחויבת להנגיש את השירותים לכלל הציב
 
 
 קבעו שיחת היכרות חינמית וגלו איך Hoshen Success יכול לשנות את המסלול שלכם.
+
 
 קבע שיחה עכשיו
 
@@ -3049,15 +3028,10 @@ Hoshen Success מספקת coaching / personal development / consulting דרך ה
 
 ### ניווט מהיר
 
-
 - בית
-
 - אימון ותוכניות
-
 - אודות
-
 - צור קשר
-
 
 
 
@@ -3069,7 +3043,7 @@ Hoshen Success מספקת coaching / personal development / consulting דרך ה
 
 - academy@hoshen-success.com
 
-- +972508804568
+- 050-8804568
 
 - שדרות נים 2, קניון עזריאלי ראשונים, ראשון לציון, מרכז, 7546302, ישראל
 
@@ -3083,6 +3057,7 @@ Hoshen Success מספקת coaching / personal development / consulting דרך ה
 
 
 קבעו שיחת היכרות חינמית וגלו איך Hoshen Success יכול לשנות את המסלול שלכם.
+
 
 קבע שיחה עכשיו
 
