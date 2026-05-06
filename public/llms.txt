@@ -7,33 +7,33 @@
 ## Pages
 
 ### בית
-https://hoshen-success-a5cea990.zappy5.app
+https://example.com
 הצטרף לאלפי אנשים שכבר שינו את חייהם עם Hoshen Success. קורס מסחר בשוק ההון למתחילים, אימון אישי ופיתוח עסקי שיוביל אותך להצלחה אמיתית. התחל היום!
 
 ### אימון ותוכניות
-https://hoshen-success-a5cea990.zappy5.app/programs
+https://example.com/programs
 מקורס מסחר בחוזים עתידיים ועד אימון אישי למנהלים בכירים — התוכניות שלנו בנויות להצלחה מדידה. בחר את המסלול שמתאים לך ותתחיל לצמוח כבר עכשיו!
 
 ### אודות
-https://hoshen-success-a5cea990.zappy5.app/about
+https://example.com/about
 Hoshen Success נולדה מתוך שליחות עמוקה לעזור לאנשים לממש את יכולותיהם המלאות. גלה מי אנחנו, מה מניע אותנו, וכיצד ייעוץ קריירה ופיתוח אישי הפכו לשפה שלנו. הכירו אותנו!
 
 ### צור קשר
-https://hoshen-success-a5cea990.zappy5.app/contact
+https://example.com/contact
 מוכן לשנות כיוון ולהתחיל לצמוח? צור קשר עם המומחים של Hoshen Success לייעוץ קריירה אישי, אימון עסקי ליזמים, או קורס מסחר בשוק ההון. אנחנו כאן בשבילך — דבר איתנו עכשיו!
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://hoshen-success-a5cea990.zappy5.app/privacy
+https://example.com/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://hoshen-success-a5cea990.zappy5.app/terms
+https://example.com/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://hoshen-success-a5cea990.zappy5.app/accessibility
+https://example.com/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
@@ -43,8 +43,8 @@ Information about WCAG compliance and accessibility features.
 - (No contact details configured yet.)
 
 ### Contact form
-- URL: https://hoshen-success-a5cea990.zappy5.app/contact
-- Endpoint: https://hoshen-success-a5cea990.zappy5.app/api/email/contact-form
+- URL: https://example.com/contact
+- Endpoint: https://example.com/api/email/contact-form
 - Method: POST
 - Content-Type: application/json
 - Fields:
@@ -79,6 +79,6 @@ coaching / personal development / consulting
 
 # Machine-readable feeds
 
-- Sitemap (XML): https://hoshen-success-a5cea990.zappy5.app/sitemap.xml
-- Robots: https://hoshen-success-a5cea990.zappy5.app/robots.txt
-- Flattened page text (for LLMs): https://hoshen-success-a5cea990.zappy5.app/llms-full.txt
+- Sitemap (XML): https://example.com/sitemap.xml
+- Robots: https://example.com/robots.txt
+- Flattened page text (for LLMs): https://example.com/llms-full.txt
