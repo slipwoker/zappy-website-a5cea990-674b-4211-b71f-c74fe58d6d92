@@ -7,33 +7,33 @@
 ## Pages
 
 ### בית
-https://example.com
+https://hoshen-success.zappy5.app
 הצטרף לאלפי אנשים שכבר שינו את חייהם עם Hoshen Success. קורס מסחר בשוק ההון למתחילים, אימון אישי ופיתוח עסקי שיוביל אותך להצלחה אמיתית. התחל היום!
 
 ### מסלולי הלימוד שלנו והליווי האישי במסחר
-https://example.com/trading-education-programs
+https://hoshen-success.zappy5.app/trading-education-programs
 מקורס מסחר בחוזים עתידיים ועד אימון אישי למנהלים בכירים — התוכניות שלנו בנויות להצלחה מדידה. בחר את המסלול שמתאים לך ותתחיל לצמוח כבר עכשיו!
 
 ### אודות
-https://example.com/about
+https://hoshen-success.zappy5.app/about
 Hoshen Success נולדה מתוך שליחות עמוקה לעזור לאנשים לממש את יכולותיהם המלאות. גלה מי אנחנו, מה מניע אותנו, וכיצד ייעוץ קריירה ופיתוח אישי הפכו לשפה שלנו. הכירו אותנו!
 
 ### צור קשר
-https://example.com/contact
+https://hoshen-success.zappy5.app/contact
 מוכן לשנות כיוון ולהתחיל לצמוח? צור קשר עם המומחים של Hoshen Success לייעוץ קריירה אישי, אימון עסקי ליזמים, או קורס מסחר בשוק ההון. אנחנו כאן בשבילך — דבר איתנו עכשיו!
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://example.com/privacy
+https://hoshen-success.zappy5.app/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://example.com/terms
+https://hoshen-success.zappy5.app/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://example.com/accessibility
+https://hoshen-success.zappy5.app/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
@@ -46,8 +46,8 @@ Information about WCAG compliance and accessibility features.
 - Address: שדרות נים 2, קניון עזריאלי ראשונים, ראשון לציון, מרכז, 7546302, ישראל
 
 ### Contact form
-- URL: https://example.com/contact
-- Endpoint: https://example.com/api/email/contact-form
+- URL: https://hoshen-success.zappy5.app/contact
+- Endpoint: https://hoshen-success.zappy5.app/api/email/contact-form
 - Method: POST
 - Content-Type: application/json
 - Fields:
@@ -82,6 +82,6 @@ coaching / personal development / consulting
 
 # Machine-readable feeds
 
-- Sitemap (XML): https://example.com/sitemap.xml
-- Robots: https://example.com/robots.txt
-- Flattened page text (for LLMs): https://example.com/llms-full.txt
+- Sitemap (XML): https://hoshen-success.zappy5.app/sitemap.xml
+- Robots: https://hoshen-success.zappy5.app/robots.txt
+- Flattened page text (for LLMs): https://hoshen-success.zappy5.app/llms-full.txt
