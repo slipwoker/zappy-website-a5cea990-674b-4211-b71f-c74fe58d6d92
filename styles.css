@@ -9809,6 +9809,33 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .navbar .logo-link img {
   filter: none !important;
 }
+
+.programs-intro-section .intro-luxury-text {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.85;
+  color: #C8D0DC;
+  letter-spacing: 0.01em;
+}
+
+.programs-intro-section .intro-luxury-brand {
+  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 55%, #F5D98A 100%);
+  background-clip: text;
+  font-weight: 700;
+}
+
+.programs-intro-section .intro-luxury-sub {
+  display: block;
+  margin-top: 14px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.9;
+  color: #8A94A6;
+  letter-spacing: 0.015em;
+  border-right: 2px solid rgba(201,168,76,0.4);
+  padding-right: 14px;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
