@@ -65,7 +65,7 @@ Description: הצטרף לאלפי אנשים שכבר שינו את חייהם 
 
 
 
-?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: rgb(255, 209, 102) !important; color: rgb(241, 193, 80) !important; background-color: rgb(255, 209, 102) !important; background-image: none !important;" data-text-color="rgb(241, 193, 80)">צור קשר
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: #F5C451; color: #111315; background-color: #F5C451; background-image: none !important" data-text-color="rgb(241, 193, 80)">צור קשר
 
 
 
@@ -736,7 +736,7 @@ Description: מקורס מסחר בחוזים עתידיים ועד אימון �
 
 
 
-?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: rgb(255, 209, 102) !important; color: rgb(241, 193, 80) !important; background-color: rgb(255, 209, 102) !important; background-image: none !important;" data-text-color="rgb(241, 193, 80)">צור קשר
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: #F5C451; color: #111315; background-color: #F5C451; background-image: none !important" data-text-color="rgb(241, 193, 80)">צור קשר
 
 
 
@@ -1361,7 +1361,7 @@ Description: Hoshen Success נולדה מתוך שליחות עמוקה לעזו
 
 
 
-?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: rgb(255, 209, 102) !important; color: rgb(241, 193, 80) !important; background-color: rgb(255, 209, 102) !important; background-image: none !important;" data-text-color="rgb(241, 193, 80)">צור קשר
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: #F5C451; color: #111315; background-color: #F5C451; background-image: none !important" data-text-color="rgb(241, 193, 80)">צור קשר
 
 
 
@@ -1952,7 +1952,7 @@ Description: מוכן לשנות כיוון ולהתחיל לצמוח? צור ק
 
 
 
-?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: rgb(255, 209, 102) !important; color: rgb(241, 193, 80) !important; background-color: rgb(255, 209, 102) !important; background-image: none !important;" data-text-color="rgb(241, 193, 80)">צור קשר
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: #F5C451; color: #111315; background-color: #F5C451; background-image: none !important" data-text-color="rgb(241, 193, 80)">צור קשר
 
 
 
