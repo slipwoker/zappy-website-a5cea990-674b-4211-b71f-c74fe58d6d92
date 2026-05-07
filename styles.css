@@ -10187,6 +10187,47 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   align-self: center;
   margin-top: 0;
 }
+
+.contact-intro-section .privacy-consent,
+.contact-contact-form-section .privacy-consent {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.contact-intro-section .privacy-consent-label,
+.contact-contact-form-section .privacy-consent-label {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  width: 100%;
+}
+
+.contact-intro-section .privacy-consent-checkbox,
+.contact-contact-form-section .privacy-consent-checkbox {
+  flex-shrink: 0;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 3px 0 0 0 !important;
+  cursor: pointer;
+  accent-color: var(--secondary);
+}
+
+.contact-intro-section .privacy-consent-label span,
+.contact-contact-form-section .privacy-consent-label span {
+  flex: 1;
+  text-align: right;
+}
+
+.contact-intro-section .privacy-consent-label a,
+.contact-contact-form-section .privacy-consent-label a {
+  color: var(--secondary);
+  text-decoration: underline;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
