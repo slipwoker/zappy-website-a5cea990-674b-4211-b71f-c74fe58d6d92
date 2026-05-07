@@ -9799,6 +9799,16 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   transform: none !important;
 }
 }
+
+.navbar .logo, .site-footer .footer-logo-wrap .logo {
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+}
+
+.navbar .logo-link img {
+  filter: none !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
