@@ -7568,8 +7568,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-family: 'Rubik', sans-serif;
   font-size: 0.875rem;
   color: #8A94A6;
-  flex-direction: row;
+  flex-direction: row-reverse;
   text-align: right;
+  justify-content: flex-end;
 }
 
 .contact-intro-section .privacy-consent-checkbox {
@@ -10160,6 +10161,13 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   .about-success-stories-section .ass-bg-orb--2 {
     display: none;
   }
+}
+
+.contact-contact-form-section .privacy-consent-label {
+  flex-direction: row-reverse !important;
+  justify-content: flex-end !important;
+  align-items: flex-start !important;
+  text-align: right !important;
 }
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
