@@ -43,7 +43,7 @@ Information about WCAG compliance and accessibility features.
 - Email: academy@hoshen-success.com
 - Phone: +972508804568
 - Phone (tel): tel:+972508804568
-- Address: שדרות נים 2, קניון עזריאלי ראשונים, ראשון לציון, מרכז, 7546302, ישראל
+- Address: שדרות נים 2, קניון עזריאלי ראשונים {⚠️ המשרד מיועד למנהלים בלבד. הכניסה בתיאום מראש בלבד⚠️}, ראשון לציון, מרכז, 7546302, ישראל
 
 ### Contact form
 - URL: https://hoshen-success.zappy5.app/contact
