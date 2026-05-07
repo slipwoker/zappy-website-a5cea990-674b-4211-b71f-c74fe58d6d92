@@ -432,7 +432,7 @@ MARKET MOVES
 
 
 
-"עומרי תודה רבה לך על הקורס ועל הליווי האישי. אתה אדם טוב, חיובי ומקצועי שנלחם באמת בשביל ההצלחה של התלמידים שלו. היחס האישי, הסבלנות וההשקעה שלך מורגשים בכל שיעור ובכל לייב. הקורס נתן לי הרבה יותר מהבנה במסחר הוא נתן לי ביטחון, סדר ודרך נכונה להסתכל על השוק בצורה מקצועית אין עליך 🙏🏼🔥"
+"עומרי תודה רבה לך על הקורס ועל הליווי האישי. אתה אדם טוב, חיובי ומקצועי שנלחם באמת בשביל ההצלחה של התלמידים שלו. היחס האישי, הסבלנות וההשקעה שלך מורגשים בכל שיעור ובכל לייב. הקורס נתן לי הרבה יותר מהבנה במסחר הוא נתן לי ביטחון, סדר ודרך נכונה להסתכל על השוק בצורה מקצועית אין עליך "
 
 
 
@@ -780,15 +780,15 @@ Description: מקורס מסחר בחוזים עתידיים ועד אימון �
 
 מסלולי הלימוד שלנו
 
--   💻 מסלול LIVE קבוצתי 1X15   לימוד מסחר מקצועי בקבוצות קטנות עד 15 תלמידים בלבד עם לייבים בזמן אמת מול השוק האמריקאי.
-- 🏫 מסלול אישי 1X1 ליווי אישי וממוקד לסוחרים שרוצים יחס אישי מלא, בניית תוכנית עבודה מקצועית והתקדמות מהירה.
--   📈 מסחר בלייב בזמן אמת   לייבים פעילים עם ניתוחי שוק, עסקאות בזמן אמת והסברים מקצועיים תוך כדי תנועה.
+-    מסלול LIVE קבוצתי 1X15   לימוד מסחר מקצועי בקבוצות קטנות עד 15 תלמידים בלבד עם לייבים בזמן אמת מול השוק האמריקאי.
+-  מסלול אישי 1X1 ליווי אישי וממוקד לסוחרים שרוצים יחס אישי מלא, בניית תוכנית עבודה מקצועית והתקדמות מהירה.
+-    מסחר בלייב בזמן אמת   לייבים פעילים עם ניתוחי שוק, עסקאות בזמן אמת והסברים מקצועיים תוך כדי תנועה.
 - US חוזים עתידיים ושוק אמריקאי לימוד מסחר מקצועי ב-NASDAQ ובשוק האמריקאי עם אסטרטגיות מתקדמות וניהול סיכונים.
 
 
 
 
-?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="programs-intro-section__btn-primary btn btn-primary" data-element-type="button" data-element-id="btn-1778099868009-jzhi1nwyb" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(255, 255, 255) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(201, 168, 76), rgb(232, 201, 106)) !important;" target="_blank" rel="noopener noreferrer">בחר את המסלול שלך
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="programs-intro-section__btn-primary btn btn-primary" data-element-type="button" data-element-id="btn-1778099868009-jzhi1nwyb" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(17, 19, 21) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(201, 168, 76), rgb(232, 201, 106)) !important;" target="_blank" rel="noopener noreferrer">בחר את המסלול שלך
 ?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="programs-intro-section__btn-ghost btn btn-ghost" data-element-type="button" data-element-id="btn-1778099868009-ib5p4kwbx" data-native-element="true" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד
 
 
@@ -846,6 +846,25 @@ PROFESSIONAL TRADING
 
 
 
+###   מסלול קבוצתי 1X15 קורסLIVE בחוזים עתידיים ליוויאישי צמוד לסוחרים
+
+
+לימוד מסחר מקצועי בקבוצות קטנות עד 15 תלמידים בלבד עם לייבים פעילים מול השוק האמריקאי.
+
+- עד 15 תלמידים בלבד
+- לייבים בזמן אמת
+- עבודה מול השוק האמריקאי
+- יחס אישי בקבוצה
+- אסטרטגיות מסחר מתקדמות
+
+
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="programs-features-section__card-cta" data-native-element="true" data-element-id="btn-1778104691180-un3ndsl7d" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד
+
+
+
+
+
+
 ### מסלול קורס LIVE אישי1X1 בחוזים עתידיים ליוויאישי צמוד לסוחרים
 
 
@@ -887,25 +906,6 @@ PROFESSIONAL TRADING
 
 
 ?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="programs-features-section__card-cta" data-native-element="true" data-element-id="btn-1778104686270-rvotky5ss" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד
-
-
-
-
-
-
-###   מסלול קבוצתי 1X15 קורסLIVE בחוזים עתידיים ליוויאישי צמוד לסוחרים
-
-
-לימוד מסחר מקצועי בקבוצות קטנות עד 15 תלמידים בלבד עם לייבים פעילים מול השוק האמריקאי.
-
-- עד 15 תלמידים בלבד
-- לייבים בזמן אמת
-- עבודה מול השוק האמריקאי
-- יחס אישי בקבוצה
-- אסטרטגיות מסחר מתקדמות
-
-
-?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="programs-features-section__card-cta" data-native-element="true" data-element-id="btn-1778104691180-un3ndsl7d" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד
 
 
 
@@ -1384,19 +1384,16 @@ Description: Hoshen Success נולדה מתוך שליחות עמוקה לעזו
 הסיפור שלנו
 
 
-# כשם שהחושן נשא את אבני החן — כך אנחנו נושאים את הפוטנציאל שלך
+# אודות בעלי המכללה הגיגטליתעמרי מאיר אורי - תרייסר
 
 
-החושן, אבן החן של המנהיגות העתיקה, לא היה רק עיטור — הוא היה כלי של בהירות, כוח ואחריות. ב-Hoshen Success אנחנו מאמינים שכל אדם טומן בתוכו פוטנציאל לא ממומש: יכולות מנהיגות, חדות אסטרטגית ועוצמה פנימית שמחכות להתגלות. המשימה שלנו היא להוציא אותם לאור — בצורה מדויקת, מכוונת ועמוקה.
+עמרי מאיר אורי תרייסר שמי עמרי מאיר אורי תרייסר, יליד ישראל (1984), יזם, איש עסקים ומייסד קבוצת חושן. שירתי בצה"ל ביחידת 8200, יחידה שבה נדרש דיוק, אחריות, חשיבה אסטרטגית ויכולת קבלת החלטות בתנאי לחץ ערכים שמלווים אותי עד היום בעולם העסקי ובעולם המסחר. אני בעל תואר ראשון במדעי המחשב, עם גישה אנליטית, מבוססת נתונים ומבנה. עבורי מספרים אינם רגש, הם שפה. ----------------------------------- קבוצת חושן אני עצמאי ובעלים של מספר פעילויות עסקיות תחת קבוצת חושן: - Hosen Success - הכשרה וליווי מקצועי בתחום המסחר בשוק הון - חושן פיננסי - ראיית חשבון והנהלת חשבונות - חושן משכנתאות - ייעוץ משכנתא אישי ומקצועי - חושן נדל"ן - תיווך ושיווק נדל"ן ברחבי הארץ - חושן O.T.M עמרי טכנולוגיה מדיה - מהנדס תוכנה + בניית אתרים אם שפת תכנות בקודים + בניית אתרים מכל הסוגים + ציוד מחשבים היקפי + קידום ממומן בכל הרשתות החברתיות. העולם שלי נשען על אחריות, שקיפות, ניתוח עומק וקבלת החלטות מחושבות. ----------------------------------- איך הגעתי לעולם המסחר? החיבור למסחר הגיע מהאהבה למבנים, לוגיקה והסתברות. עם הזמן הבנתי שהשוק אינו מקרי הוא פועל במבנה. אך רוב האנשים אינם מפסידים בגלל חוסר מידע, אלא בגלל חוסר שיטה. לכן בניתי מתודולוגיה ברורה, מסודרת ונקייה שמטרתה ללמד להבין את השוק, ולא לרדוף אחריו. ----------------------------------- הגישה שלי למסחר מסחר מבוסס מבנה שוק ניהול סיכון קפדני חשיבה הסתברותית משמעת מנטלית בניית תוכנית מסחר מותאמת אישית אני לא מבטיח רווחים. אני לא מוכר אשליות. אני בונה תשתית מקצועית. ----------------------------------- למה HOSHEN SUCCESS? חושן מסמל עבורי יציבות, אחריות וערכים. המטרה שלי היא להכשיר סוחרים שחושבים כמו אנשי מקצוע לא כמו מהמרים. ההצלחה במסחר אינה מתחילה בלחיצה על כפתור. היא מתחילה במבנה חשיבה. ואת זה בונים נכון. ----------------------------------- עמרי מאיר אורי תרייסר מיסד: HOSHEN SUCCESS מבית: קבוצת חושן. בוגר יחידת 8200 | בעל תואר ראשון במדעי המחשב B.Sc | בעל תואר שני בראיית חשבון B.A | יזם פיננסי | יזם טכנולוגיה | יזם נדל"ן
 
 
-עם שנים של ניסיון באימון אישי למנהלים בכירים, ייעוץ קריירה למשנה כיוון מקצועי וקואצ'ינג עסקי ליזמים בישראל, בנינו מתודולוגיה שמשלבת בין חשיבה אסטרטגית ובין עבודה פנימית אמיתית. כאן לא מדברים על שינוי — כאן עושים אותו.
 
 
-התחל את המסע שלך
-מסלולי הלימוד שלנו והליווי האישי במסחר
-
-
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="about-story-btn btn btn-primary" data-element-type="button" data-element-id="zappy-drop-dyt2h4z5y" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(255, 255, 255) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(201, 168, 76), rgb(232, 201, 106)) !important;" target="_blank" rel="noopener noreferrer">התחל את המסע שלך
+?text=הגעתי+מהאתר+שלכם+אני+אמשח+לקבל+מידע+נוסף+בבקשה..." class="about-story-btn btn btn-outline btn-secondary" data-element-type="button" data-element-id="zappy-drop-if4gyvxqs" data-native-element="true" style="outline: none; color: rgb(201, 168, 76) !important; border-color: rgb(201, 168, 76) !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">להסבר מעמיק על מסלולי הלימוד שלנו והליווי האישי במסחר
 
 
 
@@ -1408,7 +1405,9 @@ Description: Hoshen Success נולדה מתוך שליחות עמוקה לעזו
 
 
 
-10+
+
+
+8+
 שנות ניסיון
 
 
