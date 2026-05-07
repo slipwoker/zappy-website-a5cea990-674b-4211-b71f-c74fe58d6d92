@@ -7562,15 +7562,15 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .contact-intro-section .privacy-consent-label {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
   font-family: 'Rubik', sans-serif;
   font-size: 0.875rem;
   color: #8A94A6;
-  flex-direction: row-reverse;
-  text-align: right;
-  justify-content: flex-end;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
 }
 
 .contact-intro-section .privacy-consent-checkbox {
@@ -10168,6 +10168,24 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   justify-content: flex-end !important;
   align-items: flex-start !important;
   text-align: right !important;
+}
+
+.contact-intro-section .privacy-consent-label span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.contact-intro-section .privacy-consent-label span::before {
+  content: 'קראתי ואני מסכים/ה';
+  display: block;
+}
+
+.contact-intro-section .privacy-consent-checkbox {
+  align-self: center;
+  margin-top: 0;
 }
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
