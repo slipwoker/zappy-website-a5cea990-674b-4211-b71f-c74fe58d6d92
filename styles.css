@@ -10240,6 +10240,17 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   font-family: 'Heebo', sans-serif !important;
   font-weight: 700 !important;
 }
+
+.nav-menu a {
+  font-family: 'Heebo', sans-serif !important;
+  font-weight: 500 !important;
+}
+/* Font pairing applied */
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@500&display=swap');
+:root { --font-heading: 'Heebo', sans-serif; --font-body: 'Heebo', sans-serif; }
+body { font-family: 'Heebo', sans-serif; font-weight: 500; }
+h1, h2, h3, h4, h5, h6 { font-family: 'Heebo', sans-serif; font-weight: 500; }
+
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
