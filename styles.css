@@ -10253,6 +10253,10 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   font-weight: 500 !important;
   letter-spacing: 0.1em !important;
 }
+
+.navbar .nav-menu {
+  margin-inline-start: 40px;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
