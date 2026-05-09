@@ -10286,34 +10286,6 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .programs-intro-section .programs-intro-section__track-sub {
   font-size: 0.95rem !important;
 }
-
-#programs-intro-section .programs-intro-section__heading {
-  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 40%, #F5D98A 60%, #C9A84C 80%, #A8842A 100%) !important;
-  background-clip: text !important;
-  color: transparent !important;
-}
-
-#programs-intro-section .programs-intro-section__track-name {
-  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 40%, #F5D98A 60%, #C9A84C 80%, #A8842A 100%) !important;
-  background-clip: text !important;
-  color: transparent !important;
-}
-
-#programs-intro-section .programs-intro-section__tracks h2,
-#programs-intro-section .programs-intro-section__tracks h3 {
-  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 40%, #F5D98A 60%, #C9A84C 80%, #A8842A 100%) !important;
-  background-clip: text !important;
-  color: transparent !important;
-}
-
-#programs-intro-section .programs-intro-section__track-name {
-  color: #C9A84C !important;
-}
-
-#programs-intro-section .programs-intro-section__tracks h2,
-#programs-intro-section .programs-intro-section__tracks h3 {
-  color: #C9A84C !important;
-}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
