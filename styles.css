@@ -10442,6 +10442,10 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   60%  { transform: scale(0.97); }
   100% { transform: scale(1); }
 }
+
+.nav-cta-btn, .nav-cta-btn:hover, .nav-cta-btn:focus, .nav-cta-btn:active, .nav-cta-btn:visited {
+  color: var(--background-color) !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
