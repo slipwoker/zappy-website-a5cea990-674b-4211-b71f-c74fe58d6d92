@@ -10286,6 +10286,11 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .programs-intro-section .programs-intro-section__track-sub {
   font-size: 0.95rem !important;
 }
+
+.programs-intro-section .track-accordion-item.open .track-accordion-body {
+  max-height: 9999px !important;
+  padding: 0 16px 14px !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
