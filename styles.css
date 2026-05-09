@@ -10353,6 +10353,22 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   z-index: 2;
   mix-blend-mode: overlay;
 }
+
+.footer-cta-btn {
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.footer-cta-btn:hover {
+  animation: pulse-beat 0.6s ease infinite !important;
+  box-shadow: 0 0 20px rgba(245, 196, 81, 0.6) !important;
+}
+
+@keyframes pulse-beat {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.07); }
+  60%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
