@@ -10278,6 +10278,10 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   margin: 0 !important;
   padding: 0 !important;
 }
+
+.programs-intro-section .programs-intro-section__track-name {
+  font-size: 1.2rem !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
