@@ -10259,6 +10259,25 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   width: 120px !important;
   height: auto !important;
 }
+
+.programs-intro-section .programs-intro-section__track-content {
+  gap: 0px !important;
+}
+
+.programs-intro-section .programs-intro-section__track-content h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.programs-intro-section .programs-intro-section__track-content h3 p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.programs-intro-section .programs-intro-section__track-content p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
