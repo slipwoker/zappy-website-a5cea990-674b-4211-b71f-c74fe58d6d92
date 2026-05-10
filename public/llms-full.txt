@@ -1083,7 +1083,7 @@ PROFESSIONAL TRADING
 
 
 
-פרטים נוספים';}else{wrap.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';btn.innerHTML='   סגור';};})(this)" data-element-type="button" data-element-id="btn-1778446957606-9esx5zvqt" data-native-element="true" style="outline: none;">   פרטים נוספים
+פרטים נוספים';}else{wrap.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';btn.innerHTML='   סגור';};})(this)" data-element-type="button" data-element-id="btn-1778446966098-osby1zah9" data-native-element="true" style="outline: none;">   פרטים נוספים
 
 
 
