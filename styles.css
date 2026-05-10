@@ -10446,6 +10446,15 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .nav-cta-btn, .nav-cta-btn:hover, .nav-cta-btn:focus, .nav-cta-btn:active, .nav-cta-btn:visited {
   color: var(--background-color) !important;
 }
+
+#layout-1778421123970 .video-card-grid .zappy-grid-item {
+  background: linear-gradient(var(--background-color), var(--background-color)) padding-box,
+              linear-gradient(135deg, #A8842A 0%, #E8C96A 30%, #FFD700 50%, #C9A84C 70%, #A8842A 100%) border-box !important;
+  border: 2px solid transparent !important;
+  border-radius: 14px !important;
+  box-shadow: 0 0 22px rgba(201, 168, 76, 0.4), 0 6px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(232, 201, 106, 0.12) !important;
+  overflow: hidden !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
