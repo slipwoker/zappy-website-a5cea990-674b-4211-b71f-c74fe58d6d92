@@ -10455,36 +10455,6 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   box-shadow: 0 0 22px rgba(201, 168, 76, 0.4), 0 6px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(232, 201, 106, 0.12) !important;
   overflow: hidden !important;
 }
-
-.programs-intro-section .programs-intro-section__heading {
-  color: #E8C96A !important;
-  filter: drop-shadow(0 0 18px rgba(232,201,106,0.55)) drop-shadow(0 2px 4px rgba(168,132,42,0.7)) !important;
-  text-shadow: 0 0 30px rgba(245,217,122,0.4), 0 1px 0 rgba(168,132,42,0.8) !important;
-}
-
-.programs-features-section .programs-features-section__heading {
-  color: #E8C96A !important;
-  filter: drop-shadow(0 0 18px rgba(232,201,106,0.55)) drop-shadow(0 2px 4px rgba(168,132,42,0.7)) !important;
-  text-shadow: 0 0 30px rgba(245,217,122,0.4), 0 1px 0 rgba(168,132,42,0.8) !important;
-}
-
-.programs-process-section .programs-process-title {
-  color: #E8C96A !important;
-  filter: drop-shadow(0 0 18px rgba(232,201,106,0.55)) drop-shadow(0 2px 4px rgba(168,132,42,0.7)) !important;
-  text-shadow: 0 0 30px rgba(245,217,122,0.4), 0 1px 0 rgba(168,132,42,0.8) !important;
-}
-
-.programs-benefits-section .programs-benefits-heading {
-  color: #E8C96A !important;
-  filter: drop-shadow(0 0 18px rgba(232,201,106,0.55)) drop-shadow(0 2px 4px rgba(168,132,42,0.7)) !important;
-  text-shadow: 0 0 30px rgba(245,217,122,0.4), 0 1px 0 rgba(168,132,42,0.8) !important;
-}
-
-.programs-cta-section .programs-cta-heading {
-  color: #E8C96A !important;
-  filter: drop-shadow(0 0 18px rgba(232,201,106,0.55)) drop-shadow(0 2px 4px rgba(168,132,42,0.7)) !important;
-  text-shadow: 0 0 30px rgba(245,217,122,0.4), 0 1px 0 rgba(168,132,42,0.8) !important;
-}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
