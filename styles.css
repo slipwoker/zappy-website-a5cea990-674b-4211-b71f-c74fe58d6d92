@@ -10546,6 +10546,23 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   }
 }
 
+
+#layout-1778421123970 h2 {
+  color: var(--secondary-color) !important;
+}
+
+#layout-1778421123970 .video-card-grid .zappy-grid-item {
+  background: linear-gradient(135deg, #0a0a0a 0%, #141414 50%, #0d0d0d 100%) padding-box,
+              linear-gradient(135deg, #A8842A 0%, #E8C96A 30%, #FFD700 50%, #C9A84C 70%, #A8842A 100%) border-box !important;
+}
+
+#layout-1778421123970 h3 {
+  color: #F5F3EE !important;
+}
+
+#layout-1778421123970 p {
+  color: var(--secondary-color) !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
