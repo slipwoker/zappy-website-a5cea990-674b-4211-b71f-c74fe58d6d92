@@ -11648,6 +11648,307 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
     transition: none;
   }
 }
+
+/* AI-generated section */
+/* ============================================
+   WHY FUTURES SECTION — HOSHEN SUCCESS
+   Dark navy/trading-room aesthetic
+============================================ */
+
+.wf-futures-why {
+  position: relative;
+  background: #0a0e1a;
+  padding: 100px 20px 90px;
+  font-family: system-ui, sans-serif;
+  direction: rtl;
+  text-align: right;
+  overflow: hidden;
+}
+
+/* --- Background decorative elements --- */
+.wf-futures-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201, 168, 76, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 168, 76, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wf-futures-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wf-futures-bg-orb--1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.12) 0%, transparent 70%);
+  top: -120px;
+  left: -150px;
+}
+
+.wf-futures-bg-orb--2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 200, 220, 0.08) 0%, transparent 70%);
+  bottom: -80px;
+  right: -100px;
+}
+
+/* --- Container --- */
+.wf-futures-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* --- Eyebrow --- */
+.wf-futures-eyebrow-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.wf-futures-eyebrow {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.15) 0%, rgba(232, 201, 106, 0.1) 100%);
+  border: 1px solid rgba(201, 168, 76, 0.45);
+  color: #E8C96A;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 22px;
+  border-radius: 50px;
+}
+
+/* --- Heading --- */
+.wf-futures-heading {
+  text-align: center;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 18px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+/* --- Subtitle --- */
+.wf-futures-subtitle {
+  text-align: center;
+  font-size: clamp(1rem, 2vw, 1.18rem);
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 auto 64px;
+  max-width: 640px;
+  line-height: 1.7;
+}
+
+/* --- Grid --- */
+.wf-futures-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-bottom: 60px;
+}
+
+/* --- Card --- */
+.wf-futures-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  border-radius: 16px;
+  padding: 36px 28px 32px;
+  overflow: hidden;
+  cursor: default;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
+.wf-futures-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(201, 168, 76, 0.55);
+  background: linear-gradient(145deg, rgba(201, 168, 76, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 0 30px rgba(201, 168, 76, 0.1);
+}
+
+/* Card bottom accent line */
+.wf-futures-card-accent {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: var(--gradient-primary, linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #A8842A 100%));
+  border-radius: 0 0 16px 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.wf-futures-card:hover .wf-futures-card-accent {
+  opacity: 1;
+}
+
+/* Card icon */
+.wf-futures-card-icon {
+  font-size: 2.4rem;
+  margin-bottom: 18px;
+  display: block;
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(201, 168, 76, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.wf-futures-card:hover .wf-futures-card-icon {
+  transform: scale(1.12);
+}
+
+/* Card title */
+.wf-futures-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 10px;
+  line-height: 1.3;
+  background: var(--gradient-primary, linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #A8842A 100%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card description */
+.wf-futures-card-desc {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* --- CTA Wrapper --- */
+.wf-futures-cta-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* --- CTA Button --- */
+.wf-futures-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
+  color: #ffffff;
+  font-family: system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 18px 40px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  box-shadow: 0 6px 28px rgba(37, 211, 102, 0.35);
+  letter-spacing: 0.01em;
+  direction: rtl;
+}
+
+.wf-futures-cta-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(37, 211, 102, 0.5);
+  filter: brightness(1.08);
+}
+
+.wf-futures-cta-btn:focus-visible {
+  outline: 3px solid #E8C96A;
+  outline-offset: 4px;
+}
+
+.wf-futures-cta-btn:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.wf-futures-cta-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+/* ============================================
+   RESPONSIVE — TABLET (2 columns)
+============================================ */
+@media (max-width: 900px) {
+  .wf-futures-why {
+    padding: 80px 18px 70px;
+  }
+
+  .wf-futures-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE — MOBILE (1 column)
+============================================ */
+@media (max-width: 560px) {
+  .wf-futures-why {
+    padding: 64px 16px 56px;
+  }
+
+  .wf-futures-heading {
+    font-size: 1.7rem;
+  }
+
+  .wf-futures-subtitle {
+    font-size: 0.97rem;
+    margin-bottom: 44px;
+  }
+
+  .wf-futures-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 44px;
+  }
+
+  .wf-futures-card {
+    padding: 28px 22px 24px;
+  }
+
+  .wf-futures-card-icon {
+    font-size: 2rem;
+  }
+
+  .wf-futures-card-title {
+    font-size: 1.05rem;
+  }
+
+  .wf-futures-card-desc {
+    font-size: 0.9rem;
+  }
+
+  .wf-futures-cta-btn {
+    font-size: 0.95rem;
+    padding: 16px 26px;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .wf-futures-bg-orb--1 {
+    width: 280px;
+    height: 280px;
+  }
+
+  .wf-futures-bg-orb--2 {
+    width: 220px;
+    height: 220px;
+  }
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
