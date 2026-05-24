@@ -60,7 +60,7 @@ Information about WCAG compliance and accessibility features.
   - `callback_time` (select)
   - `topic` (text)
   - `message` (textarea)
-  - `privacy_consent` (checkbox)
+  - `privacy_consent` (checkbox, required)
 
 ---
 
