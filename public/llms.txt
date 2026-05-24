@@ -22,6 +22,9 @@ Hoshen Success נולדה מתוך שליחות עמוקה לעזור לאנשי
 https://hoshen-success.pro/contact
 מוכן לשנות כיוון ולהתחיל לצמוח? צור קשר עם המומחים של Hoshen Success לייעוץ קריירה אישי, אימון עסקי ליזמים, או קורס מסחר בשוק ההון. אנחנו כאן בשבילך — דבר איתנו עכשיו!
 
+### Page
+https://hoshen-success.pro/new-page-1779663010769
+
 ## Legal & Policy
 
 ### Privacy Policy
@@ -56,8 +59,8 @@ Information about WCAG compliance and accessibility features.
   - `phone` (tel)
   - `callback_time` (select)
   - `topic` (text)
-  - `message` (textarea, required)
-  - `privacy_consent` (checkbox, required)
+  - `message` (textarea)
+  - `privacy_consent` (checkbox)
 
 ---
 
