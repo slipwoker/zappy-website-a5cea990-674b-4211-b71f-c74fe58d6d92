@@ -11212,6 +11212,442 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
     opacity: 0.7;
   }
 }
+
+/* AI-generated section */
+/* =============================================
+   PAIN / IDENTIFICATION SECTION
+   Dark luxury emotional section for trading LP
+   ============================================= */
+
+.pain-section {
+  position: relative;
+  background-color: #0A0C14;
+  padding: 100px 20px 110px;
+  font-family: system-ui, sans-serif;
+  direction: rtl;
+  text-align: right;
+  overflow: hidden;
+}
+
+/* Subtle radial background glow */
+.pain-section::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, rgba(201, 168, 76, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pain-section::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, rgba(201, 168, 76, 0.04) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pain-section__bg-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 60px,
+      rgba(201, 168, 76, 0.015) 60px,
+      rgba(201, 168, 76, 0.015) 61px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Container */
+.pain-section__container {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ---- Header ---- */
+.pain-section__header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.pain-section__eyebrow {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #C9A84C;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  opacity: 0.85;
+}
+
+.pain-section__title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  color: #F0EDE8;
+  line-height: 1.2;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.pain-section__title-accent {
+  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #A8842A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline;
+}
+
+/* ---- Pain Cards ---- */
+.pain-section__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+.pain-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 18px;
+  padding: 40px 28px 36px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.pain-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.065);
+  border-color: rgba(201, 168, 76, 0.5);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(201, 168, 76, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Center card — slightly elevated by default */
+.pain-card--center {
+  border-color: rgba(201, 168, 76, 0.4);
+  background: rgba(201, 168, 76, 0.05);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(201, 168, 76, 0.07),
+    inset 0 1px 0 rgba(201, 168, 76, 0.12);
+}
+
+.pain-card--center:hover {
+  border-color: rgba(201, 168, 76, 0.65);
+  box-shadow:
+    0 16px 50px rgba(0, 0, 0, 0.55),
+    0 0 50px rgba(201, 168, 76, 0.14),
+    inset 0 1px 0 rgba(201, 168, 76, 0.18);
+}
+
+/* Top-right corner accent bar */
+.pain-card__border-accent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #C9A84C);
+  border-radius: 0 18px 0 0;
+}
+
+/* Glow blob inside card */
+.pain-card__glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(ellipse, rgba(180, 30, 30, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.pain-card__glow--gold {
+  background: radial-gradient(ellipse, rgba(201, 168, 76, 0.12) 0%, transparent 70%);
+}
+
+/* Icon */
+.pain-card__icon {
+  font-size: 2.8rem;
+  line-height: 1;
+  margin-bottom: 20px;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+
+/* Card text */
+.pain-card__text {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #C8C4BC;
+  margin: 0;
+  font-weight: 400;
+}
+
+.pain-card__text strong {
+  color: #EDE8DE;
+  font-weight: 700;
+}
+
+/* ---- Empathy Block ---- */
+.pain-section__empathy {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 56px;
+  padding: 0 10px;
+}
+
+.pain-section__empathy-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.35), transparent);
+}
+
+.pain-section__empathy-text {
+  text-align: center;
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  line-height: 1.8;
+  color: #C8C4BC;
+  margin: 0;
+  max-width: 680px;
+  flex-shrink: 0;
+  font-weight: 400;
+}
+
+.pain-section__empathy-highlight {
+  display: block;
+  margin-top: 8px;
+  color: #EDE8DE;
+  font-weight: 700;
+  font-size: clamp(1.15rem, 2.6vw, 1.42rem);
+  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 60%, #A8842A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pain-section__br {
+  display: block;
+}
+
+/* ---- CTA Wrapper ---- */
+.pain-section__cta-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* CTA Button */
+.pain-section__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #A8842A 100%);
+  color: #0A0C14;
+  font-family: system-ui, sans-serif;
+  font-size: clamp(1rem, 2.2vw, 1.18rem);
+  font-weight: 800;
+  text-decoration: none;
+  padding: 20px 44px;
+  border-radius: 60px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  box-shadow:
+    0 6px 30px rgba(201, 168, 76, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pain-section__cta-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 60%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.pain-section__cta-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 12px 45px rgba(201, 168, 76, 0.5),
+    0 4px 16px rgba(0, 0, 0, 0.45);
+  filter: brightness(1.06);
+}
+
+.pain-section__cta-btn:focus-visible {
+  outline: 3px solid #E8C96A;
+  outline-offset: 4px;
+}
+
+.pain-section__cta-btn:active {
+  transform: translateY(-1px) scale(1.005);
+}
+
+.pain-section__cta-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pain-section__cta-text {
+  line-height: 1.2;
+}
+
+/* CTA subtitle */
+.pain-section__cta-sub {
+  font-size: 0.82rem;
+  color: rgba(200, 196, 188, 0.6);
+  margin: 0;
+  letter-spacing: 0.04em;
+  font-weight: 400;
+}
+
+/* =============================================
+   RESPONSIVE — TABLET
+   ============================================= */
+@media (max-width: 900px) {
+  .pain-section {
+    padding: 80px 20px 90px;
+  }
+
+  .pain-section__cards {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 18px;
+  }
+
+  .pain-card {
+    padding: 32px 24px 28px;
+  }
+
+  .pain-section__empathy {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .pain-section__empathy-line {
+    width: 100%;
+    height: 1px;
+  }
+
+  .pain-section__empathy-text {
+    max-width: 100%;
+  }
+}
+
+/* =============================================
+   RESPONSIVE — MOBILE
+   ============================================= */
+@media (max-width: 600px) {
+  .pain-section {
+    padding: 64px 16px 72px;
+  }
+
+  .pain-section__header {
+    margin-bottom: 44px;
+  }
+
+  .pain-section__title {
+    font-size: 1.9rem;
+  }
+
+  .pain-section__eyebrow {
+    font-size: 0.78rem;
+  }
+
+  .pain-section__cards {
+    gap: 14px;
+  }
+
+  .pain-card {
+    padding: 28px 20px 24px;
+  }
+
+  .pain-card__icon {
+    font-size: 2.4rem;
+    margin-bottom: 14px;
+  }
+
+  .pain-card__text {
+    font-size: 0.98rem;
+  }
+
+  .pain-section__empathy {
+    margin-bottom: 44px;
+    gap: 16px;
+  }
+
+  .pain-section__empathy-text {
+    font-size: 1rem;
+  }
+
+  .pain-section__empathy-highlight {
+    font-size: 1.05rem;
+  }
+
+  .pain-section__br {
+    display: none;
+  }
+
+  .pain-section__cta-btn {
+    padding: 18px 28px;
+    font-size: 0.97rem;
+    border-radius: 50px;
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+  }
+
+  .pain-section__cta-icon {
+    font-size: 1.2rem;
+  }
+
+  .pain-section__cta-sub {
+    font-size: 0.78rem;
+  }
+}
+
+/* =============================================
+   REDUCED MOTION
+   ============================================= */
+@media (prefers-reduced-motion: reduce) {
+  .pain-card,
+  .pain-section__cta-btn {
+    transition: none;
+  }
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
