@@ -10562,6 +10562,656 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 #layout-1778421123970 p {
   color: var(--secondary-color) !important;
 }
+
+/* AI-generated section */
+/* =============================================
+   HOSHEN HERO SECTION — Full Production CSS
+   ============================================= */
+
+.hoshen-hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #0a0e1a;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201, 168, 76, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0, 212, 255, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 20% 90%, rgba(201, 168, 76, 0.06) 0%, transparent 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: system-ui, sans-serif;
+  direction: rtl;
+  text-align: center;
+  padding: 100px 20px 80px;
+  box-sizing: border-box;
+}
+
+/* ---- Background Chart ---- */
+.hoshen-hero__bg-chart {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hoshen-hero__chart-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Grid lines */
+.hoshen-grid-line {
+  stroke: rgba(201, 168, 76, 0.08);
+  stroke-width: 1;
+}
+
+/* Gold chart line */
+.hoshen-chart-line {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hoshen-chart-line--gold {
+  stroke: rgba(201, 168, 76, 0.55);
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: hoshenDrawLine 3.5s ease forwards 0.5s;
+  filter: drop-shadow(0 0 6px rgba(201, 168, 76, 0.4));
+}
+
+.hoshen-chart-line--cyan {
+  stroke: rgba(0, 212, 255, 0.3);
+  stroke-width: 1.5;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: hoshenDrawLine 4s ease forwards 1s;
+}
+
+/* Area fill */
+.hoshen-chart-area {
+  fill: url(#hoshenAreaGrad);
+  opacity: 0.12;
+}
+
+/* Candlesticks */
+.hoshen-candle--green {
+  fill: rgba(0, 200, 100, 0.45);
+  stroke: rgba(0, 200, 100, 0.7);
+  stroke-width: 1;
+}
+
+.hoshen-candle--red {
+  fill: rgba(255, 80, 80, 0.4);
+  stroke: rgba(255, 80, 80, 0.65);
+  stroke-width: 1;
+}
+
+.hoshen-wick--green {
+  stroke: rgba(0, 200, 100, 0.6);
+  stroke-width: 1.5;
+}
+
+.hoshen-wick--red {
+  stroke: rgba(255, 80, 80, 0.55);
+  stroke-width: 1.5;
+}
+
+/* Chart dots */
+.hoshen-chart-dot {
+  fill: #F5C451;
+  filter: drop-shadow(0 0 6px rgba(245, 196, 81, 0.8));
+  animation: hoshenPulseGold 2s ease-in-out infinite;
+}
+
+.hoshen-chart-dot--pulse {
+  fill: #00D4FF;
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.9));
+  animation: hoshenPulseCyan 1.8s ease-in-out infinite;
+}
+
+/* ---- Overlay ---- */
+.hoshen-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 14, 26, 0.3) 0%,
+    rgba(10, 14, 26, 0.55) 40%,
+    rgba(10, 14, 26, 0.75) 70%,
+    rgba(10, 14, 26, 0.92) 100%
+  );
+  pointer-events: none;
+}
+
+/* ---- Container ---- */
+.hoshen-hero__container {
+  position: relative;
+  z-index: 10;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+/* ---- Badge ---- */
+.hoshen-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.18) 0%, rgba(232, 201, 106, 0.12) 100%);
+  border: 1px solid rgba(201, 168, 76, 0.5);
+  border-radius: 50px;
+  padding: 10px 22px;
+  backdrop-filter: blur(8px);
+  animation: hoshenFadeDown 0.7s ease forwards;
+  opacity: 0;
+  animation-delay: 0.2s;
+}
+
+.hoshen-hero__badge-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.hoshen-hero__badge-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #F5C451;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* ---- H1 ---- */
+.hoshen-hero__h1 {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.02em;
+  animation: hoshenFadeUp 0.8s ease forwards;
+  opacity: 0;
+  animation-delay: 0.4s;
+  text-shadow: 0 2px 40px rgba(0,0,0,0.5);
+}
+
+.hoshen-hero__h1-highlight {
+  background: linear-gradient(135deg, #C9A84C 0%, #F5C451 50%, #E8C96A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline;
+  filter: drop-shadow(0 0 20px rgba(245, 196, 81, 0.4));
+}
+
+.hoshen-hero__br-desktop {
+  display: block;
+}
+
+/* ---- H2 ---- */
+.hoshen-hero__h2 {
+  font-size: clamp(1.15rem, 2.5vw, 1.6rem);
+  font-weight: 600;
+  color: #00D4FF;
+  margin: 0;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  animation: hoshenFadeUp 0.8s ease forwards;
+  opacity: 0;
+  animation-delay: 0.6s;
+  text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+/* ---- Body ---- */
+.hoshen-hero__body {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.75;
+  margin: 0;
+  max-width: 640px;
+  animation: hoshenFadeUp 0.8s ease forwards;
+  opacity: 0;
+  animation-delay: 0.8s;
+}
+
+.hoshen-hero__body strong {
+  color: #F5C451;
+  font-weight: 700;
+}
+
+/* ---- CTA Group ---- */
+.hoshen-hero__cta-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  animation: hoshenFadeUp 0.8s ease forwards;
+  opacity: 0;
+  animation-delay: 1s;
+  width: 100%;
+}
+
+/* ---- Buttons ---- */
+.hoshen-hero__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+  white-space: nowrap;
+  border: none;
+  outline: none;
+  direction: rtl;
+  letter-spacing: 0.01em;
+}
+
+.hoshen-hero__btn:focus-visible {
+  outline: 3px solid #F5C451;
+  outline-offset: 3px;
+}
+
+/* Primary — WhatsApp Green */
+.hoshen-hero__btn--primary {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff;
+  padding: 18px 36px;
+  box-shadow:
+    0 6px 30px rgba(37, 211, 102, 0.45),
+    0 2px 8px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.hoshen-hero__btn--primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  border-radius: 50px;
+  pointer-events: none;
+}
+
+.hoshen-hero__btn--primary:hover,
+.hoshen-hero__btn--primary:focus-visible {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 12px 40px rgba(37, 211, 102, 0.6),
+    0 4px 16px rgba(0,0,0,0.35);
+}
+
+.hoshen-hero__btn--primary:active {
+  transform: translateY(-1px) scale(1.00);
+}
+
+/* Secondary — Outline */
+.hoshen-hero__btn--secondary {
+  background: transparent;
+  color: #ffffff;
+  padding: 16px 30px;
+  border: 2px solid rgba(245, 196, 81, 0.6);
+  box-shadow: 0 0 20px rgba(245, 196, 81, 0.1);
+}
+
+.hoshen-hero__btn--secondary:hover,
+.hoshen-hero__btn--secondary:focus-visible {
+  background: rgba(245, 196, 81, 0.12);
+  border-color: #F5C451;
+  color: #F5C451;
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(245, 196, 81, 0.25);
+}
+
+.hoshen-hero__btn--secondary:active {
+  transform: translateY(0);
+}
+
+.hoshen-hero__btn-icon {
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.hoshen-hero__play-icon {
+  font-size: 0.85em;
+  color: #F5C451;
+  transition: color 0.22s ease;
+}
+
+.hoshen-hero__btn--secondary:hover .hoshen-hero__play-icon {
+  color: #F5C451;
+}
+
+/* ---- Trust Row ---- */
+.hoshen-hero__trust {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 4px;
+  animation: hoshenFadeUp 0.8s ease forwards;
+  opacity: 0;
+  animation-delay: 1.2s;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 60px;
+  padding: 14px 28px;
+  backdrop-filter: blur(6px);
+  width: 100%;
+  max-width: 720px;
+  box-sizing: border-box;
+}
+
+.hoshen-hero__trust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(0.8rem, 1.5vw, 0.92rem);
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.hoshen-hero__trust-check {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.hoshen-hero__trust-divider {
+  color: rgba(201, 168, 76, 0.4);
+  font-size: 1.1rem;
+  font-weight: 300;
+  padding: 0 2px;
+}
+
+/* ---- Floating Ticker Elements ---- */
+.hoshen-hero__float {
+  position: absolute;
+  z-index: 5;
+  font-family: system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  border-radius: 8px;
+  padding: 8px 14px;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+}
+
+.hoshen-hero__float--1 {
+  top: 18%;
+  left: 6%;
+  color: #00ff88;
+  background: rgba(0, 200, 100, 0.12);
+  border: 1px solid rgba(0, 200, 100, 0.3);
+  animation: hoshenFloatAnim 4s ease-in-out infinite;
+}
+
+.hoshen-hero__float--2 {
+  top: 30%;
+  right: 5%;
+  color: #F5C451;
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  animation: hoshenFloatAnim 5s ease-in-out infinite 0.8s;
+}
+
+.hoshen-hero__float--3 {
+  bottom: 28%;
+  left: 4%;
+  color: #00D4FF;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  animation: hoshenFloatAnim 4.5s ease-in-out infinite 1.5s;
+}
+
+.hoshen-hero__float--4 {
+  bottom: 20%;
+  right: 6%;
+  color: #00ff88;
+  background: rgba(0, 200, 100, 0.1);
+  border: 1px solid rgba(0, 200, 100, 0.25);
+  animation: hoshenFloatAnim 3.8s ease-in-out infinite 2s;
+}
+
+/* =============================================
+   KEYFRAME ANIMATIONS
+   ============================================= */
+
+@keyframes hoshenDrawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hoshenFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hoshenFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hoshenPulseGold {
+  0%, 100% {
+    r: 6;
+    opacity: 1;
+  }
+  50% {
+    r: 9;
+    opacity: 0.7;
+  }
+}
+
+@keyframes hoshenPulseCyan {
+  0%, 100% {
+    r: 8;
+    opacity: 1;
+  }
+  50% {
+    r: 12;
+    opacity: 0.5;
+  }
+}
+
+@keyframes hoshenFloatAnim {
+  0%, 100% {
+    transform: translateY(0px);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+@keyframes hoshenShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* =============================================
+   RESPONSIVE — TABLET
+   ============================================= */
+
+@media (max-width: 900px) {
+  .hoshen-hero {
+    padding: 90px 24px 70px;
+    min-height: 90vh;
+  }
+
+  .hoshen-hero__float--1,
+  .hoshen-hero__float--4 {
+    display: none;
+  }
+
+  .hoshen-hero__float--2 {
+    top: 12%;
+    right: 3%;
+  }
+
+  .hoshen-hero__float--3 {
+    bottom: 12%;
+    left: 3%;
+  }
+
+  .hoshen-hero__trust {
+    padding: 12px 18px;
+    border-radius: 16px;
+    gap: 8px;
+  }
+
+  .hoshen-hero__trust-divider {
+    display: none;
+  }
+
+  .hoshen-hero__trust-item {
+    flex-basis: 45%;
+    justify-content: center;
+  }
+}
+
+/* =============================================
+   RESPONSIVE — MOBILE
+   ============================================= */
+
+@media (max-width: 600px) {
+  .hoshen-hero {
+    padding: 80px 16px 60px;
+    min-height: 100svh;
+    align-items: flex-start;
+    padding-top: 100px;
+  }
+
+  .hoshen-hero__container {
+    gap: 22px;
+  }
+
+  .hoshen-hero__badge {
+    padding: 8px 16px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .hoshen-hero__badge-text {
+    font-size: 0.8rem;
+    white-space: normal;
+  }
+
+  .hoshen-hero__h1 {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    letter-spacing: -0.015em;
+  }
+
+  .hoshen-hero__br-desktop {
+    display: none;
+  }
+
+  .hoshen-hero__h2 {
+    font-size: clamp(1rem, 4.5vw, 1.25rem);
+  }
+
+  .hoshen-hero__body {
+    font-size: 0.97rem;
+  }
+
+  .hoshen-hero__cta-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .hoshen-hero__btn--primary {
+    padding: 18px 24px;
+    font-size: 1rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .hoshen-hero__btn--secondary {
+    padding: 15px 24px;
+    font-size: 0.95rem;
+    width: 100%;
+  }
+
+  .hoshen-hero__trust {
+    border-radius: 12px;
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  .hoshen-hero__trust-item {
+    flex-basis: 100%;
+    font-size: 0.88rem;
+  }
+
+  .hoshen-hero__float {
+    display: none;
+  }
+}
+
+/* =============================================
+   REDUCED MOTION
+   ============================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .hoshen-hero__badge,
+  .hoshen-hero__h1,
+  .hoshen-hero__h2,
+  .hoshen-hero__body,
+  .hoshen-hero__cta-group,
+  .hoshen-hero__trust {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .hoshen-chart-line--gold,
+  .hoshen-chart-line--cyan {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .hoshen-chart-dot,
+  .hoshen-chart-dot--pulse {
+    animation: none;
+  }
+
+  .hoshen-hero__float {
+    animation: none;
+    opacity: 0.7;
+  }
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
