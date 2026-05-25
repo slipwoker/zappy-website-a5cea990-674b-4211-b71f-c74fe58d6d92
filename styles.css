@@ -13639,8 +13639,17 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   display: none !important;
 }
 
-.navbar #navMenu {
-  display: none !important;
+html[dir="rtl"] .nav-right-group .nav-menu,
+html[lang="he"] .nav-right-group .nav-menu,
+html[lang="ar"] .nav-right-group .nav-menu {
+  justify-content: center !important;
+  flex: 1 !important;
+}
+
+@media (min-width: 769px) {
+.nav-menu {
+  justify-content: center !important;
+}
 }
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
