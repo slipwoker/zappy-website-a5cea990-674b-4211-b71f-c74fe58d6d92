@@ -59,8 +59,8 @@ Information about WCAG compliance and accessibility features.
   - `phone` (tel)
   - `callback_time` (select)
   - `topic` (text)
-  - `message` (textarea)
-  - `privacy_consent` (checkbox)
+  - `message` (textarea, required)
+  - `privacy_consent` (checkbox, required)
 
 ---
 
