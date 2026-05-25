@@ -6,22 +6,19 @@
 
 ## Pages
 
-### קורס מסחר בשוק ההון למתחילים — Hoshen Success
+### בית
 https://hoshen-success.pro
 הצטרף לאלפי אנשים שכבר שינו את חייהם עם Hoshen Success. קורס מסחר בשוק ההון למתחילים, אימון אישי ופיתוח עסקי שיוביל אותך להצלחה אמיתית. התחל היום!
 
-### תוכניות שמניעות תוצאות אמיתיות — Hoshen Success
+### מסלולי הלימוד שלנו וליווי אישי במסחר
 https://hoshen-success.pro/trading-education-programs
 מקורס מסחר בחוזים עתידיים ועד אימון אישי למנהלים בכירים — התוכניות שלנו בנויות להצלחה מדידה. בחר את המסלול שמתאים לך ותתחיל לצמוח כבר עכשיו!
 
-### הסיפור מאחורי ההצלחה שלך מתחיל כאן — Hoshen Success
+### אודות
 https://hoshen-success.pro/about
 Hoshen Success נולדה מתוך שליחות עמוקה לעזור לאנשים לממש את יכולותיהם המלאות. גלה מי אנחנו, מה מניע אותנו, וכיצד ייעוץ קריירה ופיתוח אישי הפכו לשפה שלנו. הכירו אותנו!
 
-### Page
-https://hoshen-success.pro/futures-trading-guide
-
-### הצעד הראשון להצלחה מתחיל בשיחה אחת — Hoshen Success
+### צור קשר
 https://hoshen-success.pro/contact
 מוכן לשנות כיוון ולהתחיל לצמוח? צור קשר עם המומחים של Hoshen Success לייעוץ קריירה אישי, אימון עסקי ליזמים, או קורס מסחר בשוק ההון. אנחנו כאן בשבילך — דבר איתנו עכשיו!
 
@@ -60,7 +57,7 @@ Information about WCAG compliance and accessibility features.
   - `callback_time` (select)
   - `topic` (text)
   - `message` (textarea)
-  - `privacy_consent` (checkbox)
+  - `privacy_consent` (checkbox, required)
 
 ---
 
