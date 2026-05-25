@@ -13651,6 +13651,27 @@ html[lang="ar"] .nav-right-group .nav-menu {
   justify-content: center !important;
 }
 }
+
+.navbar .nav-right-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-inline-start: auto;
+}
+
+.navbar .nav-menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.navbar .nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
