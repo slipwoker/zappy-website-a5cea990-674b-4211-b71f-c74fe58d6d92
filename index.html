@@ -227,7 +227,7 @@
     <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-NK8JGF39');</script>
 <!-- End Google Tag Manager -->
@@ -377,7 +377,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <a href="/" class="logo-link" style>
         <img src="/assets/hoshen-success-coaching-personal-development-consulting-logo.webp" alt="Hoshen Success" class="logo" data-image-type="logo" style />
       </a>
-    </div><ul class="nav-menu" id="navMenu"><li><a href="/" style>בית</a></li><li style="display: none !important;" class="zappy-hidden-menu-item"><a href="/trading-education-programs" style>מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li style="display: none !important;" class="zappy-hidden-menu-item"><a href="/about" style>אודות</a></li><li style="display: none !important;" class="zappy-hidden-menu-item"><a href="/free-guide" class>מדריך חינמי</a></li></ul></div>
+    </div><ul class="nav-menu" id="navMenu"><li><a href="/" style>בית</a></li><li><a href="/trading-education-programs" style>מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about" style>אודות</a></li><li style="display: none !important;" class="zappy-hidden-menu-item"><a href="/free-guide" class>מדריך חינמי</a></li></ul></div>
 
     
 
@@ -422,12 +422,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     // Check if background is transparent or rgba with 0 alpha
     const isTransparent = bgColor === 'transparent' || 
                          bgColor === 'rgba(0, 0, 0, 0)' ||
-                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+                         (bgColor.startsWith('rgba') &amp;&amp; bgColor.includes(', 0)'));
     
     if (isTransparent) {
       // Check for background-image or gradient
       const bgImage = computedStyle.backgroundImage;
-      if (bgImage && bgImage !== 'none') {
+      if (bgImage &amp;&amp; bgImage !== 'none') {
         console.log('[Navbar] Navbar has background image/gradient, using dark text');
         bgColor = 'rgb(240, 240, 240)'; // Assume light background
       } else {
@@ -440,7 +440,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
     // Calculate luminance to determine if background is light or dark
     const rgb = bgColor.match(/\d+/g);
-    if (rgb && rgb.length >= 3) {
+    if (rgb &amp;&amp; rgb.length &gt;= 3) {
       const r = parseInt(rgb[0]);
       const g = parseInt(rgb[1]);
       const b = parseInt(rgb[2]);
@@ -576,7 +576,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       // ONLY apply inline positioning styles on mobile viewport
       // On desktop, the CSS handles hiding these buttons with display: none
       // Inline styles were breaking desktop layout by overriding CSS
-      const isMobileViewport = window.innerWidth <= 768;
+      const isMobileViewport = window.innerWidth &lt;= 768;
       
       if (mobileToggle) {
         // Icon sizing applies to all viewports for consistency
@@ -767,7 +767,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       phoneBtn.addEventListener('click', function() {
         // Get phone number from placeholder in page or use default
         const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
-        const phoneNumber = phoneLinks.length > 0 
+        const phoneNumber = phoneLinks.length &gt; 0 
           ? phoneLinks[0].getAttribute('href').replace('tel:', '')
           : '+972508804568';
         
@@ -786,7 +786,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
   
   <main>
-    <section class="index-hero-section" data-layout-spec="בית-hero" dir="rtl" data-hero-type="fullscreen-scrim" id="index-hero-section" style="--zappy-bg-overlay: rgba(10, 12, 16, 0.85); --zappy-bg-image: url(&quot;assets/business-general-hero-upload-1778360330046.webp&quot;); background-image: linear-gradient(rgba(10, 12, 16, 0.85), rgba(10, 12, 16, 0.85)), url(&quot;assets/business-general-hero-upload-1778360330046.webp&quot;); background-repeat: no-repeat; position: relative; overflow: hidden; background-size: cover; background-position: center center; " data-zappy-bg-type="image" data-zappy-bg-color data-zappy-bg-image="assets/business-general-hero-upload-1778360330046.webp" data-zappy-bg-overlay-color="#0a0c10" data-zappy-bg-overlay-opacity="85" data-zappy-bg-video-type data-zappy-bg-video-url data-element-id="zappy-hero-bg-index-hero-section" data-element-type="background-image" data-zappy-bg-position="50% 50%" data-zappy-bg-zoom="1">
+    <section class="index-hero-section" data-layout-spec="בית-hero" dir="rtl" data-hero-type="fullscreen-scrim" id="index-hero-section" style="--zappy-bg-overlay: rgba(10, 12, 16, 0.85); --zappy-bg-image: url(&amp;quot;assets/business-general-hero-upload-1778360330046.webp&amp;quot;); background-image: linear-gradient(rgba(10, 12, 16, 0.85), rgba(10, 12, 16, 0.85)), url(&amp;quot;assets/business-general-hero-upload-1778360330046.webp&amp;quot;); background-repeat: no-repeat; position: relative; overflow: hidden; background-size: cover; background-position: center center; " data-zappy-bg-type="image" data-zappy-bg-color data-zappy-bg-image="assets/business-general-hero-upload-1778360330046.webp" data-zappy-bg-overlay-color="#0a0c10" data-zappy-bg-overlay-opacity="85" data-zappy-bg-video-type data-zappy-bg-video-url data-element-id="zappy-hero-bg-index-hero-section" data-element-type="background-image" data-zappy-bg-position="50% 50%" data-zappy-bg-zoom="1">
   <!-- Background Image -->
   <div class="index-hero-bg" style="display: none;" data-zappy-original-bg="hidden">
     <img data-hero-bg="true" data-placeholder="index-hero-image-1" data-context="Cinematic dark studio portrait of a confident professional coach or entrepreneur, rim-lit from behind with warm gold and cool cyan light creating a gemstone-like refraction effect. The subject stands or sits with quiet authority. Background shows faint abstract market chart lines and geometric diamond/gemstone lattice patterns at very low opacity. Mood: elite, focused, future-facing. Dark atmosphere with luminous highlights. Suitable for a premium Israeli coaching and personal development brand named Hoshen Success." width="1920" height="1080" src="/assets/site-index-hero-image-1.webp" alt="מאמן מצליח עם תאורת רים זהובה ותכלת על רקע כהה וקווי שוק ההון" data-hero-background="true" data-element-type="image" data-element-id="img-1778068017149-6e7hd6xf7" />
@@ -822,18 +822,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <!-- Label -->
       <div class="index-hero-label">
         <span class="index-hero-gold-rule" aria-hidden="true"></span>
-        <span class="index-hero-label-text" style>מנטור פרמיום זהב &amp; פיתוח אישי</span>
+        <span class="index-hero-label-text" style>מנטור פרמיום זהב &amp;amp; פיתוח אישי</span>
       </div>
 
       <!-- H1 -->
-      <h1 class="index-hero-h1" style></h1><h1 style></h1><h2 style>להפוך את המסחר למקצוע<br />שמכניס כסף בצורה אמיתית</h2><h1><span class="index-hero-h1-accent" style="color: rgb(17, 19, 21) !important;">לצמוח, להצליח, להוביל</span></h1>
+      <h1 class="index-hero-h1" style></h1><h1 style></h1><h2 style>להפוך את המסחר למקצוע<br /><br />שמכניס כסף בצורה אמיתית</h2><h1><span class="index-hero-h1-accent" style="color: rgb(17, 19, 21) !important;">לצמוח, להצליח, להוביל</span></h1>
 
       <!-- H3 Subtitle -->
-      <h3 class="index-hero-subtitle" style>קורס מסחר בחוזים עתידיים בשוק ההון.<br /><br />&nbsp;ליווי מקצועי בלייב בזום בקבוצות קטנות של עד 15 תלמידים בלבד 
+      <h3 class="index-hero-subtitle" style>קורס מסחר בחוזים עתידיים בשוק ההון.<br /><br /><br /><br />&amp;nbsp;ליווי מקצועי בלייב בזום בקבוצות קטנות של עד 15 תלמידים בלבד 
 
-בלייב בזום.<br /><br />ויש גם אפשרות של 
+בלייב בזום.<br /><br /><br /><br />ויש גם אפשרות של 
 
-ליווי מקצועי<br />אחד על אחד! באופן אישי יותר בלייב בזום.<br /><br />לומדים לנתח שוק, לזהות עסקאות איכותיות ולעבוד בצורה מקצועית ומסודרת.</h3>
+ליווי מקצועי<br /><br />אחד על אחד! באופן אישי יותר בלייב בזום.<br /><br /><br /><br />לומדים לנתח שוק, לזהות עסקאות איכותיות ולעבוד בצורה מקצועית ומסודרת.</h3>
 
       <!-- CTAs -->
       <div class="index-hero-ctas">
@@ -889,7 +889,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <div style="padding: 20px;">
         <h3 style="font-size: 20px; font-weight: 600; color: rgb(31, 41, 55); margin-bottom: 10px; font-family: system-ui, -apple-system, sans-serif;">
 
-הסבר קצר על תוכנית עבודה<br />במסחר בלייב!
+הסבר קצר על תוכנית עבודה<br /><br />במסחר בלייב!
 
 </h3>
         <p style="font-size: 15px; line-height: 1.6; color: rgb(31, 41, 55); opacity: 0.8; font-family: system-ui, -apple-system, sans-serif;"><b>שמבינים עניין ! מבינים הכל ! ! !</b></p>
@@ -904,7 +904,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <div style="padding: 20px;">
         <h3 style="font-size: 20px; font-weight: 600; color: rgb(31, 41, 55); margin-bottom: 10px; font-family: system-ui, -apple-system, sans-serif;">
 
-כמה מילים מתלמידה<br />שלנו מ USA
+כמה מילים מתלמידה<br /><br />שלנו מ USA
 
 </h3>
         <p style="font-size: 15px; line-height: 1.6; color: rgb(31, 41, 55); opacity: 0.8; font-family: system-ui, -apple-system, sans-serif;"><b>פררגונים! פרגונים! ועוד פרגונים ! ! !</b></p>
@@ -929,8 +929,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <div class="iss-gold-rule" aria-hidden="true"></div>
 
       <p class="iss-eyebrow">השירותים שלנו</p>
-      <h2 class="iss-heading" style>מסלולי לימוד&nbsp;<span class="iss-heading-accent" style="color: rgb(17, 19, 21) !important;">וליווי במסחר</span></h2>
-      <p class="iss-intro" style><b>בחרו את המסלול שמתאים לכם<br /><br />מלימוד בסיסי ועד מסחר מתקדם בלייב בזום עם ליווי אישי.</b></p>
+      <h2 class="iss-heading" style>מסלולי לימוד&amp;nbsp;<span class="iss-heading-accent" style="color: rgb(17, 19, 21) !important;">וליווי במסחר</span></h2>
+      <p class="iss-intro" style><b>בחרו את המסלול שמתאים לכם<br /><br /><br /><br />מלימוד בסיסי ועד מסחר מתקדם בלייב בזום עם ליווי אישי.</b></p>
 
       <!-- Service pillars list -->
       <ul class="iss-pillars" style><li class="iss-pillar zappy-grid-item-nested-grid zappy-preserve-css-grid" data-original-gap="16px" style="display: grid; align-items: stretch !important;" data-grid-item-index="0">
@@ -945,9 +945,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 
           <div class="iss-pillar-content" style data-grid-item-index="1">
-            <h3 class="iss-pillar-title" style>מסלול - CLASS ROOM LIVE<br />&nbsp;קורס מסחר מקצועי בחוזים עתידיים בלייב בזום<br />אחד על 15 תלמידים</h3>
-            <p class="iss-pillar-desc" style>&nbsp; לימוד מסחר בצורה מקצועית בקבוצות קטנות של עד 15 תלמידים בלבד.<br />
-כולל לייבים בזמן אמת, ניתוח שוק, ניהול סיכונים ועבודה עם חברות נוסטרו.&nbsp;&nbsp;</p>
+            <h3 class="iss-pillar-title" style>מסלול - CLASS ROOM LIVE<br /><br />&amp;nbsp;קורס מסחר מקצועי בחוזים עתידיים בלייב בזום<br /><br />אחד על 15 תלמידים</h3>
+            <p class="iss-pillar-desc" style>&amp;nbsp; לימוד מסחר בצורה מקצועית בקבוצות קטנות של עד 15 תלמידים בלבד.<br /><br />
+כולל לייבים בזמן אמת, ניתוח שוק, ניהול סיכונים ועבודה עם חברות נוסטרו.&amp;nbsp;&amp;nbsp;</p>
           </div>
         </li><li class="iss-pillar zappy-grid-item-nested-grid zappy-preserve-css-grid" data-original-gap="16px" style="display: grid; align-items: stretch !important;" data-grid-item-index="1">
           <div class="iss-pillar-icon" aria-hidden="true">
@@ -957,15 +957,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </svg>
           </div>
           <div class="iss-pillar-content" data-grid-item-index="1">
-            <h3 class="iss-pillar-title" style>מסלול -&nbsp;
+            <h3 class="iss-pillar-title" style>מסלול -&amp;nbsp;
 
 ELITE LIVE
 
-<br />&nbsp;
+<br /><br />&amp;nbsp;
 
  קורס מסחר מקצועי בחוזים עתידיים בלייב בזום
 
- <br />ליווי אישי אחד על אחד</h3>
+ <br /><br />ליווי אישי אחד על אחד</h3>
             <p class="iss-pillar-desc" style>
 
 ליווי אישי וממוקד לסוחרים שרוצים להתקדם מהר יותר עם תוכנית עבודה מקצועית ותמיכה מלאה.
@@ -981,10 +981,10 @@ ELITE LIVE
             </svg>
           </div>
           <div class="iss-pillar-content" data-grid-item-index="1">
-            <h3 class="iss-pillar-title" style>&nbsp; מסלול -  Basic Live<br />קורס מסחר בסיסי מקצועי בחוזים עתידיים בזום&nbsp; &nbsp;&nbsp;</h3>
+            <h3 class="iss-pillar-title" style>&amp;nbsp; מסלול -  Basic Live<br /><br />קורס מסחר בסיסי מקצועי בחוזים עתידיים בזום&amp;nbsp; &amp;nbsp;&amp;nbsp;</h3>
             <p class="iss-pillar-desc" style>
 
-לימוד מסחר בסיסי מקצועי בשוק האמריקאי החל מהבסיס ועד עבודה עם אסטרטגיות מתקדמות ולייבים בזמן אמת.<br /></p>
+לימוד מסחר בסיסי מקצועי בשוק האמריקאי החל מהבסיס ועד עבודה עם אסטרטגיות מתקדמות ולייבים בזמן אמת.<br /><br /></p>
           </div>
         </li></ul>
 
@@ -1016,7 +1016,7 @@ ELITE LIVE
         <div class="iss-card-inner">
           <div class="iss-card-body">
             <h2 style><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#C9A84C"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></p></h2><p data-element-id="move-1778255189290-hjis9xus"><span class="iss-card-tag iss-card-tag--cyan">שוק ההון</span>
-            </p><h3 class="iss-card-title" style>&nbsp; בניית תוכנית מסחר אישית&nbsp;&nbsp;</h3>
+            </p><h3 class="iss-card-title" style>&amp;nbsp; בניית תוכנית מסחר אישית&amp;nbsp;&amp;nbsp;</h3>
             <p class="iss-card-text" style>תהליך ליווי אישי וממוקד הכולל בניית תוכנית עבודה מקצועית, ניהול סיכונים נכון והתאמה מלאה לסגנון המסחר שלך.</p>
             <p><a href="https://wa.me/972508804568" class="iss-card-link btn btn-ghost" data-native-element="true" data-element-id="btn-1778071299922-pnpseszid" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד <span aria-hidden="true">←</span></a>
           </p></div>
@@ -1027,8 +1027,8 @@ ELITE LIVE
       <article class="iss-card iss-card--small">
         <div class="iss-card-inner">
           <div class="iss-card-body">
-            <h3 class="iss-card-title" style>הערך המוסף שלנו!!  מסחר לייב בזום<br /></h3>
-            <p class="iss-card-text" style>&nbsp;4 מפגשי לייב בשבוע בזמן אמת עם ניתוחים, עסקאות והסברים מקצועיים תוך כדי תנועה בשוק.  <br /><br />🔥 4 מפגשי לייב בשבוע בזמן אמת<br />🔥 ניתוח שוק + עסקאות בלייב<br />🔥 עבודה בזמן אמת מול השוק האמריקאי</p>
+            <h3 class="iss-card-title" style>הערך המוסף שלנו!!  מסחר לייב בזום<br /><br /></h3>
+            <p class="iss-card-text" style>&amp;nbsp;4 מפגשי לייב בשבוע בזמן אמת עם ניתוחים, עסקאות והסברים מקצועיים תוך כדי תנועה בשוק.  <br /><br /><br /><br />🔥 4 מפגשי לייב בשבוע בזמן אמת<br /><br />🔥 ניתוח שוק + עסקאות בלייב<br /><br />🔥 עבודה בזמן אמת מול השוק האמריקאי</p>
             <p><a href="https://wa.me/972508804568" class="iss-card-link btn btn-ghost" data-native-element="true" data-element-id="btn-1778071306533-xsln4qjw0" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד <span aria-hidden="true">←</span></a>
           </p></div>
         </div>
@@ -1078,7 +1078,7 @@ ELITE LIVE
 ניסיון אמיתי בשוק ההון
 
 </h3>
-        <p class="index-stats-section__card-desc" style="color: rgb(17, 19, 21) !important;">&nbsp; שמונה שנות ניסיון בעולם המסחר, ניתוח שוק בזמן אמת וליווי סוחרים מתחילים ומתקדמים בדרך למסחר מקצועי.&nbsp;&nbsp;</p>
+        <p class="index-stats-section__card-desc" style="color: rgb(17, 19, 21) !important;">&amp;nbsp; שמונה שנות ניסיון בעולם המסחר, ניתוח שוק בזמן אמת וליווי סוחרים מתחילים ומתקדמים בדרך למסחר מקצועי.&amp;nbsp;&amp;nbsp;</p>
       </article>
 
       <!-- Stat 2 -->
@@ -1093,7 +1093,7 @@ ELITE LIVE
         <h3 class="index-stats-section__card-title" style>
 
 מסחר בזמן אמת</h3>
-        <p class="index-stats-section__card-desc" style="color: rgb(17, 19, 21) !important;">&nbsp; 4 מפגשי לייב בכל שבוע מול השוק האמריקאי עם ניתוחים מקצועיים, עסקאות בזמן אמת וליווי צמוד.&nbsp;&nbsp;</p>
+        <p class="index-stats-section__card-desc" style="color: rgb(17, 19, 21) !important;">&amp;nbsp; 4 מפגשי לייב בכל שבוע מול השוק האמריקאי עם ניתוחים מקצועיים, עסקאות בזמן אמת וליווי צמוד.&amp;nbsp;&amp;nbsp;</p>
       </article>
 
       <!-- Stat 3 -->
@@ -1112,7 +1112,7 @@ MARKET MOVES
 
 
 קריאת שוק מקצועית</h3>
-        <p class="index-stats-section__card-desc" style="color: rgb(17, 19, 21) !important;">&nbsp; עבודה בזמן אמת מול השוק האמריקאי עם זיהוי תנועות שוק, אסטרטגיות מתקדמות וליווי מקצועי.&nbsp;&nbsp;</p>
+        <p class="index-stats-section__card-desc" style="color: rgb(17, 19, 21) !important;">&amp;nbsp; עבודה בזמן אמת מול השוק האמריקאי עם זיהוי תנועות שוק, אסטרטגיות מתקדמות וליווי מקצועי.&amp;nbsp;&amp;nbsp;</p>
       </article>
 
       <!-- Stat 4 -->
@@ -1122,14 +1122,14 @@ MARKET MOVES
           <span class="index-stats-section__figure" style>98%</span>
           <span class="index-stats-section__figure-unit" style="color: rgb(17, 19, 21) !important;">
 
-שביעות רצון תלמידים<br /><br />&nbsp;+ קהילת סוחרים</span>
+שביעות רצון תלמידים<br /><br /><br /><br />&amp;nbsp;+ קהילת סוחרים</span>
         </div>
-        <h3 class="index-stats-section__card-title" style>&nbsp;קהילת סוחרים חזקה&nbsp;&nbsp;<br /><br />תוצאות שמרגישים</h3>
-        <p class="index-stats-section__card-desc" style="color: rgb(17, 19, 21) !important;">&nbsp; התלמידים שלנו נהנים מליווי מקצועי, מסחר בלייב, יחס אישי ותמיכה מלאה לאורך כל הדרך<br />כולל 
+        <h3 class="index-stats-section__card-title" style>&amp;nbsp;קהילת סוחרים חזקה&amp;nbsp;&amp;nbsp;<br /><br /><br /><br />תוצאות שמרגישים</h3>
+        <p class="index-stats-section__card-desc" style="color: rgb(17, 19, 21) !important;">&amp;nbsp; התלמידים שלנו נהנים מליווי מקצועי, מסחר בלייב, יחס אישי ותמיכה מלאה לאורך כל הדרך<br /><br />כולל 
 
 חוויית לימוד מקצועית
 
-.<br /><br />קהילת סוחרים איכותית עם ליווי אישי, עבודה בזמן אמת מול השוק האמריקאי ותמיכה מקצועית.&nbsp;&nbsp;</p>
+.<br /><br /><br /><br />קהילת סוחרים איכותית עם ליווי אישי, עבודה בזמן אמת מול השוק האמריקאי ותמיכה מקצועית.&amp;nbsp;&amp;nbsp;</p>
       </article>
 
     </div>
@@ -1183,7 +1183,7 @@ MARKET MOVES
 
 המלצות תלמידים</span>
         </p><div class="its-gold-rule" aria-hidden="true"></div>
-        <h2 class="its-heading" style>&nbsp; סוחרים אמיתיים תוצאות אמיתיות.&nbsp;&nbsp;</h2>
+        <h2 class="its-heading" style>&amp;nbsp; סוחרים אמיתיים תוצאות אמיתיות.&amp;nbsp;&amp;nbsp;</h2>
         <p class="its-subtext" style>
 
 תלמידים של Hoshen Success משתפים מהחוויה שלהם בלייבים, בליווי האישי ובדרך שלהם לעולם המסחר.
@@ -1205,7 +1205,7 @@ MARKET MOVES
           </svg>
         </div>
         <blockquote class="its-quote">
-          <p style>&nbsp; "לפני הקורס הייתי מפחד להיכנס לעסקאות.<br />היום אני מבין את השוק הרבה יותר טוב, עובד עם אסטרטגיה מסודרת ומרגיש הרבה יותר ביטחון במסחר."&nbsp;&nbsp;</p>
+          <p style>&amp;nbsp; "לפני הקורס הייתי מפחד להיכנס לעסקאות.<br /><br />היום אני מבין את השוק הרבה יותר טוב, עובד עם אסטרטגיה מסודרת ומרגיש הרבה יותר ביטחון במסחר."&amp;nbsp;&amp;nbsp;</p>
         </blockquote>
         <footer class="its-card-footer">
           <div class="its-avatar-ring">
@@ -1235,7 +1235,7 @@ MARKET MOVES
           </svg>
         </div>
         <blockquote class="its-quote">
-          <p style>"אחרי שנים של ייאוש, בלבול ותחושה שכבר סגרנו את הדלת לעולם שוק ההון קיבלנו המלצה חמה מיונתן וויס על עמרי מאיר אורי, ואין ספק שזו הייתה אחת ההחלטות הכי טובות שעשינו.<br /><br />מהרגע הראשון קיבלנו ליווי מקצועי, יחס אישי, בהירות, סדר וכלים מעשיים ופשוטים להבנה שעזרו לנו סוף סוף להבין איך באמת לנתח את השוק בצורה נכונה.<br /><br />הדבר הכי מרגש מבחינתנו הוא שכבר במהלך הלימודים הצלחנו להרוויח בעסקאות אפילו בחשבון דמו וזה נתן לנו ביטחון ואמונה שאפשר באמת להתקדם ולהצליח בתחום הזה.<br /><br />אחד הדברים שהכי אהבנו בקורס הוא שהמסחר ממוקד לשעה אחת בלבד ביום, בסשן ניו יורק שמתחיל בשעה 16:30 שעון ישראל דבר שמאפשר לשלב את זה בצורה נוחה גם בחיי היום יום.<br /><br />תודה ענקית לעמרי על הסבלנות, המקצועיות והאמונה בנו לאורך כל הדרך."</p>
+          <p style>"אחרי שנים של ייאוש, בלבול ותחושה שכבר סגרנו את הדלת לעולם שוק ההון קיבלנו המלצה חמה מיונתן וויס על עמרי מאיר אורי, ואין ספק שזו הייתה אחת ההחלטות הכי טובות שעשינו.<br /><br /><br /><br />מהרגע הראשון קיבלנו ליווי מקצועי, יחס אישי, בהירות, סדר וכלים מעשיים ופשוטים להבנה שעזרו לנו סוף סוף להבין איך באמת לנתח את השוק בצורה נכונה.<br /><br /><br /><br />הדבר הכי מרגש מבחינתנו הוא שכבר במהלך הלימודים הצלחנו להרוויח בעסקאות אפילו בחשבון דמו וזה נתן לנו ביטחון ואמונה שאפשר באמת להתקדם ולהצליח בתחום הזה.<br /><br /><br /><br />אחד הדברים שהכי אהבנו בקורס הוא שהמסחר ממוקד לשעה אחת בלבד ביום, בסשן ניו יורק שמתחיל בשעה 16:30 שעון ישראל דבר שמאפשר לשלב את זה בצורה נוחה גם בחיי היום יום.<br /><br /><br /><br />תודה ענקית לעמרי על הסבלנות, המקצועיות והאמונה בנו לאורך כל הדרך."</p>
         </blockquote>
         <footer class="its-card-footer">
           <div class="its-avatar-ring">
@@ -1263,7 +1263,7 @@ MARKET MOVES
           </svg>
         </div>
         <blockquote class="its-quote">
-          <p >"עומרי תודה רבה לך על הקורס ועל הליווי האישי.<br />אתה אדם טוב, חיובי ומקצועי שנלחם באמת בשביל ההצלחה של התלמידים שלו. היחס האישי, הסבלנות וההשקעה שלך מורגשים בכל שיעור ובכל לייב.<br /><br />הקורס נתן לי הרבה יותר מהבנה במסחר הוא נתן לי ביטחון, סדר ודרך נכונה להסתכל על השוק בצורה מקצועית אין עליך "</p>
+          <p >"עומרי תודה רבה לך על הקורס ועל הליווי האישי.<br /><br />אתה אדם טוב, חיובי ומקצועי שנלחם באמת בשביל ההצלחה של התלמידים שלו. היחס האישי, הסבלנות וההשקעה שלך מורגשים בכל שיעור ובכל לייב.<br /><br /><br /><br />הקורס נתן לי הרבה יותר מהבנה במסחר הוא נתן לי ביטחון, סדר ודרך נכונה להסתכל על השוק בצורה מקצועית אין עליך "</p>
         </blockquote>
         <footer class="its-card-footer">
           <div class="its-avatar-ring">
@@ -1291,14 +1291,14 @@ MARKET MOVES
           </svg>
         </div>
         <blockquote class="its-quote">
-          <p >"לפני שנכנסתי לקהילה של מכללת Hoshen Success הייתי מאוד מבולבל מכל עולם המסחר ולא באמת ידעתי ממי ללמוד ואיך לעבוד נכון מול השוק מהרגע שהכרתי את עמרי מאיר אורי הכול התחיל להשתנות.<br /><br />מדובר במנטור הכי גבר שהכרתי אי פעם מקצועי, סבלני, חיובי ואחד שבאמת נלחם בשביל שהתלמידים שלו יצליחו.<br /><br />הלייבים והקהילה ברמה גבוהה מאוד, עם ניתוחים מקצועיים בזמן אמת, הסברים ברורים והמון יחס אישי שלא רואים בכל מקום.<br /><br />הדבר שהכי חיזק לי את הביטחון היה לראות איך עובדים באמת מול השוק האמריקאי בלייב ולא רק ללמוד תאוריה.<br /><br />הקהילה עצמה מלאה באנרגיות טובות, תמיכה ומוטיבציה, ואני שמח מאוד שנכנסתי לעולם הזה דרך מכללת Hoshen Success "</p>
+          <p >"לפני שנכנסתי לקהילה של מכללת Hoshen Success הייתי מאוד מבולבל מכל עולם המסחר ולא באמת ידעתי ממי ללמוד ואיך לעבוד נכון מול השוק מהרגע שהכרתי את עמרי מאיר אורי הכול התחיל להשתנות.<br /><br /><br /><br />מדובר במנטור הכי גבר שהכרתי אי פעם מקצועי, סבלני, חיובי ואחד שבאמת נלחם בשביל שהתלמידים שלו יצליחו.<br /><br /><br /><br />הלייבים והקהילה ברמה גבוהה מאוד, עם ניתוחים מקצועיים בזמן אמת, הסברים ברורים והמון יחס אישי שלא רואים בכל מקום.<br /><br /><br /><br />הדבר שהכי חיזק לי את הביטחון היה לראות איך עובדים באמת מול השוק האמריקאי בלייב ולא רק ללמוד תאוריה.<br /><br /><br /><br />הקהילה עצמה מלאה באנרגיות טובות, תמיכה ומוטיבציה, ואני שמח מאוד שנכנסתי לעולם הזה דרך מכללת Hoshen Success "</p>
         </blockquote>
         <footer class="its-card-footer">
           <div class="its-avatar-ring">
             <div class="its-avatar-initials" >תלמיד</div>
           </div>
           <div class="its-person" >
-            <strong class="its-name">&nbsp; אושר דוד&nbsp;&nbsp;</strong>
+            <strong class="its-name">&amp;nbsp; אושר דוד&amp;nbsp;&amp;nbsp;</strong>
             <span class="its-role" >
 
 תלמיד בקורס לייב בזום 1X1
@@ -1321,14 +1321,14 @@ MARKET MOVES
           </svg>
         </div>
         <blockquote class="its-quote">
-          <p >"אני נמצא כבר תקופה בקבוצת הוואטסאפ ובלייבים של עמרי מאיר אורי המדהים והמוכשר!! ממכללת: Hoshen Success, ובאמת שלא נתקלתי בקהילה כזאת מקצועית ומסודרת.<br /><br />מהרגע שנכנסתי הרגשתי שיש פה יחס אישי, אהבת חינם, סבלנות והמון רצון אמיתי לעזור לאנשים להבין את השוק ולהצליח במסחר.<br /><br />הלייבים ברמה גבוהה מאוד, עם ניתוחים מקצועיים בזמן אמת והסברים ברורים שעוזרים להבין באמת מה קורה בשוק ולא רק להיכנס לעסקאות בלי להבין למה.<br /><br />הכי חזק מבחינתי זה שגם הצלחתי להרוויח יחד עם עמרי בכמה עסקאות לייב, וזה נתן לי הרבה יותר ביטחון ואמונה בדרך.<br /><br />קהילה חזקה, אנרגיות טובות והמון מקצועיות.<br />שמח מאוד שנכנסתי לזה"</p>
+          <p >"אני נמצא כבר תקופה בקבוצת הוואטסאפ ובלייבים של עמרי מאיר אורי המדהים והמוכשר!! ממכללת: Hoshen Success, ובאמת שלא נתקלתי בקהילה כזאת מקצועית ומסודרת.<br /><br /><br /><br />מהרגע שנכנסתי הרגשתי שיש פה יחס אישי, אהבת חינם, סבלנות והמון רצון אמיתי לעזור לאנשים להבין את השוק ולהצליח במסחר.<br /><br /><br /><br />הלייבים ברמה גבוהה מאוד, עם ניתוחים מקצועיים בזמן אמת והסברים ברורים שעוזרים להבין באמת מה קורה בשוק ולא רק להיכנס לעסקאות בלי להבין למה.<br /><br /><br /><br />הכי חזק מבחינתי זה שגם הצלחתי להרוויח יחד עם עמרי בכמה עסקאות לייב, וזה נתן לי הרבה יותר ביטחון ואמונה בדרך.<br /><br /><br /><br />קהילה חזקה, אנרגיות טובות והמון מקצועיות.<br /><br />שמח מאוד שנכנסתי לזה"</p>
         </blockquote>
         <footer class="its-card-footer">
           <div class="its-avatar-ring">
             <div class="its-avatar-initials" >קהילה</div>
           </div>
           <div class="its-person" >
-            <strong class="its-name">&nbsp; איציק פרידמן&nbsp;&nbsp;</strong>
+            <strong class="its-name">&amp;nbsp; איציק פרידמן&amp;nbsp;&amp;nbsp;</strong>
             <span class="its-role" >
 
 איציק פרידמן
@@ -1435,10 +1435,10 @@ MARKET MOVES
   <div class="container mx-auto px-4 md:px-8 text-center">
     <p style="color: #F5C451; font-size: 13px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 24px; margin-top: 32px; text-align: center; display: block; width: 100%; margin-left: auto; margin-right: auto">NASDAQ 100 • FUTURES TRADING • LIVE ZOOM</p>
     <h1 style="color: #F5F3EE; font-size: 2.5rem; font-weight: 800; line-height: 1.4; margin-bottom: 20px;">
-      המקצוע שהופך אנשים רגילים<br>לסוחרים מקצועיים בשוק ההון
+      המקצוע שהופך אנשים רגילים<br /><br />לסוחרים מקצועיים בשוק ההון
     </h1>
     <p style="color: rgb(208, 203, 194); font-size: 1.1rem; line-height: 1.9; margin-bottom: 36px; text-align: center; margin-left: auto; margin-right: auto; display: block; width: fit-content; max-width: 100%;">
-      לימודי מסחר בחוזים עתידיים בלייב עם Omri Meir Ory<br>
+      לימודי מסחר בחוזים עתידיים בלייב עם Omri Meir Ory<br /><br />
       בלי ניסיון קודם • בלי צורך בהון עצמי גדול • עם ליווי אישי אמיתי
     </p>
     <p style="text-align: center; display: flex; justify-content: center; align-items: center; width: 100%; margin-left: auto; margin-right: auto"><a href="https://wa.me/972508804568" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: #25D366; color: #ffffff; font-size: 1.1rem; font-weight: 700; padding: 16px 36px; border-radius: 8px; text-decoration: none;">
@@ -1527,19 +1527,19 @@ MARKET MOVES
 
     <!-- Headline -->
     <h1 class="hoshen-hero__h1">
-      תרצה לסחור בשוק ההון<br class="hoshen-hero__br-desktop" />
+      תרצה לסחור בשוק ההון<br class="hoshen-hero__br-desktop" /><br />
       <span class="hoshen-hero__h1-highlight" style="color: rgb(17, 19, 21) !important;">כמו מקצוען?</span>
     </h1>
 
     <!-- Subheadline -->
     <h2 class="hoshen-hero__h2" style>
-      קורס מסחר מקצועי בחוזים<br />עתידיים ליווי אישי בלייב בזום
+      קורס מסחר מקצועי בחוזים<br /><br />עתידיים ליווי אישי בלייב בזום
     </h2>
 
     <!-- Body text -->
     <p class="hoshen-hero__body" style>
-      למד לנתח שוק, לזהות עסקאות איכותיות ולעבוד בצורה מקצועית.<br />
-      <strong>&nbsp;הלימודים&nbsp; עם המנטור אחד על 15 תלמידים /&nbsp; או אחד על אחד בלבד אונליין בזום!!</strong><strong>.<br /></strong>4 לייבים של מסחר אונליין בזום בשבוע מול השוק האמריקאי.
+      למד לנתח שוק, לזהות עסקאות איכותיות ולעבוד בצורה מקצועית.<br /><br />
+      <strong>&amp;nbsp;הלימודים&amp;nbsp; עם המנטור אחד על 15 תלמידים /&amp;nbsp; או אחד על אחד בלבד אונליין בזום!!</strong><strong>.<br /><br /></strong>4 לייבים של מסחר אונליין בזום בשבוע מול השוק האמריקאי.
     </p>
 
     <!-- CTA Buttons -->
@@ -1635,7 +1635,7 @@ MARKET MOVES
     <div class="pain-section__empathy" role="note">
       <div class="pain-section__empathy-line" aria-hidden="true"></div>
       <p class="pain-section__empathy-text">
-        אתה לא לבד. רוב האנשים שמגיעים אלינו מרגישים בדיוק כך.<br class="pain-section__br" />
+        אתה לא לבד. רוב האנשים שמגיעים אלינו מרגישים בדיוק כך.<br class="pain-section__br" /><br />
         <span class="pain-section__empathy-highlight" style="color: rgb(17, 19, 21) !important;">ההבדל היחיד הוא שהם החליטו לעשות משהו עם זה.</span>
       </p>
       <div class="pain-section__empathy-line" aria-hidden="true"></div>
@@ -1872,7 +1872,7 @@ MARKET MOVES
           <ul class="footer-contact">
             <li>
               <span class="contact-icon"><i class="fas fa-envelope" data-element-type="icon" data-element-id="icon-1778071114576-v7iukl5kb" data-icon-type="fontawesome"></i></span>
-              <span class="contact-text"><a href="/cdn-cgi/l/email-protection#c0a1a3a1a4a5adb980a8afb3a8a5aeedb3b5a3a3a5b3b3eea3afad"><span class="__cf_email__" data-cfemail="90f1f3f1f4f5fde9d0f8ffe3f8f5febde3e5f3f3f5e3e3bef3fffd">[email&nbsp;protected]</span></a></span>
+              <span class="contact-text"><a href="/cdn-cgi/l/email-protection#c0a1a3a1a4a5adb980a8afb3a8a5aeedb3b5a3a3a5b3b3eea3afad"><span class="__cf_email__" data-cfemail="90f1f3f1f4f5fde9d0f8ffe3f8f5febde3e5f3f3f5e3e3bef3fffd">[email&amp;nbsp;protected]</span></a></span>
             </li>
             <li>
               <span class="contact-icon"><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1778071114576-x5o987xrh" data-icon-type="fontawesome"></i></span>
@@ -1886,7 +1886,7 @@ MARKET MOVES
         <!-- Column 4: CTA / Extra -->
         <div class="footer-col footer-cta-col">
           <h3 class="footer-heading"><span class="heading-accent"></span>מוכנים להתחיל?</h3>
-          <p class="footer-cta-text" style>קבעו פגישת היכרות חינמית בזום!! אם המנטור הענק!! שלנו עמרי מאיר אורי<br /><br /><br /><br /><br /><br /><br /><br />&nbsp;וגלו איך Hoshen Success יכולים לשנות לכם את המסלול שלכם בחיים מקצה לקצה!!.</p>
+          <p class="footer-cta-text" style>קבעו פגישת היכרות חינמית בזום!! אם המנטור הענק!! שלנו עמרי מאיר אורי<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />&amp;nbsp;וגלו איך Hoshen Success יכולים לשנות לכם את המסלול שלכם בחיים מקצה לקצה!!.</p>
           <p style="text-align: center !important; display: flex !important; justify-content: center !important; align-items: flex-start !important; width: 100% !important;"><a href="https://wa.me/972508804568" class="footer-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-yclgf8hnx" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(46, 0, 173) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(255, 209, 102), rgb(245, 196, 81)) !important;" target="_blank" rel="noopener noreferrer" data-text-color="#2e00ad">לחץ לשיחה עכשיו בוואצאפ !</a>
         </p></div>
 
@@ -1897,7 +1897,7 @@ MARKET MOVES
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NK8JGF39" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms">
         </iframe>
       </div>
-    </div></div><div class="zappy-inserted-element" id="zappy-element-1778449026839-h7rln1ahl" data-element-id="zappy-element-1778449026839-h7rln1ahl" data-element-type="iframe" style="width: 1px; max-width: 100%; margin: 20px auto; display: flex; justify-content: center;"><div style="width: 1px; max-width: 100%; display: block;" data-full-width data-custom-width="1"><div style="position: relative; width: 100%; height: 1px; background: rgb(243, 244, 246); border-radius: 8px; overflow: hidden;" data-element-type="iframe" data-element-id="zappy-element-1778449026839-h7rln1ahl" id="zappy-element-1778449026839-h7rln1ahl" data-custom-height="1"><iframe src="<!-- Google Tag Manager --> <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-NK8JGF39');</script> <!-- End Google Tag Manager -->" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe></div></div></div>
+    </div></div><div class="zappy-inserted-element" id="zappy-element-1778449026839-h7rln1ahl" data-element-id="zappy-element-1778449026839-h7rln1ahl" data-element-type="iframe" style="width: 1px; max-width: 100%; margin: 20px auto; display: flex; justify-content: center;"><div style="width: 1px; max-width: 100%; display: block;" data-full-width data-custom-width="1"><div style="position: relative; width: 100%; height: 1px; background: rgb(243, 244, 246); border-radius: 8px; overflow: hidden;" data-element-type="iframe" data-element-id="zappy-element-1778449026839-h7rln1ahl" id="zappy-element-1778449026839-h7rln1ahl" data-custom-height="1"><iframe src="<!-- Google Tag Manager --> <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-NK8JGF39');</script> <!-- End Google Tag Manager -->" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe></div></div></div>
 
   <!-- Divider -->
   <div class="footer-divider-wrap">
