@@ -13638,6 +13638,10 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .navbar #navMenu > li:nth-child(1) {
   display: none !important;
 }
+
+.navbar #navMenu {
+  display: none !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
