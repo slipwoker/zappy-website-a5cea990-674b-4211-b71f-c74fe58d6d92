@@ -13672,6 +13672,19 @@ html[lang="ar"] .nav-right-group .nav-menu {
   justify-content: space-between;
   width: 100%;
 }
+
+.navbar .nav-menu {
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.navbar .nav-right-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
