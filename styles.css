@@ -13651,6 +13651,13 @@ html[lang="ar"] .nav-right-group .nav-menu {
   justify-content: center !important;
 }
 }
+
+@media (min-width: 769px) {
+html[dir="rtl"] .nav-right-group .nav-menu,
+  html[lang="he"] .nav-right-group .nav-menu {
+  justify-content: flex-end !important;
+}
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
