@@ -13651,12 +13651,6 @@ html[lang="ar"] .nav-right-group .nav-menu {
   justify-content: center !important;
 }
 }
-
-@media (min-width: 769px) {
-.nav-right-group .nav-menu {
-  justify-content: flex-end !important;
-}
-}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
