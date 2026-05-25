@@ -13630,6 +13630,10 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
     transform: none;
   }
 }
+
+.nav-menu {
+  margin-top: -8px !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
