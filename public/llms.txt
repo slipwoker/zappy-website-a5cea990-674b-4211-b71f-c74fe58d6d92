@@ -25,9 +25,8 @@ https://hoshen-success.pro/contact
 ### Page
 https://hoshen-success.pro/free-guide
 
-### אזור גישה מאובטח לצוות
-https://hoshen-success.pro/team-access
-Hoshen Success - אזור גישה מאובטח לצוות
+### Page
+https://hoshen-success.pro/new-page-1782083175099
 
 ## Legal & Policy
 
@@ -63,8 +62,8 @@ Information about WCAG compliance and accessibility features.
   - `phone` (tel)
   - `callback_time` (select)
   - `topic` (text)
-  - `message` (textarea, required)
-  - `privacy_consent` (checkbox, required)
+  - `message` (textarea)
+  - `privacy_consent` (checkbox)
 
 ---
 
