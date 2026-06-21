@@ -161,26 +161,31 @@
       // Track button clicks (counted as actions)
       if (target.tagName === 'BUTTON' || target.closest('button')) {
         var button = target.tagName === 'BUTTON' ? target : target.closest('button');
-        trackEvent('click', {
+        var clickMeta = {
           element: 'button',
           text: button.textContent.trim().substring(0, 100),
           id: button.id || null,
           class: button.className || null
-        });
+        };
+        
+        trackEvent('click', clickMeta);
       }
       
       // Track link clicks (navigation - not counted as actions)
       else if (target.tagName === 'A' || target.closest('a')) {
         var link = target.tagName === 'A' ? target : target.closest('a');
-        trackEvent('navigation', {
+        var navMeta = {
           element: 'link',
           text: link.textContent.trim().substring(0, 100),
           href: link.href,
           external: link.hostname !== window.location.hostname
-        });
+        };
+        
+        trackEvent('navigation', navMeta);
       }
     }, true);
   }
+  
   
   // Track form submissions
   if (config.trackFormSubmissions) {
@@ -359,7 +364,7 @@
       <a href="/" class="logo-link" >
         <img src="/assets/hoshen-success-coaching-personal-development-consulting-logo.webp" alt="Hoshen Success" class="logo" data-image-type="logo" >
       </a>
-    </div><ul class="nav-menu" id="navMenu"><li><a href="/" >בית</a></li><li><a href="/trading-education-programs" >מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about" >אודות</a></li><li><a href="/contact" >צור קשר</a></li></ul></div>
+    </div><ul class="nav-menu" id="navMenu"><li><a href="/" >בית</a></li><li><a href="/trading-education-programs" >מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about" >אודות</a></li><li><a href="/contact" >צור קשר</a></li><li><a href="/team-access" class="nav-link">כניסה</a></li></ul></div>
 
     
 
@@ -1662,7 +1667,7 @@
           <ul class="footer-contact">
             <li>
               <span class="contact-icon"><i class="fas fa-envelope" data-element-type="icon" data-element-id="icon-1778071114576-v7iukl5kb" data-icon-type="fontawesome"></i></span>
-              <span class="contact-text"><a href="/cdn-cgi/l/email-protection#c0a1a3a1a4a5adb980a8afb3a8a5aeedb3b5a3a3a5b3b3eea3afad"><span class="__cf_email__" data-cfemail="90f1f3f1f4f5fde9d0f8ffe3f8f5febde3e5f3f3f5e3e3bef3fffd">[email&nbsp;protected]</span></a></span>
+              <span class="contact-text"><a href="mailto:academy@hoshen-success.com"><span>academy@hoshen-success.com</span></a></span>
             </li>
             <li>
               <span class="contact-icon"><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1778071114576-x5o987xrh" data-icon-type="fontawesome"></i></span>

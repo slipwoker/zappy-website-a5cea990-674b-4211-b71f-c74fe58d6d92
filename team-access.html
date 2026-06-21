@@ -1,0 +1,3174 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>אזור גישה מאובטח לצוות</title>
+    <meta name="description" content="Hoshen Success - אזור גישה מאובטח לצוות">
+    <meta name="keywords" content="">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'a5cea990-674b-4211-b71f-c74fe58d6d92',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        var clickMeta = {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        };
+        
+        trackEvent('click', clickMeta);
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        var navMeta = {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        };
+        
+        trackEvent('navigation', navMeta);
+      }
+    }, true);
+  }
+  
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="אזור גישה מאובטח לצוות">
+    <meta property="og:description" content="Hoshen Success - אזור גישה מאובטח לצוות">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="אזור גישה מאובטח לצוות">
+    <meta name="twitter:description" content="Hoshen Success - אזור גישה מאובטח לצוות">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LocalBusiness","@id":"https://hoshen-success.pro#organization","name":"Hoshen Success","url":"https://hoshen-success.pro","description":"Hoshen Success is a coaching and personal development brand, likely offering guidance, mentorship, or training to help individuals achieve their goals. The brand name 'Hoshen' (a Hebrew word referring to a gemstone breastplate) suggests a rich, meaningful identity possibly rooted in Jewish or Israeli culture, with themes of strength, clarity, and achieving one's full potential.","address":{"@type":"PostalAddress","streetAddress":"שדרות נים 2, קניון עזריאלי ראשונים { המשרד מיועד למנהלים בלבד. הכניסה בתיאום מראש בלבד}, ראשון לציון, מרכז, 7546302, ישראל"},"contactPoint":[{"@type":"ContactPoint","contactType":"customer service","email":"academy@hoshen-success.com","telephone":"+972515533507"}]},{"@type":"WebSite","@id":"https://hoshen-success.pro#website","url":"https://hoshen-success.pro","name":"Hoshen Success","publisher":{"@id":"https://hoshen-success.pro#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://hoshen-success.pro"},{"@type":"ListItem","position":2,"name":"Team Access","item":"https://hoshen-success.pro/team-access"}]}]}</script>
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NK8JGF39');</script>
+<!-- End Google Tag Manager -->
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:url" content="https://hoshen-success.pro/team-access">
+    <meta property="og:type" content="article">
+    
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="אזור גישה מאובטח לצוות">
+    <meta property="og:locale" content="he_IL">
+    <!-- Twitter Card Meta Tags -->
+    
+    
+    
+    
+    <meta name="twitter:image:alt" content="אזור גישה מאובטח לצוות"><style id="zappy-ai-page-styles">.team-access-hero-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 85vh;
+  padding: 140px 0 100px 0;
+  overflow: hidden;
+  background-color: #0A0C10;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(0,212,255,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(201,168,76,0.06) 0%, transparent 50%),
+    linear-gradient(180deg, #0A0C10 0%, #0d1018 100%);
+  color: var(--text-light);
+  direction: rtl;
+}
+
+/* Background Media */
+.team-access-hero-section__bg-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.25;
+  mix-blend-mode: overlay;
+}
+.team-access-hero-section__bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Scrim Overlay */
+.team-access-hero-section__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(10,12,16,0.4) 0%, rgba(10,12,16,0.85) 100%);
+}
+
+/* Decorative Motifs */
+.team-access-hero-section__deco {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+}
+.team-access-hero-section__deco.gemstone-lattice {
+  top: 5%;
+  right: -5%;
+  width: 450px;
+  height: 450px;
+  color: #C9A84C;
+  opacity: 0.5;
+  transform: rotate(-15deg);
+}
+.team-access-hero-section__deco.radial-glow-orb {
+  bottom: -10%;
+  left: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(40px);
+}
+
+/* Main Container */
+.team-access-hero-section__container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* Two-Column Grid */
+.team-access-hero-section__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* Text Column (Right) */
+.team-access-hero-section__text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  text-align: right;
+}
+
+.team-access-hero-section__headline {
+  font-size: 3.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--text-light);
+  margin: 0;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+.team-access-hero-section__subtitle {
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #B0BAC8;
+  margin: 0;
+  max-width: 520px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* CTA Row */
+.team-access-hero-section__cta-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.team-access-hero-section__cta-primary {
+  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 100%);
+  color: #0A0C10;
+  padding: 14px 32px;
+  border-radius: 100px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 40px rgba(201,168,76,0.25);
+  text-align: center;
+}
+.team-access-hero-section__cta-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 60px rgba(201,168,76,0.45);
+}
+
+.team-access-hero-section__cta-secondary {
+  background: transparent;
+  color: #C9A84C;
+  border: none;
+  padding: 14px 24px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+  text-underline-offset: 4px;
+  text-align: center;
+}
+.team-access-hero-section__cta-secondary:hover {
+  color: #E8C96A;
+  text-decoration: none;
+}
+
+/* Trust Note */
+.team-access-hero-section__trust-note {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #8A94A6;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.team-access-hero-section__trust-icon {
+  font-size: 1rem;
+  display: inline-block;
+}
+
+/* Panel Column (Left) */
+.team-access-hero-section__panel-col {
+  display: flex;
+  justify-content: center;
+}
+
+.team-access-hero-section__access-panel {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(201,168,76,0.2);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.team-access-hero-section__access-panel:hover {
+  box-shadow: 0 30px 80px rgba(201,168,76,0.15);
+  transform: translateY(-6px);
+}
+
+.team-access-hero-section__panel-header {
+  padding: 32px 36px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  text-align: right;
+}
+
+.team-access-hero-section__panel-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-light);
+  margin: 0 0 6px 0;
+}
+
+.team-access-hero-section__panel-subtitle {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #8A94A6;
+  margin: 0;
+}
+
+.team-access-hero-section__panel-body {
+  padding: 28px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.team-access-hero-section__info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.team-access-hero-section__info-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #C9A84C;
+}
+
+.team-access-hero-section__info-value {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #B0BAC8;
+  font-family: monospace;
+  background: rgba(255,255,255,0.05);
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.08);
+  letter-spacing: 0.04em;
+}
+
+.team-access-hero-section__divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+  margin: 8px 0;
+}
+
+.team-access-hero-section__panel-footer {
+  margin-top: 4px;
+  text-align: right;
+}
+
+.team-access-hero-section__footer-text {
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #8A94A6;
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.team-access-hero-section__footer-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Bottom Transition Divider */
+.team-access-hero-section__divider-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  pointer-events: none;
+  z-index: 5;
+}
+.team-access-hero-section__divider-wrapper svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .team-access-hero-section {
+    min-height: auto;
+    padding: 120px 20px 60px 20px;
+    align-items: flex-start;
+  }
+  
+  .team-access-hero-section__container {
+    padding: 0;
+  }
+
+  .team-access-hero-section__grid {
+    grid-template-columns: 1fr !important;
+    gap: 48px;
+  }
+
+  .team-access-hero-section__text-col {
+    text-align: center;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .team-access-hero-section__headline {
+    font-size: 2.2rem;
+    text-align: center;
+  }
+
+  .team-access-hero-section__subtitle {
+    font-size: 1.1rem;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .team-access-hero-section__cta-row {
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+  
+  .team-access-hero-section__cta-primary,
+  .team-access-hero-section__cta-secondary {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .team-access-hero-section__trust-note {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .team-access-hero-section__panel-col {
+    width: 100%;
+  }
+
+  .team-access-hero-section__access-panel {
+    max-width: 100%;
+  }
+
+  .team-access-hero-section__panel-header,
+  .team-access-hero-section__panel-body {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .team-access-hero-section__deco.gemstone-lattice {
+    width: 250px;
+    height: 250px;
+    right: -10%;
+    top: 0;
+    opacity: 0.3;
+  }
+  
+  .team-access-hero-section__deco.radial-glow-orb {
+    width: 300px;
+    height: 300px;
+    bottom: -5%;
+    left: -20%;
+  }
+}
+/* ZAPPY_POSTGEN_GUARD_HERO_FONT_CAP:team-access-hero */
+.hero h1, .hero-section h1, [class*="hero-"] h1, [class~="hero"] h1, .hero .hero-title, .hero-title { font-size: 48px !important; line-height: 1.2 !important; }
+@media (max-width: 1024px) {
+  .hero h1, .hero-section h1, [class*="hero-"] h1, [class~="hero"] h1, .hero .hero-title, .hero-title { font-size: 36px !important; }
+}
+@media (max-width: 768px) {
+  .hero h1, .hero-section h1, [class*="hero-"] h1, [class~="hero"] h1, .hero .hero-title, .hero-title { font-size: 28px !important; }
+}
+
+
+.team-access-about-section {
+  position: relative;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  padding: 100px 16px 80px;
+  overflow: hidden;
+  direction: rtl;
+}
+
+.team-access-about-section .ta-section-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Background Motif */
+.team-access-about-section .ta-bg-motif {
+  position: absolute;
+  top: -100px;
+  right: -120px;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+  transform: rotate(-15deg);
+}
+
+.team-access-about-section .ta-bg-motif svg {
+  width: 400px;
+  height: 400px;
+}
+
+/* Header */
+.team-access-about-section .ta-header {
+  margin-bottom: 64px;
+}
+
+.team-access-about-section .ta-heading {
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-dark);
+  margin: 0 0 16px 0;
+  text-align: start;
+  letter-spacing: -0.5px;
+}
+
+.team-access-about-section .ta-subtitle {
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 680px;
+  text-align: start;
+}
+
+/* Two-Column Grid (RTL: Right=Text 7fr, Left=Media 5fr) */
+.team-access-about-section .ta-content-grid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 60px;
+  align-items: start;
+  direction: rtl;
+  margin-bottom: 60px;
+}
+
+/* Right Column: Text Features */
+.team-access-about-section .ta-text-column {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.team-access-about-section .ta-feature-item {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.team-access-about-section .ta-feature-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary);
+  background: rgba(245, 196, 81, 0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(245, 196, 81, 0.15);
+}
+
+.team-access-about-section .ta-feature-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.team-access-about-section .ta-feature-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.team-access-about-section .ta-feature-title {
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-dark);
+  margin: 0 0 8px 0;
+  text-align: start;
+}
+
+.team-access-about-section .ta-feature-desc {
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0;
+  text-align: start;
+}
+
+/* Left Column: Code Card */
+.team-access-about-section .ta-media-column {
+  min-width: 0;
+}
+
+.team-access-about-section .ta-code-card {
+  background: #FFFFFF;
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.team-access-about-section .ta-code-card:hover {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.team-access-about-section .ta-code-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #F9F9F7;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.team-access-about-section .ta-code-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.team-access-about-section .ta-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+}
+
+.team-access-about-section .dot-red {
+  background: #FF5F56;
+}
+
+.team-access-about-section .dot-yellow {
+  background: #FFBD2E;
+}
+
+.team-access-about-section .dot-green {
+  background: #27C93F;
+}
+
+.team-access-about-section .ta-code-title {
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-inline-start: 12px;
+  letter-spacing: 0.3px;
+}
+
+.team-access-about-section .ta-code-body {
+  padding: 24px 20px;
+  position: relative;
+  background: #FFFFFF;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-access-about-section .ta-code-preview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #F5F3EE;
+  border-radius: 6px;
+  padding: 20px;
+  border: 1px dashed var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.team-access-about-section .ta-code-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: 'Inter', 'Assistant', 'Rubik', monospace;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  z-index: 2;
+  position: relative;
+  width: 100%;
+}
+
+.team-access-about-section .ta-line {
+  display: block;
+  opacity: 0.7;
+  font-weight: 400;
+  direction: ltr;
+  text-align: left;
+}
+
+.team-access-about-section .ta-line.indent {
+  padding-inline-start: 16px;
+}
+
+.team-access-about-section .ta-code-watermark {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1;
+  color: var(--secondary);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.team-access-about-section .ta-code-watermark svg {
+  width: 80px;
+  height: 80px;
+}
+
+/* Gold Divider */
+.team-access-about-section .ta-divider-wrapper {
+  width: 100%;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(245, 196, 81, 0.2);
+  display: flex;
+  justify-content: center;
+}
+
+.team-access-about-section .ta-divider-wrapper svg {
+  width: 120px;
+  height: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .team-access-about-section {
+    padding: 80px 16px 60px;
+  }
+
+  .team-access-about-section .ta-bg-motif {
+    top: -50px;
+    right: -80px;
+    opacity: 0.3;
+  }
+
+  .team-access-about-section .ta-bg-motif svg {
+    width: 250px;
+    height: 250px;
+  }
+
+  .team-access-about-section .ta-header {
+    margin-bottom: 40px;
+  }
+
+  .team-access-about-section .ta-heading {
+    font-size: 1.75rem;
+  }
+
+  .team-access-about-section .ta-content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px;
+  }
+
+  .team-access-about-section .ta-text-column {
+    gap: 32px;
+  }
+
+  .team-access-about-section .ta-feature-item {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .team-access-about-section .ta-code-body {
+    min-height: 240px;
+  }
+
+  .team-access-about-section .ta-code-lines {
+    font-size: 0.8rem;
+  }
+}
+
+.team-access-features-section {
+  position: relative;
+  background-color: #0A0C10;
+  background-image: radial-gradient(rgba(201,168,76,0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: var(--text-light);
+  padding: 100px 16px 120px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.team-access-features-section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Section Header */
+.team-access-features-section .section-header {
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 2;
+}
+
+.team-access-features-section .gold-rule {
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A84C, #E8C96A);
+  margin-bottom: 24px;
+  margin-inline-start: 0;
+  border-radius: 2px;
+}
+
+.team-access-features-section .section-header h2 {
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: #FFFFFF;
+  margin: 0 0 16px 0;
+  text-align: right;
+}
+
+.team-access-features-section .section-header p {
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.75;
+  color: #8A94A6;
+  max-width: 700px;
+  margin-inline-start: 0;
+  text-align: right;
+}
+
+/* Features Grid */
+.team-access-features-section .features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  direction: rtl;
+  position: relative;
+  z-index: 2;
+}
+
+/* Feature Card */
+.team-access-features-section .feature-card {
+  position: relative;
+  background: #111420;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  padding: 2rem;
+  border: 1px solid rgba(201,168,76,0.12);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.team-access-features-section .feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(201,168,76,0.2);
+  border-color: rgba(201,168,76,0.3);
+}
+
+/* Card Accent Line */
+.team-access-features-section .card-accent-line {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 3px;
+  border-radius: 0 0 0 0;
+}
+
+.team-access-features-section .card-accent-line.accent-cyan {
+  background: linear-gradient(90deg, #00D4FF, rgba(0,212,255,0.2));
+}
+
+.team-access-features-section .card-accent-line.accent-gold {
+  background: linear-gradient(90deg, #C9A84C, rgba(201,168,76,0.2));
+}
+
+/* Card Index */
+.team-access-features-section .card-index {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-family: 'Manrope', 'Sora', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: rgba(255,255,255,0.03);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Card Content */
+.team-access-features-section .card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 16px;
+}
+
+.team-access-features-section .card-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(201,168,76,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  color: #C9A84C;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.team-access-features-section .feature-card:hover .card-icon-wrapper {
+  background: rgba(201,168,76,0.15);
+  color: #E8C96A;
+}
+
+.team-access-features-section .card-icon {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+}
+
+.team-access-features-section .card-content h3 {
+  font-family: 'Manrope', 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #FFFFFF;
+  margin: 0 0 12px 0;
+  text-align: right;
+}
+
+.team-access-features-section .card-content p {
+  font-family: 'Inter', 'Assistant', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.75;
+  color: #8A94A6;
+  margin: 0 0 24px 0;
+  flex-grow: 1;
+  text-align: right;
+}
+
+.team-access-features-section .card-tag {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8A94A6;
+  padding: 6px 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 100px;
+  align-self: flex-start;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.team-access-features-section .feature-card:hover .card-tag {
+  color: #C9A84C;
+  border-color: rgba(201,168,76,0.4);
+}
+
+/* Decorative Orb */
+.team-access-features-section .decorative-orb {
+  position: absolute;
+  top: -150px;
+  left: -150px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .team-access-features-section {
+    padding: 80px 16px 80px;
+  }
+
+  .team-access-features-section .section-header {
+    margin-bottom: 40px;
+  }
+
+  .team-access-features-section .section-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .team-access-features-section .features-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px;
+  }
+
+  .team-access-features-section .feature-card {
+    padding: 1.5rem;
+  }
+
+  .team-access-features-section .card-index {
+    font-size: 2.5rem;
+    top: 10px;
+    left: 10px;
+  }
+
+  .team-access-features-section .card-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .team-access-features-section .decorative-orb {
+    width: 300px;
+    height: 300px;
+    top: -50px;
+    left: -50px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .team-access-features-section .features-grid {
+    gap: 20px;
+  }
+  
+  .team-access-features-section .feature-card {
+    padding: 1.5rem;
+  }
+}
+
+.team-access-details-section {
+  position: relative;
+  background-color: #0A0C10;
+  background-image:
+    radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(0,212,255,0.04) 0%, transparent 60%),
+    linear-gradient(180deg, #0A0C10 0%, #0d1018 100%);
+  color: var(--text-light);
+  padding: 100px 16px 80px;
+  overflow: hidden;
+  direction: rtl;
+  text-align: right;
+}
+
+/* Decorative Background Elements */
+.team-access-details-section__bg-orb {
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(60px);
+}
+
+.team-access-details-section__bg-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(201,168,76,0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* Container */
+.team-access-details-section__container {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+@media (min-width: 768px) {
+  .team-access-details-section__container {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 80px;
+  }
+}
+
+/* Right Column: Content */
+.team-access-details-section__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.team-access-details-section__heading {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: #FFFFFF;
+  margin: 0 0 20px 0;
+}
+
+.team-access-details-section__description {
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.8;
+  color: #B0BAC8;
+  margin: 0 0 40px 0;
+  max-width: 600px;
+}
+
+/* Info List */
+.team-access-details-section__info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.team-access-details-section__info-item {
+  padding: 24px 0;
+}
+
+.team-access-details-section__info-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.team-access-details-section__info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(201,168,76,0.1);
+  color: #C9A84C;
+  flex-shrink: 0;
+}
+
+.team-access-details-section__info-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.team-access-details-section__info-text {
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.75;
+  color: #8A94A6;
+  margin: 0;
+  padding-inline-start: 48px;
+}
+
+.team-access-details-section__divider {
+  border: none;
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 0;
+  width: 100%;
+}
+
+/* Left Column: Panel */
+.team-access-details-section__panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .team-access-details-section__panel {
+    max-width: 460px;
+    position: sticky;
+    top: 120px;
+  }
+}
+
+.team-access-details-section__card {
+  background: #111420;
+  border-radius: 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  padding: 2rem;
+  border: 1px solid rgba(201,168,76,0.12);
+  position: relative;
+  z-index: 2;
+}
+
+.team-access-details-section__card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #FFFFFF;
+  margin: 0 0 24px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.team-access-details-section__credentials {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.team-access-details-section__cred-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.team-access-details-section__cred-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #8A94A6;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.team-access-details-section__cred-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #FFFFFF;
+  text-align: left;
+  direction: ltr;
+  word-break: break-word;
+}
+
+/* Highlighted Note */
+.team-access-details-section__note {
+  background: rgba(0,212,255,0.05);
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.team-access-details-section__note-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00D4FF;
+  box-shadow: 0 0 12px rgba(0,212,255,0.5);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.team-access-details-section__note-text {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #B0BAC8;
+  margin: 0;
+}
+
+/* Decorative Accent Line */
+.team-access-details-section__accent-line {
+  width: 48px;
+  height: 2px;
+  background: #C9A84C;
+  margin-inline-start: auto;
+  opacity: 0.8;
+}
+
+/* Bottom Transition Line */
+.team-access-details-section__bottom-accent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0,212,255,0.3) 20%, rgba(0,212,255,0.3) 80%, transparent 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .team-access-details-section {
+    padding: 100px 16px 60px;
+  }
+
+  .team-access-details-section__heading {
+    font-size: 1.8rem;
+  }
+
+  .team-access-details-section__description {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .team-access-details-section__info-title {
+    font-size: 1.3rem;
+  }
+
+  .team-access-details-section__info-text {
+    padding-inline-start: 0;
+  }
+
+  .team-access-details-section__info-item {
+    padding: 20px 0;
+  }
+
+  .team-access-details-section__card {
+    padding: 1.5rem;
+  }
+
+  .team-access-details-section__cred-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .team-access-details-section__cred-value {
+    text-align: right;
+    direction: rtl;
+  }
+
+  .team-access-details-section__bg-orb {
+    width: 300px;
+    height: 300px;
+    top: -10%;
+    right: -20%;
+  }
+}
+
+.team-access-faq-section {
+  background: linear-gradient(180deg, #111420 0%, #1C2133 100%);
+  color: var(--text-light);
+  padding: 120px 16px 100px;
+  position: relative;
+  overflow: visible;
+  direction: rtl;
+}
+
+.team-access-faq-section .faq-container {
+  max-width: 860px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Gold accent line - top */
+.team-access-faq-section .faq-accent-line {
+  width: 64px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A84C 0%, rgba(201,168,76,0) 100%);
+  margin-inline-end: auto;
+  margin-inline-start: 0;
+  margin-bottom: 28px;
+  border-radius: 2px;
+}
+
+.team-access-faq-section .faq-accent-line--bottom {
+  margin-top: 48px;
+  margin-bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201,168,76,0.4) 0%, rgba(201,168,76,0) 100%);
+}
+
+.team-access-faq-section .faq-heading {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--text-light);
+  margin: 0 0 20px 0;
+  text-align: right;
+}
+
+.team-access-faq-section .faq-intro {
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.8;
+  color: #B0BAC8;
+  margin: 0 0 48px 0;
+  text-align: right;
+  max-width: 680px;
+}
+
+.team-access-faq-section .faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.team-access-faq-section .faq-item {
+  padding: 36px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+  transition: border-color 0.3s ease;
+}
+
+.team-access-faq-section .faq-item:last-child {
+  border-bottom: none;
+}
+
+.team-access-faq-section .faq-question {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-light);
+  margin: 0 0 16px 0;
+  text-align: right;
+  position: relative;
+  padding-inline-end: 20px;
+}
+
+.team-access-faq-section .faq-question::before {
+  content: '';
+  position: absolute;
+  inset-inline-end: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  background: #C9A84C;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.team-access-faq-section .faq-answer {
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.75;
+  color: #8A94A6;
+  margin: 0;
+  text-align: right;
+  padding-inline-end: 20px;
+}
+
+/* Hover effect for subtle polish */
+.team-access-faq-section .faq-item:hover {
+  border-bottom-color: rgba(201,168,76,0.25);
+}
+
+.team-access-faq-section .faq-item:hover .faq-question::before {
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(201,168,76,0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .team-access-faq-section {
+    padding: 100px 16px 60px;
+  }
+
+  .team-access-faq-section .faq-heading {
+    font-size: 1.8rem;
+  }
+
+  .team-access-faq-section .faq-intro {
+    font-size: 1rem;
+    margin-bottom: 32px;
+  }
+
+  .team-access-faq-section .faq-item {
+    padding: 24px 0;
+  }
+
+  .team-access-faq-section .faq-question {
+    font-size: 1.25rem;
+    padding-inline-end: 16px;
+  }
+
+  .team-access-faq-section .faq-answer {
+    padding-inline-end: 16px;
+  }
+
+  .team-access-faq-section .faq-accent-line {
+    margin-bottom: 20px;
+  }
+
+  .team-access-faq-section .faq-accent-line--bottom {
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-access-faq-section {
+    padding: 100px 12px 48px;
+  }
+
+  .team-access-faq-section .faq-heading {
+    font-size: 1.6rem;
+  }
+
+  .team-access-faq-section .faq-question {
+    font-size: 1.15rem;
+  }
+
+  .team-access-faq-section .faq-item {
+    padding: 20px 0;
+  }
+}
+
+.team-access-cta-section {
+  background: linear-gradient(180deg, #0A0C10 0%, #0d1018 100%);
+  color: var(--text-light);
+  padding: 100px 16px;
+  position: relative;
+  overflow: hidden;
+  direction: rtl;
+}
+
+.team-access-cta-section .team-access-cta-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.team-access-cta-section .team-access-cta-panel {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: 24px;
+  padding: 64px 48px;
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 3;
+  backdrop-filter: blur(2px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.team-access-cta-section .team-access-cta-heading {
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin: 0 0 16px 0;
+  line-height: 1.3;
+  direction: rtl;
+}
+
+.team-access-cta-section .team-access-cta-description {
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin: 0 0 32px 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  direction: rtl;
+}
+
+.team-access-cta-section .team-access-cta-action-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.team-access-cta-section .team-access-cta-primary-btn {
+  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 100%);
+  color: #0A0C10;
+  padding: 16px 36px;
+  border-radius: 100px;
+  border: none;
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 0 25px rgba(201, 168, 76, 0.2), 0 0 50px rgba(0, 212, 255, 0.1);
+  position: relative;
+  z-index: 4;
+}
+
+.team-access-cta-section .team-access-cta-primary-btn:hover {
+  box-shadow: 0 0 35px rgba(201, 168, 76, 0.4), 0 0 70px rgba(0, 212, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.team-access-cta-section .team-access-cta-sub-text {
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin: 0;
+  direction: rtl;
+}
+
+.team-access-cta-section .team-access-cta-glow-orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.08) 0%, rgba(0, 212, 255, 0.04) 40%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(40px);
+}
+
+@media (min-width: 768px) {
+  .team-access-cta-section {
+    padding: 120px 24px;
+  }
+
+  .team-access-cta-section .team-access-cta-heading {
+    font-size: 2.5rem;
+  }
+
+  .team-access-cta-section .team-access-cta-panel {
+    padding: 80px 64px;
+  }
+}
+
+@media (max-width: 768px) {
+  .team-access-cta-section {
+    padding: 80px 16px;
+  }
+
+  .team-access-cta-section .team-access-cta-panel {
+    padding: 48px 24px;
+    border-radius: 16px;
+  }
+
+  .team-access-cta-section .team-access-cta-heading {
+    font-size: 1.75rem;
+  }
+
+  .team-access-cta-section .team-access-cta-description {
+    font-size: 1rem;
+  }
+
+  .team-access-cta-section .team-access-cta-primary-btn {
+    padding: 14px 28px;
+    font-size: 0.95rem;
+  }
+
+  .team-access-cta-section .team-access-cta-glow-orb {
+    width: 400px;
+    height: 400px;
+  }
+}</style>
+    <link rel="stylesheet" href="/styles.css">
+    <script>window.ZAPPY_WEBSITE_ID = "a5cea990-674b-4211-b71f-c74fe58d6d92"; window.ZAPPY_API_BASE = "https://api.zappy5.com";</script>
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: var(--text-dark, #333) !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+      [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 10px !important; padding-right: 28px !important; }
+      .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus (exclude catalog sub-menus that use <a> children instead of <li>) */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))):not(:has(> a)), .sub-menu:not(:has(li)):not(:has(> a)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .navbar .sub-menu.mobile-expanded, .nav-menu .sub-menu.mobile-expanded, #navMenu .sub-menu.mobile-expanded { max-height: none !important; overflow-y: visible !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-light) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-light) !important; white-space: normal !important; }
+        .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+        [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 0 !important; padding-right: 28px !important; }
+        .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+        .nav-menu.active, #navMenu.active { max-width: 100vw !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-light) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NK8JGF39" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  <nav class="navbar" dir="rtl" style="background-color: transparent !important; box-shadow: none;">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu" data-element-type="button" data-element-id="btn-1778071114571-68lly8dcn" data-native-element="true" >
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="width: 24px !important; height: 24px !important; display: block !important;">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none !important; width: 24px !important; height: 24px !important;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+
+  <button class="phone-header-btn" data-phone="+972515533507" aria-label="Call" data-element-type="button" data-element-id="btn-1778071114571-rxcyjnu32" data-native-element="true" >
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="width: 24px; height: 24px;">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+
+  <div class="nav-container">
+    <div class="nav-right-group"><div class="nav-brand" style="display: flex; justify-content: center; align-items: center">
+      <a href="/" class="logo-link" >
+        <img src="/assets/hoshen-success-coaching-personal-development-consulting-logo.webp" alt="Hoshen Success" class="logo" data-image-type="logo" >
+      </a>
+    </div><ul class="nav-menu" id="navMenu"><li><a href="/" >בית</a></li><li><a href="/trading-education-programs" >מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about" >אודות</a></li><li><a href="/contact" >צור קשר</a></li><li><a href="/team-access" class="nav-link">כניסה</a></li></ul></div>
+
+    
+
+    <div class="nav-cta-container">
+      <a href="https://wa.me/972515533507" class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: rgb(245, 196, 81) !important; color: var(--text-color, #1a1a1a) !important; background-color: rgb(245, 196, 81) !important; background-image: none !important;" data-text-color="dark">צור קשר</a>
+    </div>
+  </div>
+</nav>
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-light)) !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '50%', 'important');
+          mobileToggle.style.setProperty('transform', 'translateY(-50%)', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '50%', 'important');
+          phoneBtn.style.setProperty('transform', 'translateY(-50%)', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu on button click - use newToggle now
+    newToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = this.querySelector('.hamburger-icon');
+      const closeIcon = this.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    });
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '+972508804568';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp button visibility is now controlled via CSS (siteSettings).
+    // No JS-based desktop hiding — the button is visible on both mobile and desktop by default.
+  });
+})();
+
+</script>
+  
+  <main class="blog-page ai-generated-page"><section class="team-access-hero-section" data-layout-spec="אזור גישה מאובטח לצוות-hero" data-hero-type="fullscreen-scrim">
+  <!-- Background Media & Scrim -->
+  <div class="team-access-hero-section__bg-media" aria-hidden="true">
+    <img data-hero-bg="true" data-context="A dark cinematic abstract background with deep navy and charcoal tones, subtle intersecting geometric grid lines resembling a faceted gemstone lattice, with soft radial cyan and gold glows emerging from the top-right and bottom-left corners. The image evokes premium executive coaching, strategic depth, and exclusive access." width="1200" height="600" src="/assets/hoshen-success-coaching-personal-development-consulting-section-hero-team-access-hero-image-1.webp" alt="" class="team-access-hero-section__bg-img">
+  </div>
+  <div class="team-access-hero-section__scrim" aria-hidden="true"></div>
+
+  <!-- Decorative Motifs -->
+  <div class="team-access-hero-section__deco gemstone-lattice" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="gem-lattice" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+          <path d="M30 0 L60 30 L30 60 L0 30 Z" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.25"></path>
+          <path d="M30 10 L50 30 L30 50 L10 30 Z" fill="none" stroke="currentColor" stroke-width="0.4" opacity="0.15"></path>
+          <path d="M30 20 L40 30 L30 40 L20 30 Z" fill="currentColor" opacity="0.08"></path>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#gem-lattice)"></rect>
+    </svg>
+  </div>
+  <div class="team-access-hero-section__deco radial-glow-orb" aria-hidden="true"></div>
+
+  <!-- Main Content Container -->
+  <div class="team-access-hero-section__container">
+    <div class="team-access-hero-section__grid">
+      
+      <!-- Right Column: Text & CTAs -->
+      <div class="team-access-hero-section__text-col">
+        <h1 class="team-access-hero-section__headline">הגישה לצמיחה האמיתית שלך מתחילה כאן</h1>
+        <h3 class="team-access-hero-section__subtitle">מרחב עבודה אישי ומאובטח שבו אתה וצוות חושן סוקסס בונים יחד את אסטרטגיית ההצלחה הבאה שלך.</h3>
+        
+        <div class="team-access-hero-section__cta-row">
+          <a href="/contact" class="team-access-hero-section__cta-primary btn-pill" style="color: #FFFFFF !important">כניסה לאזור האישי</a>
+          <a href="/contact" class="team-access-hero-section__cta-secondary btn-ghost">גלה עוד על המסלול</a>
+        </div>
+        
+        <p class="team-access-hero-section__trust-note">
+          <span class="team-access-hero-section__trust-icon" aria-hidden="true">🔒</span>
+          מוגן בהצפנה מתקדמת • גישה מיידית עם הרשמה
+        </p>
+      </div>
+
+      <!-- Left Column: Secure Access Panel -->
+      <div class="team-access-hero-section__panel-col">
+        <div class="team-access-hero-section__access-panel">
+          <div class="team-access-hero-section__panel-header">
+            <h3 class="team-access-hero-section__panel-title">אזור גישה מאובטח</h3>
+            <p class="team-access-hero-section__panel-subtitle">פרטי ההתחברות שלך</p>
+          </div>
+          
+          <div class="team-access-hero-section__panel-body">
+            <div class="team-access-hero-section__info-row">
+              <span class="team-access-hero-section__info-label">שם משתמש</span>
+              <span class="team-access-hero-section__info-value">[business_email]</span>
+            </div>
+            <div class="team-access-hero-section__info-row">
+              <span class="team-access-hero-section__info-label">סיסמה</span>
+              <span class="team-access-hero-section__info-value">••••••••••</span>
+            </div>
+            
+            <div class="team-access-hero-section__divider" role="separator"></div>
+            
+            <div class="team-access-hero-section__panel-footer">
+              <p class="team-access-hero-section__footer-text">
+                <span class="team-access-hero-section__footer-icon" aria-hidden="true">👥</span>
+                גישה זו מיועדת לך ולצוות המוביל שלך בלבד. כל המידע נשמר בסודיות מלאה.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Transition Divider -->
+  <div class="team-access-hero-section__divider-wrapper" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="heroFadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#0A0C10" stop-opacity="0"></stop>
+          <stop offset="100%" stop-color="#0A0C10" stop-opacity="1"></stop>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="1200" height="80" fill="url(#heroFadeGrad)"></rect>
+    </svg>
+  </div>
+</section>
+
+<section class="team-access-about-section" data-layout-spec="אזור גישה מאובטח לצוות-about">
+  <div class="ta-section-inner">
+    <!-- Top Content Block -->
+    <header class="ta-header">
+      <h2 class="ta-heading">הטמעה חכמה, שליטה מלאה</h2>
+      <p class="ta-subtitle">אזור הגישה המאובטח לצוות מאפשר לכם להטמיע תכנים, לנהל הרשאות ולשתף פעולה בסביבה דיגיטלית מתקדמת, תוך שמירה על חוויית משתמש נקייה ומהירה.</p>
+    </header>
+
+    <!-- Two-Column Grid (RTL: 7:5 ratio) -->
+    <div class="ta-content-grid">
+      
+      <!-- Right Column: Text Features (7 parts) -->
+      <div class="ta-text-column">
+        
+        <div class="ta-feature-item">
+          <div class="ta-feature-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 3H7.8C6.11984 3 5.27976 3 4.63803 3.32698C4.07354 3.6146 3.6146 4.07354 3.32698 4.63803C3 5.27976 3 6.11984 3 7.8V8M8 21H7.8C6.11984 21 5.27976 21 4.63803 20.673C4.07354 20.3854 3.6146 19.9265 3.32698 19.362C3 18.7202 3 17.8802 3 16.2V16M21 8V7.8C21 6.11984 21 5.27976 20.673 4.63803C20.3854 4.07354 19.9265 3.6146 19.362 3.32698C18.7202 3 17.8802 3 16.2 3H16M21 16V16.2C21 17.8802 21 18.7202 20.673 19.362C20.3854 19.9265 19.9265 20.3854 19.362 20.673C18.7202 21 17.8802 21 16.2 21H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="ta-feature-content">
+            <h3 class="ta-feature-title">הטמעת HTML ישירה</h3>
+            <p class="ta-feature-desc">הדביקו קוד HTML מותאם אישית ישירות לתוך אזור ההטמעה. המערכת מעבדת את הקוד בצורה מאובטחת ומציגה אותו בדיוק כפי שתכננתם, ללא התערבות בעיצוב.</p>
+          </div>
+        </div>
+
+        <div class="ta-feature-item">
+          <div class="ta-feature-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15C15.3137 15 18 12.3137 18 9C18 5.68629 15.3137 3 12 3C8.68629 3 6 5.68629 6 9C6 10.8433 6.89879 12.4772 8.31836 13.4906M12 15C8.68629 15 6 17.6863 6 21M12 15C15.3137 15 18 17.6863 18 21M12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9C10 10.1046 10.8954 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="ta-feature-content">
+            <h3 class="ta-feature-title">בקרת גישה מתקדמת</h3>
+            <p class="ta-feature-desc">הגדירו בדיוק מי רואה מה. מערכת ההרשאות הגמישה מאפשרת לכם להעניק גישה מלאה, חלקית או מוגבלת בזמן לכל חבר צוות, תוך שמירה על אבטחת מידע מקסימלית.</p>
+          </div>
+        </div>
+
+        <div class="ta-feature-item">
+          <div class="ta-feature-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8.5 3H5C3.89543 3 3 3.89543 3 5V8.5M8.5 21H5C3.89543 21 3 20.1046 3 19V15.5M15.5 21H19C20.1046 21 21 20.1046 21 19V15.5M15.5 3H19C20.1046 3 21 3.89543 21 5V8.5M12 8V16M9 11H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="ta-feature-content">
+            <h3 class="ta-feature-title">שיתוף פעולה צוותי</h3>
+            <p class="ta-feature-desc">שתפו תבניות, דפי נחיתה ומשאבים דיגיטליים עם הצוות בלחיצה אחת. כל שינוי נשמר אוטומטית ומסונכרן בזמן אמת בין כל המשתמשים המורשים.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Left Column: Code Embed Area (5 parts) -->
+      <div class="ta-media-column">
+        <div class="ta-code-card">
+          <div class="ta-code-header">
+            <div class="ta-code-dots">
+              <span class="ta-dot dot-red"></span>
+              <span class="ta-dot dot-yellow"></span>
+              <span class="ta-dot dot-green"></span>
+            </div>
+            <span class="ta-code-title">אזור הטמעה</span>
+          </div>
+          <div class="ta-code-body">
+            <div class="ta-code-preview">
+              <!-- Simulated code background with placeholder text -->
+              <div class="ta-code-lines">
+                <span class="ta-line">&lt;!-- הטמיעו כאן קוד HTML --&gt;</span>
+                <span class="ta-line">&lt;div class="secure-area"&gt;</span>
+                <span class="ta-line indent">  &lt;h3&gt;תוכן מותאם אישית&lt;/h3&gt;</span>
+                <span class="ta-line indent">  &lt;p&gt;המערכת תציג את הקוד שלכם&lt;/p&gt;</span>
+                <span class="ta-line">&lt;/div&gt;</span>
+                <span class="ta-line">&lt;style&gt;</span>
+                <span class="ta-line indent">  .secure-area { padding: 20px; }</span>
+                <span class="ta-line">&lt;/style&gt;</span>
+              </div>
+              <div class="ta-code-watermark" aria-hidden="true">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Decorative Gold Divider -->
+    <div class="ta-divider-wrapper" aria-hidden="true">
+      <svg data-no-icon-edit="true" aria-hidden="true" width="100%" height="2" viewBox="0 0 1200 2" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="1" x2="1200" y2="1" stroke="var(--secondary)" stroke-width="1" stroke-dasharray="8 8" opacity="0.4"></line>
+      </svg>
+    </div>
+
+  </div>
+
+  <!-- Decorative Gemstone Motif (Background) -->
+  <div class="ta-bg-motif" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" width="400" height="400" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M100 10 L180 60 L180 140 L100 190 L20 140 L20 60 Z" stroke="var(--secondary)" stroke-width="1" opacity="0.08" fill="none"></path>
+      <path d="M100 30 L160 70 L160 130 L100 170 L40 130 L40 70 Z" stroke="var(--secondary)" stroke-width="0.5" opacity="0.05" fill="none"></path>
+      <line x1="100" y1="10" x2="100" y2="190" stroke="var(--secondary)" stroke-width="0.5" opacity="0.05"></line>
+      <line x1="20" y1="60" x2="180" y2="140" stroke="var(--secondary)" stroke-width="0.5" opacity="0.05"></line>
+      <line x1="180" y1="60" x2="20" y2="140" stroke="var(--secondary)" stroke-width="0.5" opacity="0.05"></line>
+    </svg>
+  </div>
+</section>
+
+<section class="team-access-features-section" data-layout-spec="אזור גישה מאובטח לצוות-features">
+  <div class="team-access-features-section-container">
+    
+    <!-- Section Header -->
+    <div class="section-header">
+      <div class="gold-rule" aria-hidden="true"></div>
+      <h2>גישה מאובטחת לצוות ההדרכה</h2>
+      <p>מערכת ניהול הלמידה של חושן מציעה סביבת עבודה מאובטחת ויעילה המותאמת לצרכי הצוות המקצועי. אנו מספקים כלים מתקדמים לניהול תכנים, מעקב אחר התקדמות המשתתפים ותקשורת פנים-ארגונית מוצפנת.</p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="features-grid">
+      
+      <!-- Card 01 -->
+      <article class="feature-card">
+        <span class="card-index" aria-hidden="true">01</span>
+        <div class="card-accent-line accent-cyan"></div>
+        <div class="card-content">
+          <div class="card-icon-wrapper">
+            <svg data-element-type="icon" data-icon-type="svg" class="card-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15C15.3137 15 18 12.3137 18 9C18 5.68629 15.3137 3 12 3C8.68629 3 6 5.68629 6 9C6 12.3137 8.68629 15 12 15Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M2.90527 20.2491C3.82736 18.6531 5.15322 17.3278 6.74966 16.4064C8.34611 15.485 10.1569 15 12.0002 15C13.8434 15 15.6542 15.4851 17.2506 16.4065C18.847 17.3279 20.1729 18.6533 21.0949 20.2493" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M18 14L20 12L22 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M20 12V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>ניהול הרשאות מתקדם</h3>
+          <p>הגדרת תפקידים והרשאות גישה מדויקות לכל חבר צוות. מנהלים, מדריכים ומנטורים מקבלים סביבת עבודה מותאמת אישית עם כלים ייעודיים לתפקידם.</p>
+          <span class="card-tag">אבטחה</span>
+        </div>
+      </article>
+
+      <!-- Card 02 -->
+      <article class="feature-card">
+        <span class="card-index" aria-hidden="true">02</span>
+        <div class="card-accent-line accent-gold"></div>
+        <div class="card-content">
+          <div class="card-icon-wrapper">
+            <svg data-element-type="icon" data-icon-type="svg" class="card-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 7V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V7C3 4 4.5 2 8 2H16C19.5 2 21 4 21 7Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M14.5 4.5V6.5C14.5 7.6 15.4 8.5 16.5 8.5H18.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M8 13H12" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M8 17H16" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>מעקב התקדמות בזמן אמת</h3>
+          <p>דשבורד ניהולי חכם המציג נתוני התקדמות, שיעורי השלמה ומדדי הצלחה של כל תוכנית אימון. כל המידע מוצג בגרפים ויזואליים המאפשרים קבלת החלטות מהירה.</p>
+          <span class="card-tag">אנליטיקה</span>
+        </div>
+      </article>
+
+      <!-- Card 03 -->
+      <article class="feature-card">
+        <span class="card-index" aria-hidden="true">03</span>
+        <div class="card-accent-line accent-cyan"></div>
+        <div class="card-content">
+          <div class="card-icon-wrapper">
+            <svg data-element-type="icon" data-icon-type="svg" class="card-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 13V17C18 19.2091 16.2091 21 14 21H10C7.79086 21 6 19.2091 6 17V13C6 10.7909 7.79086 9 10 9H14C16.2091 9 18 10.7909 18 13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M12 2V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M8 4H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M12 13V16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M10.5 14.5H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>תקשורת פנים-ארגונית מוצפנת</h3>
+          <p>ערוצי תקשורת ייעודיים לצוות ההדרכה, כולל צ'אט קבוצתי, העברת קבצים מאובטחת ועדכונים שוטפים. כל התקשורת מוצפנת מקצה לקצה להגנה על פרטיות המידע.</p>
+          <span class="card-tag">תקשורת</span>
+        </div>
+      </article>
+
+    </div>
+
+  </div>
+
+  <!-- Decorative Radial Glow Orb -->
+  <div class="decorative-orb" aria-hidden="true"></div>
+</section>
+
+<section class="team-access-details-section" data-layout-spec="אזור גישה מאובטח לצוות-details">
+  <!-- Decorative Background Motifs -->
+  <div class="team-access-details-section__bg-orb" aria-hidden="true"></div>
+  <div class="team-access-details-section__bg-grid" aria-hidden="true"></div>
+
+  <div class="team-access-details-section__container">
+    
+    <!-- Right Column: Text & Info Blocks -->
+    <div class="team-access-details-section__content">
+      <h2 class="team-access-details-section__heading">גישה מאובטחת לצוות</h2>
+      <p class="team-access-details-section__description">
+        מערכת הגישה המאובטחת של חושן הצלחה נבנתה כדי להעניק לצוות שלכם שליטה מלאה ושקיפות מקסימלית, תוך שמירה על רמת אבטחה מהגבוהות בתעשייה. אנו מבינים שהצלחה ארגונית מתחילה בתשתית דיגיטלית אמינה. לכן, פיתחנו פלטפורמה ייעודית המאפשרת ניהול הרשאות חכם, תיעוד פעילות מלא, והגנה על הנכסים האסטרטגיים שלכם.
+      </p>
+      
+      <div class="team-access-details-section__info-list">
+        
+        <!-- Info Block 1 -->
+        <div class="team-access-details-section__info-item">
+          <div class="team-access-details-section__info-header">
+            <span class="team-access-details-section__info-icon" aria-hidden="true">
+              <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+                <path d="M10 6V10.5M10 13.5V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+              </svg>
+            </span>
+            <h3 class="team-access-details-section__info-title">למי מיועד</h3>
+          </div>
+          <p class="team-access-details-section__info-text">
+            המערכת מותאמת למנהלי הדרכה, ראשי צוותים, ומנהלי משאבי אנוש בארגונים המעוניינים לנטר את תהליכי הפיתוח המקצועי של העובדים ולשפר את תרבות הלמידה הפנים-ארגונית.
+          </p>
+        </div>
+
+        <!-- Divider -->
+        <hr class="team-access-details-section__divider" aria-hidden="true">
+
+        <!-- Info Block 2 -->
+        <div class="team-access-details-section__info-item">
+          <div class="team-access-details-section__info-header">
+            <span class="team-access-details-section__info-icon" aria-hidden="true">
+              <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
+                <path d="M6 10H14M6 7H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+              </svg>
+            </span>
+            <h3 class="team-access-details-section__info-title">איך הצוות משתמש</h3>
+          </div>
+          <p class="team-access-details-section__info-text">
+            לאחר הזדהות מאובטחת, כל חבר צוות מקבל לוח בקרה מותאם אישית. ניתן לצפות בדוחות התקדמות, להקצות משימות, ולתקשר ישירות עם מנטורים. הממשק האינטואיטיבי מאפשר אימוץ מהיר ללא צורך בהדרכה טכנית מקדימה.
+          </p>
+        </div>
+
+        <!-- Divider -->
+        <hr class="team-access-details-section__divider" aria-hidden="true">
+
+        <!-- Info Block 3 -->
+        <div class="team-access-details-section__info-item">
+          <div class="team-access-details-section__info-header">
+            <span class="team-access-details-section__info-icon" aria-hidden="true">
+              <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 10L8 14L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+              </svg>
+            </span>
+            <h3 class="team-access-details-section__info-title">איך נמסרים פרטי הגישה</h3>
+          </div>
+          <p class="team-access-details-section__info-text">
+            פרטי הגישה נשלחים בצורה מוצפנת ישירות למייל הארגוני של המשתמש. תהליך ההצטרפות כולל אימות דו-שלבי (2FA) ומדיניות סיסמאות חזקה. מנהל המערכת יכול להפיק הזמנות גורפות ולעקוב אחר סטטוס ההפעלה של כל חשבון.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Left Column: Credentials Panel -->
+    <div class="team-access-details-section__panel">
+      <div class="team-access-details-section__card">
+        <h3 class="team-access-details-section__card-title">פרטי גישה</h3>
+        
+        <div class="team-access-details-section__credentials">
+          <!-- Row 1 -->
+          <div class="team-access-details-section__cred-row">
+            <span class="team-access-details-section__cred-label">משתמש ראשי</span>
+            <span class="team-access-details-section__cred-value">admin@hoshen.co.il</span>
+          </div>
+          
+          <!-- Row 2 -->
+          <div class="team-access-details-section__cred-row">
+            <span class="team-access-details-section__cred-label">גישת צוות</span>
+            <span class="team-access-details-section__cred-value">12 חברי צוות פעילים</span>
+          </div>
+          
+          <!-- Row 3 -->
+          <div class="team-access-details-section__cred-row">
+            <span class="team-access-details-section__cred-label">סוג המערכת</span>
+            <span class="team-access-details-section__cred-value">Enterprise Suite</span>
+          </div>
+          
+          <!-- Row 4 -->
+          <div class="team-access-details-section__cred-row">
+            <span class="team-access-details-section__cred-label">עדכון אחרון</span>
+            <span class="team-access-details-section__cred-value">15 אוקטובר 2024</span>
+          </div>
+        </div>
+
+        <!-- Highlighted Note -->
+        <div class="team-access-details-section__note">
+          <span class="team-access-details-section__note-dot" aria-hidden="true"></span>
+          <p class="team-access-details-section__note-text">
+            פרטי הגישה מוצגים כאן להמחשה בלבד. בסביבת העבודה האמיתית, הנתונים מוטמעים באופן דינמי ומאובטח בהתאם להרשאות המשתמש.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Decorative accent line -->
+      <div class="team-access-details-section__accent-line" aria-hidden="true"></div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Transition Line -->
+  <div class="team-access-details-section__bottom-accent" aria-hidden="true"></div>
+</section>
+
+<section class="team-access-faq-section" data-layout-spec="אזור גישה מאובטח לצוות-faq">
+  <div class="faq-container">
+    <!-- Gold accent line at top -->
+    <div class="faq-accent-line" aria-hidden="true"></div>
+
+    <h2 class="faq-heading">שאלות נפוצות – גישת חושן להצלחה</h2>
+    <p class="faq-intro">אספנו עבורכם את התשובות לשאלות המרכזיות שעולות בתהליך האימון והליווי האישי. כל תשובה משקפת את הפילוסופיה, המתודולוגיה והמחויבות שלנו להתפתחות האמיתית שלכם.</p>
+
+    <div class="faq-list">
+      <!-- FAQ Item 1 -->
+      <article class="faq-item">
+        <h3 class="faq-question">למי מתאים תהליך האימון בחושן הצלחה?</h3>
+        <p class="faq-answer">התהליך מותאם לאנשי מקצוע, יזמים ומנהלים השואפים לפרוץ דרך ברמה האישית והמקצועית. בין אם אתם נמצאים בצומת דרכים בקריירה, מרגישים תקיעות, או פשוט רוצים לממש את מלוא הפוטנציאל – אנחנו כאן כדי לבנות יחד תוכנית מדויקת שתניע אתכם קדימה.</p>
+      </article>
+
+      <!-- FAQ Item 2 -->
+      <article class="faq-item">
+        <h3 class="faq-question">מה מייחד את שיטת העבודה של חושן הצלחה?</h3>
+        <p class="faq-answer">הגישה שלנו משלבת תובנות מעולם המודיעין העסקי עם כלי אימון אקזקיוטיבי מתקדמים. אנו מתמקדים בזיהוי דפוסי חשיבה, מיפוי אסטרטגי של מטרות ובניית תוכנית פעולה מובנית – הכוללת מדדים ברורים להצלחה. התוצאה היא תהליך ממוקד תוצאות שמרגיש כמו קפיצת מדרגה, לא כמו שיחה נעימה.</p>
+      </article>
+
+      <!-- FAQ Item 3 -->
+      <article class="faq-item">
+        <h3 class="faq-question">כמה זמן נמשך תהליך אימון טיפוסי?</h3>
+        <p class="faq-answer">משך התהליך מותאם אישית לצרכים ולמטרות שלכם. רוב הלקוחות שלנו עוברים תהליך של שלושה עד שישה חודשים, במסגרת מפגשים שבועיים או דו-שבועיים. אנו מאמינים ששינוי אמיתי דורש התמדה וזמן, ולכן כל תוכנית נבנית בקצב הנכון עבורכם, תוך שמירה על מומנטום רציף.</p>
+      </article>
+
+      <!-- FAQ Item 4 -->
+      <article class="faq-item">
+        <h3 class="faq-question">האם התהליך מתקיים פנים אל פנים או בזום?</h3>
+        <p class="faq-answer">אנו מציעים גמישות מלאה – אפשר לקיים מפגשים פרונטליים במשרדינו או מפגשים מקוונים באמצעות זום, בהתאם להעדפתכם וללוח הזמנים שלכם. הפורמט ההיברידי מאפשר לנו לעבוד עם לקוחות מכל רחבי הארץ והעולם, מבלי להתפשר על איכות הקשר והליווי הצמוד.</p>
+      </article>
+
+      <!-- FAQ Item 5 -->
+      <article class="faq-item">
+        <h3 class="faq-question">מה קורה במפגש ההיכרות הראשון?</h3>
+        <p class="faq-answer">מפגש ההיכרות הוא הזדמנות עבורנו להבין לעומק את האתגרים, השאיפות והחזון שלכם. נבצע מיפוי ראשוני של נקודות החוזק והחסמים, נגדיר יחד את יעדי התהליך, ונבנה מתווה ראשוני לתוכנית העבודה. המפגש הזה הוא ללא התחייבות – מטרתו לאפשר לכם לחוות את הגישה שלנו ולהחליט אם היא מתאימה לכם.</p>
+      </article>
+    </div>
+
+    <!-- Gold accent line at bottom -->
+    <div class="faq-accent-line faq-accent-line--bottom" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="team-access-cta-section" data-layout-spec="אזור גישה מאובטח לצוות-cta">
+  <div class="team-access-cta-container">
+    <div class="team-access-cta-panel">
+      <h2 class="team-access-cta-heading">גישה מאובטחת לצוות שלך</h2>
+      <p class="team-access-cta-description">מרחב עבודה מותאם אישית בו הצוות שלך מקבל כלים, תכנים ותהליכים מדויקים להטמעת שפת האימון והצמיחה של חושן הצלחה. אנחנו בונים יחד את סביבת הלמידה שמתאימה בדיוק לקצב ולמטרות שלכם.</p>
+      <div class="team-access-cta-action-row">
+        <a href="/contact" class="team-access-cta-primary-btn">הקמת אזור גישה לצוות</a>
+        <p class="team-access-cta-sub-text">התאמה אישית מלאה • הטמעה מהירה • ליווי צמוד</p>
+      </div>
+    </div>
+    <div class="team-access-cta-glow-orb" aria-hidden="true"></div>
+  </div>
+</section></main>
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="hsfaq-section" dir="rtl" lang="he" aria-labelledby="hsfaq-heading" id="hsfaq-section">
+  <div class="hsfaq-container">
+
+    <!-- Eyebrow + Heading -->
+    <div class="hsfaq-header">
+      <p><span class="hsfaq-eyebrow">שאלות נפוצות</span>
+      </p><h2 class="hsfaq-title" id="hsfaq-heading">כל מה שרצית לדעת</h2>
+      <p class="hsfaq-subtitle" >מצאנו את השאלות שהכי חוזרות על עצמן ענינו על הכל במקום אחד</p>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="hsfaq-list" role="list">
+
+      <!-- Q1 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="0">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-1" id="hsfaq-btn-1" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-hiruke297" data-native-element="true">
+          <span class="hsfaq-question-text">כמה זמן לוקח הקורס?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-1" role="region" aria-labelledby="hsfaq-btn-1" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            הקורס נמשך בין 3-6 חודשים בהתאם לקצב הלמידה שלך. אנחנו עובדים 4 פעמים בשבוע בלייב בזום, ועל פי ברוב המקרים תלמידים מתחילים לסחור בצורה עצמאית תוך 3 חודשים.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="1">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-2" id="hsfaq-btn-2" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-jlkslmue3" data-native-element="true">
+          <span class="hsfaq-question-text">כמה עולה הקורס?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-2" role="region" aria-labelledby="hsfaq-btn-2" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            המחיר משתנה לפי המסלול שתבחר. שוחח איתנו בוואטסאפ לקבלת מחיר מדויק ומותאם אישית. אנחנו מציעים גם תוכניות תשלום נוחות.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="2">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-3" id="hsfaq-btn-3" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-zlid7g2wv" data-native-element="true">
+          <span class="hsfaq-question-text">האם אני צריך ניסיון קודם במסחר?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-3" role="region" aria-labelledby="hsfaq-btn-3" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            לא! הקורס שלנו מתאים לחלוטין למתחילים. אנחנו מתחילים מהבסיס ובונים את הידע שלב אחר שלב. כל מה שצריך זה רצון ללמוד.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="3">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-4" id="hsfaq-btn-4" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-vz32hh38d" data-native-element="true">
+          <span class="hsfaq-question-text">מה זה מסחר בחוזים עתידיים?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-4" role="region" aria-labelledby="hsfaq-btn-4" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            חוזים עתידיים הם מכשיר פיננסי שמאפשר לסחור במדדים כמו NQ100 ו-ES500. הם מציעים נזילות גבוהה, שעות מסחר ברורות ויכולת לייצר רווח גם בירידות שוק.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="4">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-5" id="hsfaq-btn-5" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-j87t5ngh4" data-native-element="true">
+          <span class="hsfaq-question-text">כמה שעות ביום צריך להשקיע?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-5" role="region" aria-labelledby="hsfaq-btn-5" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            המסחר עצמו ממוקד לשעה אחת ביום — סשן ניו יורק 16:30-17:30 שעון ישראל. בנוסף, ישנם שיעורי זום ולמידה עצמאית. סה"כ 2-3 שעות ביום מספיקות.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="5">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-6" id="hsfaq-btn-6" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-cspiaqkhq" data-native-element="true">
+          <span class="hsfaq-question-text">האם אפשר לסחור מהבית?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-6" role="region" aria-labelledby="hsfaq-btn-6" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            כן! כל מה שצריך זה מחשב וחיבור לאינטרנט. הלייבים מתקיימים בזום ואתה יכול להצטרף מכל מקום בעולם.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="6">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-7" id="hsfaq-btn-7" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-7zcnnsg4e" data-native-element="true">
+          <span class="hsfaq-question-text">מה זה מסחר עם חברת נוסטרו?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-7" role="region" aria-labelledby="hsfaq-btn-7" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            חברות נוסטרו מספקות הון מסחר לסוחרים מוכשרים. לאחר הכשרה מוצלחת, תוכל לסחור עם הון של עשרות אלפי דולרים ולחלוק ברווחים — בלי לסכן כסף משלך.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="7">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-8" id="hsfaq-btn-8" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-5r1slxxqn" data-native-element="true">
+          <span class="hsfaq-question-text">איך מתחילים?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-8" role="region" aria-labelledby="hsfaq-btn-8" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            פשוט מאוד! לחץ על כפתור הוואטסאפ, שלח הודעה ונקבע שיחת היכרות חינמית בזום. בשיחה נבין את הצרכים שלך ונמצא את המסלול המתאים ביותר.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.hsfaq-list -->
+
+    <!-- Bottom CTA -->
+    <div class="hsfaq-cta">
+      <p class="hsfaq-cta-text">עדיין יש לך שאלות? אנחנו כאן!</p>
+      <p class="zappy-editable"><a href="https://wa.me/972515533507" class="hsfaq-cta-btn" target="_blank" rel="noopener noreferrer" aria-label="שאל אותנו בוואטסאפ - פתיחה בחלון חדש" data-element-type="button" data-element-id="btn-1779717203343-5ptp2vo9w" data-native-element="true">
+        📲 שאל אותנו בוואטסאפ
+      </a>
+    </p></div>
+
+  </div><!-- /.hsfaq-container -->
+</section>
+
+
+
+
+
+<footer class="site-footer" dir="rtl">
+  <div class="footer-top">
+    <div class="footer-container">
+      <div class="footer-grid">
+
+        <!-- Column 1: Company Info -->
+        <div class="footer-col footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="/assets/hoshen-success-coaching-personal-development-consulting-logo.webp" alt="Hoshen Success" class="logo" data-element-type="image" data-element-id="img-1778071114577-ow31xqqcg" data-zappy-footer-image="true" >
+          </div>
+          <p class="footer-tagline">הצלחה אמיתית מתחילה כאן. אנחנו מלווים אנשים שאפתניים לפרוץ מגבלות, לבנות חזון ולהגיע לשיאים חדשים.</p>
+          <div class="footer-social">
+            <a href="https://facebook.com/people/%D7%A7%D7%95%D7%A8%D7%A1-%D7%9E%D7%A1%D7%97%D7%A8-%D7%91%D7%97%D7%95%D7%96%D7%99%D7%9D-%D7%A2%D7%AA%D7%99%D7%93%D7%99%D7%99%D7%9D-%D7%AA%D7%99%D7%A7%D7%99-%D7%A0%D7%95%D7%A1%D7%98%D7%A8%D7%95-Hoshen-Success/61583682081159" aria-label="Facebook" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com/hoshen_success_academy" aria-label="Instagram" class="social-link"><i class="fab fa-instagram" data-element-type="icon" data-element-id="icon-1778448714199-fgb833xpp" data-icon-type="fontawesome"></i></a>
+            <a href="https://wa.me/972515533507" aria-label="WhatsApp" class="social-link"><i class="fab fa-whatsapp" data-element-type="icon" data-element-id="icon-1778448714200-2z8ffq71j" data-icon-type="fontawesome"></i></a>
+          </div>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-col">
+          <h3 class="footer-heading"><span class="heading-accent"></span>ניווט מהיר</h3>
+          <ul class="footer-links" ><li><a href="/">בית</a></li><li><a href="/trading-education-programs">מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about">אודות</a></li><li><a href="/contact">צור קשר</a></li></ul>
+        </div>
+
+        <!-- Column 3: Contact Info -->
+        <div class="footer-col">
+          <h3 class="footer-heading"><span class="heading-accent"></span>יצירת קשר</h3>
+          <ul class="footer-contact">
+            <li>
+              <span class="contact-icon"><i class="fas fa-envelope" data-element-type="icon" data-element-id="icon-1778071114576-v7iukl5kb" data-icon-type="fontawesome"></i></span>
+              <span class="contact-text"><a href="mailto:academy@hoshen-success.com"><span>academy@hoshen-success.com</span></a></span>
+            </li>
+            <li>
+              <span class="contact-icon"><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1778071114576-x5o987xrh" data-icon-type="fontawesome"></i></span>
+              <span class="contact-text"><a href="tel:+972515533507" >050-8804568</a></span>
+            </li>
+            <li><a href="/"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+              <span class="contact-text">שדרות נים 2, קניון עזריאלי ראשונים { המשרד מיועד למנהלים בלבד. הכניסה בתיאום מראש בלבד}, ראשון לציון, מרכז, 7546302, ישראל</span></a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: CTA / Extra -->
+        <div class="footer-col footer-cta-col">
+          <h3 class="footer-heading"><span class="heading-accent"></span>מוכנים להתחיל?</h3>
+          <p class="footer-cta-text" >קבעו פגישת היכרות חינמית בזום!! אם המנטור הענק!! שלנו עמרי מאיר אורי וגלו איך Hoshen Success יכולים לשנות לכם את המסלול שלכם בחיים מקצה לקצה!!.</p>
+          <p style="text-align: center !important; display: flex !important; justify-content: center !important; align-items: flex-start !important; width: 100% !important;"><a href="https://wa.me/972515533507" class="footer-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-yclgf8hnx" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(46, 0, 173) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(255, 209, 102), rgb(245, 196, 81)) !important;" target="_blank" rel="noopener noreferrer" data-text-color="#2e00ad">לחץ לשיחה עכשיו בוואצאפ !</a>
+        </p></div>
+
+      </div>
+    </div>
+  </div><div class="zappy-inserted-element" id="zappy-element-1778449026839-h7rln1ahl" data-element-id="zappy-element-1778449026839-h7rln1ahl" data-element-type="iframe" style="width: 1px; max-width: 100%; margin: 20px auto; display: flex; justify-content: center;"><div style="width: 1px; max-width: 100%; display: block;" data-full-width="" data-custom-width="1"><div style="position: relative; width: 100%; height: 1px; background: rgb(243, 244, 246); border-radius: 8px; overflow: hidden;" data-element-type="iframe" data-element-id="zappy-element-1778449026839-h7rln1ahl" id="zappy-element-1778449026839-h7rln1ahl" data-custom-height="1"><iframe src="<!-- Google Tag Manager --> <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-NK8JGF39');</script> <!-- End Google Tag Manager -->" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen="" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe></div></div></div>
+
+  <!-- Divider -->
+  <div class="footer-divider-wrap">
+    <div class="footer-container">
+      <div class="footer-divider"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="footer-bottom">
+    <div class="footer-container">
+      <div class="footer-bottom-inner">
+        <p class="footer-copyright">© 2026 Hoshen Success. כל הזכויות שמורות.</p>
+        <div class="footer-legal">
+          <a href="/privacy" >מדיניות פרטיות</a>
+          <span class="legal-sep"></span>
+          <a href="/terms" >תנאי שימוש</a>
+          <span class="legal-sep"></span>
+          <a href="/accessibility" >נגישות</a>
+          <span class="legal-sep"></span>
+          <a href="https://zappy5.com" target="_blank" class="zappy-attribution" >נוצר באמצעות Hoshen Success</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+  
+  <a href="https://wa.me/972515533507" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+</body>
+</html>
