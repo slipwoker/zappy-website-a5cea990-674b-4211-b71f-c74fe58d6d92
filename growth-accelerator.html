@@ -1,0 +1,2538 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Growth Accelerator Landing Page</title>
+    <meta name="description" content="Hoshen Success - Growth Accelerator Landing Page">
+    <meta name="keywords" content="">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'a5cea990-674b-4211-b71f-c74fe58d6d92',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        var clickMeta = {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        };
+        
+        trackEvent('click', clickMeta);
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        var navMeta = {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        };
+        
+        trackEvent('navigation', navMeta);
+      }
+    }, true);
+  }
+  
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="Growth Accelerator Landing Page">
+    <meta property="og:description" content="Hoshen Success - Growth Accelerator Landing Page">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Growth Accelerator Landing Page">
+    <meta name="twitter:description" content="Hoshen Success - Growth Accelerator Landing Page">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LocalBusiness","@id":"https://hoshen-success.pro#organization","name":"Hoshen Success","url":"https://hoshen-success.pro","description":"Hoshen Success is a coaching and personal development brand, likely offering guidance, mentorship, or training to help individuals achieve their goals. The brand name 'Hoshen' (a Hebrew word referring to a gemstone breastplate) suggests a rich, meaningful identity possibly rooted in Jewish or Israeli culture, with themes of strength, clarity, and achieving one's full potential.","address":{"@type":"PostalAddress","streetAddress":"שדרות נים 2, קניון עזריאלי ראשונים { המשרד מיועד למנהלים בלבד. הכניסה בתיאום מראש בלבד}, ראשון לציון, מרכז, 7546302, ישראל"},"contactPoint":[{"@type":"ContactPoint","contactType":"customer service","email":"academy@hoshen-success.com","telephone":"+972515533507"}]},{"@type":"WebSite","@id":"https://hoshen-success.pro#website","url":"https://hoshen-success.pro","name":"Hoshen Success","publisher":{"@id":"https://hoshen-success.pro#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://hoshen-success.pro"},{"@type":"ListItem","position":2,"name":"Growth Accelerator","item":"https://hoshen-success.pro/growth-accelerator"}]}]}</script>
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NK8JGF39');</script>
+<!-- End Google Tag Manager -->
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:url" content="https://hoshen-success.pro/growth-accelerator">
+    <meta property="og:type" content="article">
+    
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="Growth Accelerator Landing Page">
+    <meta property="og:locale" content="he_IL">
+    <!-- Twitter Card Meta Tags -->
+    
+    
+    
+    
+    <meta name="twitter:image:alt" content="Growth Accelerator Landing Page"><style id="zappy-ai-page-styles">.growth-accelerator-landing-page-hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: #0A0C10;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 80px;
+}
+
+/* Background Image Layer */
+.growth-accelerator-landing-page-hero-section .hero-bg-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.growth-accelerator-landing-page-hero-section .hero-bg-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Scrim Overlay */
+.growth-accelerator-landing-page-hero-section .hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(10,12,16,0.3) 0%, rgba(10,12,16,0.85) 100%);
+  background-image: radial-gradient(ellipse at 30% 50%, rgba(10,12,16,0.2) 0%, rgba(10,12,16,0.9) 70%);
+}
+
+/* Radial Glow Orb Decoration */
+.growth-accelerator-landing-page-hero-section .hero-glow-orb {
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+/* Main Container */
+.growth-accelerator-landing-page-hero-section .hero-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  direction: rtl;
+}
+
+/* Two-Column Grid */
+.growth-accelerator-landing-page-hero-section .hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 60px;
+  direction: rtl;
+}
+
+/* Left Column - Visual */
+.growth-accelerator-landing-page-hero-section .hero-visual-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.growth-accelerator-landing-page-hero-section .hero-visual-panel {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  border: 1px solid rgba(201,168,76,0.15);
+}
+
+.growth-accelerator-landing-page-hero-section .hero-visual-content {
+  position: relative;
+  width: 100%;
+  padding-bottom: 66.67%;
+}
+
+.growth-accelerator-landing-page-hero-section .hero-gemstone-motif {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40%;
+  height: 40%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.growth-accelerator-landing-page-hero-section .hero-chart-lines {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 60%;
+  height: 30%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.growth-accelerator-landing-page-hero-section .hero-visual-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  display: block;
+}
+
+/* Right Column - Text */
+.growth-accelerator-landing-page-hero-section .hero-text-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: right;
+  gap: 24px;
+  direction: rtl;
+}
+
+.growth-accelerator-landing-page-hero-section .hero-headline {font-size: 3.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: #FFFFFF;
+  margin: 0;
+  text-align: right;
+  max-width: 600px;}
+
+.growth-accelerator-landing-page-hero-section .hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #B0BAC8;
+  margin: 0;
+  text-align: right;
+  max-width: 520px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* CTA Group */
+.growth-accelerator-landing-page-hero-section .hero-cta-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+  direction: rtl;
+}
+
+.growth-accelerator-landing-page-hero-section .btn-primary {
+  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 100%);
+  color: #0A0C10;
+  padding: 14px 28px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 40px rgba(201,168,76,0.25);
+}
+
+.growth-accelerator-landing-page-hero-section .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 60px rgba(201,168,76,0.4);
+}
+
+.growth-accelerator-landing-page-hero-section .btn-ghost {
+  background: transparent;
+  color: #C9A84C;
+  border: none;
+  padding: 12px 20px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline-block;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.95rem;
+}
+
+.growth-accelerator-landing-page-hero-section .btn-ghost:hover {
+  color: #E8C96A;
+  transform: translateY(-2px);
+}
+
+/* Trust Indicators Row */
+.growth-accelerator-landing-page-hero-section .hero-trust-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  direction: rtl;
+}
+
+.growth-accelerator-landing-page-hero-section .trust-capsule {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 100px;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(4px);
+}
+
+.growth-accelerator-landing-page-hero-section .trust-icon {
+  color: #C9A84C;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.growth-accelerator-landing-page-hero-section .trust-text {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #E8E6E0;
+  white-space: nowrap;
+}
+
+/* Bottom Divider */
+.growth-accelerator-landing-page-hero-section .hero-divider-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.growth-accelerator-landing-page-hero-section .hero-divider-wrapper svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .growth-accelerator-landing-page-hero-section {
+    padding-top: 100px;
+    padding-bottom: 60px;
+    min-height: auto;
+  }
+
+  .growth-accelerator-landing-page-hero-section .hero-container {
+    padding: 24px 16px;
+  }
+
+  .growth-accelerator-landing-page-hero-section .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px;
+  }
+
+  .growth-accelerator-landing-page-hero-section .hero-visual-col {
+    order: 1;
+  }
+
+  .growth-accelerator-landing-page-hero-section .hero-text-col {
+    order: 2;
+    align-items: center;
+    text-align: center;
+  }
+
+  .growth-accelerator-landing-page-hero-section .hero-headline {
+    font-size: 2.4rem;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .growth-accelerator-landing-page-hero-section .hero-subtitle {
+    font-size: 1.2rem;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .growth-accelerator-landing-page-hero-section .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .growth-accelerator-landing-page-hero-section .btn-primary,
+  .growth-accelerator-landing-page-hero-section .btn-ghost {
+    text-align: center;
+    width: 100%;
+  }
+
+  .growth-accelerator-landing-page-hero-section .hero-trust-row {
+    justify-content: center;
+  }
+
+  .growth-accelerator-landing-page-hero-section .hero-visual-panel {
+    max-width: 320px;
+  }
+
+  .growth-accelerator-landing-page-hero-section .hero-glow-orb {
+    width: 300px;
+    height: 300px;
+    top: -10%;
+    right: -20%;
+  }
+}
+/* ZAPPY_POSTGEN_GUARD_HERO_FONT_CAP:growth-accelerator-landing-page-hero */
+.hero h1, .hero-section h1, [class*="hero-"] h1, [class~="hero"] h1, .hero .hero-title, .hero-title { font-size: 48px !important; line-height: 1.2 !important; }
+@media (max-width: 1024px) {
+  .hero h1, .hero-section h1, [class*="hero-"] h1, [class~="hero"] h1, .hero .hero-title, .hero-title { font-size: 36px !important; }
+}
+@media (max-width: 768px) {
+  .hero h1, .hero-section h1, [class*="hero-"] h1, [class~="hero"] h1, .hero .hero-title, .hero-title { font-size: 28px !important; }
+}
+
+/* ZAPPY_POSTGEN_GUARD_HERO_TYPO:Growth Accelerator Landing Page-hero (growth-accelerator-landing-page-hero) — stripped 1 jarring hero headline effect(s) */
+
+
+.growth-accelerator-landing-page-features-section {
+  position: relative;
+  background-color: #0A0C10;
+  background-image:
+    radial-gradient(circle at 15% 30%, rgba(201,168,76,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 85% 70%, rgba(0,212,255,0.04) 0%, transparent 50%),
+    linear-gradient(180deg, #0A0C10 0%, #0d1018 100%);
+  color: var(--text-light);
+  padding: 80px 16px;
+  overflow: visible;
+  direction: rtl;
+  text-align: right;
+}
+
+.growth-accelerator-landing-page-features-section .features-section-bg {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(201,168,76,0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.growth-accelerator-landing-page-features-section .features-gold-rule {
+  position: absolute;
+  top: 60px;
+  right: 50%;
+  transform: translateX(50%);
+  width: 56px;
+  height: 4px;
+  background: linear-gradient(90deg, #C9A84C, #E8C96A);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.9;
+}
+
+.growth-accelerator-landing-page-features-section .features-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.growth-accelerator-landing-page-features-section .features-intro {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.growth-accelerator-landing-page-features-section .features-heading {
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: #FFFFFF;
+  margin: 0 0 16px 0;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+.growth-accelerator-landing-page-features-section .features-subheading {
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: #8A94A6;
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.growth-accelerator-landing-page-features-section .features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  direction: rtl;
+}
+
+.growth-accelerator-landing-page-features-section .feature-card {
+  position: relative;
+  background: #111420;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  padding: 2rem;
+  border: 1px solid rgba(201,168,76,0.12);
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.growth-accelerator-landing-page-features-section .feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  border-top: 2px solid rgba(201,168,76,0.25);
+  border-right: 2px solid rgba(201,168,76,0.25);
+  border-radius: 0 10px 0 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: border-color 0.3s ease;
+}
+
+.growth-accelerator-landing-page-features-section .feature-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border-bottom: 2px solid rgba(0,212,255,0.2);
+  border-left: 2px solid rgba(0,212,255,0.2);
+  border-radius: 0 0 0 10px;
+  pointer-events: none;
+  z-index: 0;
+  transition: border-color 0.3s ease;
+}
+
+.growth-accelerator-landing-page-features-section .feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(201,168,76,0.2);
+  border-color: rgba(201,168,76,0.3);
+}
+
+.growth-accelerator-landing-page-features-section .feature-card:hover::before {
+  border-color: rgba(201,168,76,0.6);
+}
+
+.growth-accelerator-landing-page-features-section .feature-card:hover::after {
+  border-color: rgba(0,212,255,0.5);
+}
+
+.growth-accelerator-landing-page-features-section .feature-marker {
+  position: relative;
+  z-index: 1;
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8A94A6;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.growth-accelerator-landing-page-features-section .feature-title {
+  position: relative;
+  z-index: 1;
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #FFFFFF;
+  margin: 0 0 12px 0;
+}
+
+.growth-accelerator-landing-page-features-section .feature-desc {
+  position: relative;
+  z-index: 1;
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: #8A94A6;
+  margin: 0 0 20px 0;
+}
+
+.growth-accelerator-landing-page-features-section .feature-list {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.growth-accelerator-landing-page-features-section .feature-list li {
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #C9C8C3;
+  padding-inline-start: 20px;
+  position: relative;
+}
+
+.growth-accelerator-landing-page-features-section .feature-list li::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  background-color: #C9A84C;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+@media (max-width: 992px) {
+  .growth-accelerator-landing-page-features-section .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .growth-accelerator-landing-page-features-section {
+    padding: 100px 16px 60px;
+  }
+
+  .growth-accelerator-landing-page-features-section .features-gold-rule {
+    top: 40px;
+    width: 40px;
+    height: 3px;
+  }
+
+  .growth-accelerator-landing-page-features-section .features-intro {
+    margin-bottom: 40px;
+  }
+
+  .growth-accelerator-landing-page-features-section .features-heading {
+    font-size: 1.8rem;
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  .growth-accelerator-landing-page-features-section .features-subheading {
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  .growth-accelerator-landing-page-features-section .features-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+
+  .growth-accelerator-landing-page-features-section .feature-card {
+    padding: 1.5rem;
+  }
+
+  .growth-accelerator-landing-page-features-section .feature-title {
+    font-size: 1.3rem;
+  }
+}
+
+.growth-accelerator-landing-page-stats-section {
+    background: var(--bg-light);
+    color: var(--text-dark);
+    position: relative;
+    overflow: visible;
+    padding: 80px 16px 100px;
+    direction: rtl;
+}
+
+.growth-accelerator-landing-page-stats-section .stats-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.growth-accelerator-landing-page-stats-section .stats-header {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.growth-accelerator-landing-page-stats-section .stats-header h2 {
+    font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+}
+
+.growth-accelerator-landing-page-stats-section .stats-header p {
+    font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.growth-accelerator-landing-page-stats-section .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    direction: rtl;
+}
+
+.growth-accelerator-landing-page-stats-section .stat-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03), 0 1px 2px rgba(0,0,0,0.04);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    min-width: 0;
+}
+
+.growth-accelerator-landing-page-stats-section .stat-card:hover {
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+    transform: translateY(-4px);
+}
+
+.growth-accelerator-landing-page-stats-section .stat-number {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.growth-accelerator-landing-page-stats-section .stat-value {
+    font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-dark);
+}
+
+.growth-accelerator-landing-page-stats-section .stat-accent {
+    display: inline-block;
+    width: 32px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+    border-radius: 2px;
+    align-self: flex-end;
+    margin-bottom: 8px;
+}
+
+.growth-accelerator-landing-page-stats-section .stat-card h3 {
+    font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.growth-accelerator-landing-page-stats-section .stat-card p {
+    font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.growth-accelerator-landing-page-stats-section .stats-divider-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.growth-accelerator-landing-page-stats-section .stats-divider-wrapper svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width: 1024px) {
+    .growth-accelerator-landing-page-stats-section .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .growth-accelerator-landing-page-stats-section {
+        padding: 60px 16px 80px;
+    }
+
+    .growth-accelerator-landing-page-stats-section .stats-header {
+        margin-bottom: 40px;
+    }
+
+    .growth-accelerator-landing-page-stats-section .stats-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .growth-accelerator-landing-page-stats-section .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .growth-accelerator-landing-page-stats-section .stat-card {
+        padding: 24px 20px;
+    }
+
+    .growth-accelerator-landing-page-stats-section .stat-value {
+        font-size: 2rem;
+    }
+}
+
+.growth-accelerator-landing-page-testimonials-section {
+  position: relative;
+  overflow: hidden;
+  background-color: #0A0C10;
+  background-image:
+    radial-gradient(rgba(201,168,76,0.06) 1px, transparent 1px),
+    linear-gradient(180deg, #0A0C10 0%, #0d1018 100%);
+  background-size: 32px 32px, auto;
+  color: var(--text-light);
+  padding: 80px 16px;
+  text-align: start;
+  direction: rtl;
+}
+
+/* Glow Orb Decoration */
+.growth-accelerator-landing-page-testimonials-section-glow-orb {
+  position: absolute;
+  top: -150px;
+  inset-inline-end: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Content Container */
+.growth-accelerator-landing-page-testimonials-section-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Logo Row */
+.growth-accelerator-landing-page-testimonials-section-logo-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 32px 48px;
+  margin-bottom: 64px;
+  opacity: 0.45;
+}
+
+.growth-accelerator-landing-page-testimonials-section .brand-wordmark {
+  font-family: 'Inter', 'Assistant', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Section Header */
+.growth-accelerator-landing-page-testimonials-section-header {
+  text-align: center;
+  margin-bottom: 48px;
+  max-width: 700px;
+  margin-inline: auto;
+}
+
+.growth-accelerator-landing-page-testimonials-section-header h2 {
+  font-family: 'Manrope', 'Sora', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+}
+
+.growth-accelerator-landing-page-testimonials-section-header p {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: #8A94A6;
+  max-width: none !important;
+}
+
+/* Gold Horizontal Rule */
+.growth-accelerator-landing-page-testimonials-section-gold-rule {
+  width: 48px;
+  height: 3px;
+  background-color: #C9A84C;
+  margin: 0 auto 56px auto;
+  border-radius: 2px;
+}
+
+/* Testimonial Grid */
+.growth-accelerator-landing-page-testimonials-section-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  direction: rtl;
+}
+
+/* Testimonial Card */
+.growth-accelerator-landing-page-testimonials-section-card {
+  position: relative;
+  background: #111420;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  padding: 2.5rem 2rem 2rem 2rem;
+  border: 1px solid rgba(201,168,76,0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-width: 0;
+}
+
+.growth-accelerator-landing-page-testimonials-section-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  border-color: rgba(201,168,76,0.25);
+}
+
+/* Cyan Accent Line */
+.growth-accelerator-landing-page-testimonials-section-card-accent {
+  width: 32px;
+  height: 3px;
+  background: var(--accent);
+  margin-bottom: 24px;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+.growth-accelerator-landing-page-testimonials-section-card blockquote {
+  margin: 0 0 32px 0;
+  flex-grow: 1;
+}
+
+.growth-accelerator-landing-page-testimonials-section-card blockquote p {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.8;
+  color: #8A94A6;
+  font-style: normal;
+  margin: 0;
+}
+
+/* Attribution Block */
+.growth-accelerator-landing-page-testimonials-section-attribution {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 20px;
+}
+
+.growth-accelerator-landing-page-testimonials-section-attribution strong {
+  font-family: 'Inter', 'Assistant', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1.4;
+}
+
+.growth-accelerator-landing-page-testimonials-section-attribution span {
+  font-family: 'Inter', 'Assistant', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #8A94A6;
+}
+
+.growth-accelerator-landing-page-testimonials-section-context {
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #C9A84C !important;
+  margin-top: 4px;
+}
+
+/* Responsive: Mobile */
+@media (max-width: 768px) {
+  .growth-accelerator-landing-page-testimonials-section {
+    padding: 64px 16px;
+  }
+
+  .growth-accelerator-landing-page-testimonials-section-logo-row {
+    gap: 24px 32px;
+    margin-bottom: 48px;
+    opacity: 0.4;
+  }
+
+  .growth-accelerator-landing-page-testimonials-section .brand-wordmark {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+
+  .growth-accelerator-landing-page-testimonials-section-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .growth-accelerator-landing-page-testimonials-section-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px;
+  }
+
+  .growth-accelerator-landing-page-testimonials-section-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .growth-accelerator-landing-page-testimonials-section-glow-orb {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    inset-inline-end: -100px;
+  }
+}
+
+/* Responsive: Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .growth-accelerator-landing-page-testimonials-section-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.growth-accelerator-landing-page-cta-section {
+  background-color: #0A0C10;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(0,212,255,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(201,168,76,0.08) 0%, transparent 50%),
+    linear-gradient(180deg, #0A0C10 0%, #0d1018 100%);
+  color: var(--text-light);
+  padding: 100px 24px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  direction: rtl;
+}
+
+.growth-accelerator-landing-page-cta-section .cta-panel {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 60px 40px;
+  background: rgba(17, 20, 37, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 2px;
+  border: 1px solid rgba(201,168,76,0.15);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 0 80px rgba(0,212,255,0.05);
+  position: relative;
+  z-index: 2;
+}
+
+.growth-accelerator-landing-page-cta-section .cta-heading {
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Sora', sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.growth-accelerator-landing-page-cta-section .cta-description {
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.growth-accelerator-landing-page-cta-section .cta-button {
+  display: inline-block;
+  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 100%);
+  color: #0A0C10;
+  padding: 14px 36px;
+  border-radius: 6px;
+  border: none;
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 30px rgba(201,168,76,0.3);
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.growth-accelerator-landing-page-cta-section .cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 45px rgba(201,168,76,0.5), 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.growth-accelerator-landing-page-cta-section .cta-reassurance {
+  font-family: 'Inter', 'Assistant', 'Rubik', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgba(245, 243, 238, 0.6);
+  margin: 0;
+}
+
+/* Decorative gemstone refraction texture */
+.growth-accelerator-landing-page-cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle at 30% 30%, rgba(201,168,76,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(40px);
+  opacity: 0.6;
+}
+
+.growth-accelerator-landing-page-cta-section::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -40px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle at 70% 70%, rgba(0,212,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(50px);
+  opacity: 0.5;
+}
+
+/* Subtle top rule to separate from previous section */
+.growth-accelerator-landing-page-cta-section .cta-panel::before {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: rgba(201,168,76,0.4);
+  margin: 0 auto 32px;
+  border-radius: 1px;
+}
+
+@media (max-width: 768px) {
+  .growth-accelerator-landing-page-cta-section {
+    padding: 80px 16px;
+  }
+
+  .growth-accelerator-landing-page-cta-section .cta-panel {
+    padding: 40px 20px;
+  }
+
+  .growth-accelerator-landing-page-cta-section .cta-heading {
+    font-size: 1.75rem;
+  }
+
+  .growth-accelerator-landing-page-cta-section .cta-button {
+    padding: 12px 28px;
+    font-size: 0.9rem;
+  }
+}</style>
+    <link rel="stylesheet" href="/styles.css">
+    <script>window.ZAPPY_WEBSITE_ID = "a5cea990-674b-4211-b71f-c74fe58d6d92"; window.ZAPPY_API_BASE = "https://api.zappy5.com";</script>
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: var(--text-dark, #333) !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+      [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 10px !important; padding-right: 28px !important; }
+      .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus (exclude catalog sub-menus that use <a> children instead of <li>) */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))):not(:has(> a)), .sub-menu:not(:has(li)):not(:has(> a)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .navbar .sub-menu.mobile-expanded, .nav-menu .sub-menu.mobile-expanded, #navMenu .sub-menu.mobile-expanded { max-height: none !important; overflow-y: visible !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-light) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-light) !important; white-space: normal !important; }
+        .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+        [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 0 !important; padding-right: 28px !important; }
+        .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+        .nav-menu.active, #navMenu.active { max-width: 100vw !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-light) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NK8JGF39" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  <nav class="navbar" dir="rtl" style="background-color: transparent !important; box-shadow: none;">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu" data-element-type="button" data-element-id="btn-1778071114571-68lly8dcn" data-native-element="true" >
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="width: 24px !important; height: 24px !important; display: block !important;">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none !important; width: 24px !important; height: 24px !important;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+
+  <button class="phone-header-btn" data-phone="+972515533507" aria-label="Call" data-element-type="button" data-element-id="btn-1778071114571-rxcyjnu32" data-native-element="true" >
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="width: 24px; height: 24px;">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+
+  <div class="nav-container">
+    <div class="nav-right-group"><div class="nav-brand" style="display: flex; justify-content: center; align-items: center">
+      <a href="/" class="logo-link" >
+        <img src="/assets/hoshen-success-coaching-personal-development-consulting-logo.webp" alt="Hoshen Success" class="logo" data-image-type="logo" >
+      </a>
+    </div><ul class="nav-menu" id="navMenu"><li><a href="/" >בית</a></li><li><a href="/trading-education-programs" >מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about" >אודות</a></li><li><a href="/contact" >צור קשר</a></li><li><a href="/growth-accelerator" class="nav-link">צמיחה</a></li></ul></div>
+
+    
+
+    <div class="nav-cta-container">
+      <a href="https://wa.me/972515533507" class="nav-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-aa77aolbh" data-native-element="true" target="_blank" rel="noopener noreferrer" style="border-color: rgb(245, 196, 81) !important; color: var(--text-color, #1a1a1a) !important; background-color: rgb(245, 196, 81) !important; background-image: none !important;" data-text-color="dark">צור קשר</a>
+    </div>
+  </div>
+</nav>
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-light)) !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '50%', 'important');
+          mobileToggle.style.setProperty('transform', 'translateY(-50%)', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '50%', 'important');
+          phoneBtn.style.setProperty('transform', 'translateY(-50%)', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu on button click - use newToggle now
+    newToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = this.querySelector('.hamburger-icon');
+      const closeIcon = this.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    });
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '+972508804568';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp button visibility is now controlled via CSS (siteSettings).
+    // No JS-based desktop hiding — the button is visible on both mobile and desktop by default.
+  });
+})();
+
+</script>
+  
+  <main class="blog-page ai-generated-page"><section class="growth-accelerator-landing-page-hero-section" data-layout-spec="Growth Accelerator Landing Page-hero" data-hero-type="fullscreen-scrim">
+  <!-- Background Image -->
+  <div class="hero-bg-wrapper">
+    <img data-hero-bg="true" data-context="A cinematic, dark-toned portrait of a confident business professional in a modern glass office at dusk, with soft cyan and gold light reflections suggesting strategic growth and ambition. The composition should feel premium, executive, and forward-looking, with shallow depth of field." width="1200" height="600" src="/assets/hoshen-success-coaching-personal-development-consulting-section-hero-growth-accelerator-landing-page-hero-image-1.webp" alt="איש עסקים בסביבה אסטרטגית מודרנית">
+  </div>
+
+  <!-- Scrim Overlay -->
+  <div class="hero-scrim"></div>
+
+  <!-- Radial Glow Orb Decoration -->
+  <div class="hero-glow-orb" aria-hidden="true"></div>
+
+  <!-- Main Content Grid -->
+  <div class="hero-container">
+    <div class="hero-grid">
+      
+      <!-- Left Column (Visual) -->
+      <div class="hero-visual-col">
+        <div class="hero-visual-panel">
+          <div class="hero-visual-content">
+            <!-- Gemstone Lattice SVG Motif -->
+            <svg class="hero-gemstone-motif" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="gemGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.15"></stop>
+                  <stop offset="100%" stop-color="#00D4FF" stop-opacity="0.08"></stop>
+                </linearGradient>
+              </defs>
+              <path d="M100,10 L130,50 L100,90 L70,50 Z" fill="none" stroke="url(#gemGrad)" stroke-width="1.5"></path>
+              <path d="M100,110 L130,150 L100,190 L70,150 Z" fill="none" stroke="url(#gemGrad)" stroke-width="1.5"></path>
+              <path d="M100,60 L130,100 L100,140 L70,100 Z" fill="none" stroke="url(#gemGrad)" stroke-width="1.5"></path>
+              <path d="M10,100 L50,70 L90,100 L50,130 Z" fill="none" stroke="url(#gemGrad)" stroke-width="1.5"></path>
+              <path d="M110,100 L150,70 L190,100 L150,130 Z" fill="none" stroke="url(#gemGrad)" stroke-width="1.5"></path>
+              <path d="M100,10 L100,190" stroke="url(#gemGrad)" stroke-width="0.5"></path>
+              <path d="M10,100 L190,100" stroke="url(#gemGrad)" stroke-width="0.5"></path>
+            </svg>
+            <!-- Chart Line Overlays -->
+            <svg class="hero-chart-lines" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <polyline points="0,80 40,70 80,75 120,20 160,30 200,10" fill="none" stroke="#00D4FF" stroke-width="1.5" stroke-opacity="0.4"></polyline>
+              <polyline points="0,90 40,85 80,88 120,50 160,60 200,40" fill="none" stroke="#C9A84C" stroke-width="1" stroke-opacity="0.3"></polyline>
+            </svg>
+            <!-- Placeholder for the main visual -->
+            <img data-context="A cinematic, dark-toned portrait of a confident business professional in a modern glass office at dusk, with soft cyan and gold light reflections suggesting strategic growth and ambition. The composition should feel premium, executive, and forward-looking, with shallow depth of field." width="1200" height="600" src="/assets/hoshen-success-coaching-personal-development-consulting-section-hero-growth-accelerator-landing-page-hero-image-1.webp" alt="דיוקן מקצועי של יועץ אסטרטגי" class="hero-visual-img">
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column (Text) -->
+      <div class="hero-text-col">
+        <h1 class="hero-headline">הצמיחה שלך מתחילה באסטרטגיה מנצחת</h1>
+        <h3 class="hero-subtitle">ליווי אישי ומקצועי להשגת יעדים שאפתניים בעולם העסקי המודרני</h3>
+        
+        <div class="hero-cta-group">
+          <a href="#contact" class="btn-primary">קבע פגישת ייעוץ</a>
+          <a href="#programs" class="btn-ghost">גלה את התוכניות</a>
+        </div>
+
+        <div class="hero-trust-row">
+          <div class="trust-capsule">
+            <span class="trust-icon" aria-hidden="true">✦</span>
+            <span class="trust-text">500+ בוגרים</span>
+          </div>
+          <div class="trust-capsule">
+            <span class="trust-icon" aria-hidden="true">✦</span>
+            <span class="trust-text">12 שנות ניסיון</span>
+          </div>
+          <div class="trust-capsule">
+            <span class="trust-icon" aria-hidden="true">✦</span>
+            <span class="trust-text">97% שביעות רצון</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Divider Transition -->
+  <div class="hero-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,80 L0,40 Q50,35 100,42 T200,38 Q250,42 300,35 T400,40 Q450,38 500,42 T600,35 Q650,40 700,38 T800,42 Q850,35 900,40 T1000,38 Q1050,42 1100,35 T1200,40 L1200,80 Z" fill="var(--bg-dark)"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="growth-accelerator-landing-page-features-section" data-layout-spec="Growth Accelerator Landing Page-features">
+  <div class="features-section-bg"></div>
+  
+  <!-- Decorative gold horizontal rule -->
+  <div class="features-gold-rule" aria-hidden="true"></div>
+
+  <div class="features-container">
+    <div class="features-intro">
+      <h2 class="features-heading">מפת הדרכים להצלחה שלך</h2>
+      <p class="features-subheading">אנחנו משלבים אסטרטגיות ניהול מתקדמות עם תובנות מעולם המודיעין העסקי כדי לבנות תוכנית צמיחה מדויקת, ממוקדת ומותאמת אישית.</p>
+    </div>
+
+    <div class="features-grid">
+      
+      <!-- Card 1 -->
+      <div class="feature-card">
+        <span class="feature-marker">01</span>
+        <h3 class="feature-title">אבחון עומק אסטרטגי</h3>
+        <p class="feature-desc">מיפוי מקיף של החוזקות, נקודות העיוורון וההזדמנויות הסמויות בעסק או בקריירה שלך.</p>
+        <ul class="feature-list">
+          <li>ניתוח 360 מעלות</li>
+          <li>זיהוי חסמים נסתרים</li>
+          <li>דוח תובנות אישי</li>
+        </ul>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="feature-card">
+        <span class="feature-marker">02</span>
+        <h3 class="feature-title">בניית תוכנית פעולה</h3>
+        <p class="feature-desc">תרגום האבחון למפת דרכים מעשית עם אבני דרך ברורות, לוחות זמנים ומדדי הצלחה.</p>
+        <ul class="feature-list">
+          <li>יעדים חכמים וברי-השגה</li>
+          <li>חלוקה לשלבים רבעוניים</li>
+          <li>מנגנוני בקרה מובנים</li>
+        </ul>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="feature-card">
+        <span class="feature-marker">03</span>
+        <h3 class="feature-title">ליווי צמוד והטמעה</h3>
+        <p class="feature-desc">מפגשי אימון אישיים שוטפים המוודאים שהתוכנית לא נשארת על הנייר אלא הופכת למציאות יומיומית.</p>
+        <ul class="feature-list">
+          <li>מפגשים דו-שבועיים</li>
+          <li>ליווי בוואטסאפ בין מפגשים</li>
+          <li>התאמות בזמן אמת</li>
+        </ul>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="feature-card">
+        <span class="feature-marker">04</span>
+        <h3 class="feature-title">פיתוח מנהיגות אישית</h3>
+        <p class="feature-desc">חיזוק יכולות הניהול, התקשורת הבין-אישית והחוסן המנטלי הנדרשים להובלה בעולם תחרותי.</p>
+        <ul class="feature-list">
+          <li>מודל חוסן מנטלי</li>
+          <li>תקשורת אפקטיבית</li>
+          <li>ניהול קונפליקטים</li>
+        </ul>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="feature-card">
+        <span class="feature-marker">05</span>
+        <h3 class="feature-title">אינטליגנציה שוקית</h3>
+        <p class="feature-desc">שילוב כלים מתקדמים לניתוח מגמות, זיהוי איומים והזדמנויות, ובניית יתרון תחרותי בר-קיימא.</p>
+        <ul class="feature-list">
+          <li>מיפוי מתחרים</li>
+          <li>זיהוי טרנדים גלובליים</li>
+          <li>חיזוי תרחישים</li>
+        </ul>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="feature-card">
+        <span class="feature-marker">06</span>
+        <h3 class="feature-title">מדידה ואופטימיזציה</h3>
+        <p class="feature-desc">מעקב רציף אחר ביצועים, ניתוח נתונים והפקת לקחים כדי להבטיח שיפור מתמיד וצמיחה מואצת.</p>
+        <ul class="feature-list">
+          <li>לוחות מחוונים (KPI)</li>
+          <li>סקירות רבעוניות</li>
+          <li>תהליכי שיפור מתמיד</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="growth-accelerator-landing-page-stats-section" data-layout-spec="Growth Accelerator Landing Page-stats">
+    <div class="stats-container">
+        <div class="stats-header">
+            <h2>המספרים שמאחורי ההצלחה</h2>
+            <p>כל מפגש אימון, כל תוכנית פיתוח וכל ליווי אסטרטגי מייצרים תוצאות מדידות שמשנות קריירות, עסקים וחיים. הנתונים שלנו מדברים בעד עצמם.</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">
+                    <span class="stat-value">+500</span>
+                    <span class="stat-accent"></span>
+                </div>
+                <h3>בוגרי תוכניות</h3>
+                <p>מנהלים, יזמים ואנשי מקצוע שהשלימו את תוכניות הדגל שלנו והשיגו קפיצת מדרגה משמעותית בקריירה.</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    <span class="stat-value">94%</span>
+                    <span class="stat-accent"></span>
+                </div>
+                <h3>שיעור שביעות רצון</h3>
+                <p>אחוז הלקוחות שהעניקו ציון מצוין בחוות הדעת השנתיות, ומעידים על חוויית ליווי יוצאת דופן.</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    <span class="stat-value">12+</span>
+                    <span class="stat-accent"></span>
+                </div>
+                <h3>שנות ניסיון</h3>
+                <p>צברנו ניסיון עשיר בליווי מאות תהליכי צמיחה אישיים וארגוניים במגזר הפרטי, הציבורי והעסקי.</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    <span class="stat-value">₪3.2M</span>
+                    <span class="stat-accent"></span>
+                </div>
+                <h3>עלייה ממוצעת בשכר</h3>
+                <p>העלייה המצטברת בשכר הבוגרים שלנו בתוך 18 חודשים מתום התוכנית, המשקפת את הערך המוסף של התהליך.</p>
+            </div>
+        </div>
+        <div class="stats-divider-wrapper">
+            <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,60 L0,20 Q150,30 300,18 T600,22 Q750,28 900,16 T1200,20 L1200,60 Z" fill="var(--bg-dark)"></path>
+            </svg>
+        </div>
+    </div>
+</section>
+
+<section class="growth-accelerator-landing-page-testimonials-section" data-layout-spec="Growth Accelerator Landing Page-testimonials" data-section-background="dark">
+  <!-- Subtle radial glow orb decoration -->
+  <div class="growth-accelerator-landing-page-testimonials-section-glow-orb" aria-hidden="true"></div>
+
+  <div class="growth-accelerator-landing-page-testimonials-section-container">
+    
+    <!-- Upper Brand/Partner Logo Row -->
+    <div class="growth-accelerator-landing-page-testimonials-section-logo-row">
+      <span class="brand-wordmark">NEXUS CAPITAL</span>
+      <span class="brand-wordmark">APEX STRATEGIES</span>
+      <span class="brand-wordmark">VERTEX GROUP</span>
+      <span class="brand-wordmark">CORE DYNAMICS</span>
+      <span class="brand-wordmark">PINNACLE ADVISORS</span>
+    </div>
+
+    <!-- Section Header -->
+    <div class="growth-accelerator-landing-page-testimonials-section-header">
+      <h2>מה לקוחותינו אומרים</h2>
+      <p>ההצלחה של הלקוחות שלנו היא המדד האמיתי לאיכות הליווי והאסטרטגיה שאנחנו מספקים. כל סיפור צמיחה מתחיל בהחלטה אחת אמיצה.</p>
+    </div>
+
+    <!-- Gold horizontal rule decoration -->
+    <div class="growth-accelerator-landing-page-testimonials-section-gold-rule" aria-hidden="true"></div>
+
+    <!-- Testimonial Cards Grid -->
+    <div class="growth-accelerator-landing-page-testimonials-section-grid">
+      
+      <!-- Card 1 -->
+      <article class="growth-accelerator-landing-page-testimonials-section-card">
+        <div class="growth-accelerator-landing-page-testimonials-section-card-accent"></div>
+        <blockquote>
+          <p>"העבודה עם חושן הצלחה שינתה לחלוטין את הדרך שבה אני מנהל את העסק שלי. תוך חצי שנה הכפלנו את ההכנסות וצמחנו לצוות של 15 עובדים. הליווי האישי והכלים הפרקטיים שקיבלתי הם פשוט זהב טהור."</p>
+        </blockquote>
+        <footer class="growth-accelerator-landing-page-testimonials-section-attribution">
+          <strong>אורי לוי</strong>
+          <span>מייסד ומנכ"ל, TechNova Solutions</span>
+          <span class="growth-accelerator-landing-page-testimonials-section-context">תוכנית האצה עסקית</span>
+        </footer>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="growth-accelerator-landing-page-testimonials-section-card">
+        <div class="growth-accelerator-landing-page-testimonials-section-card-accent"></div>
+        <blockquote>
+          <p>"אחרי שנים של תקיעות בקריירה, המנטורינג שקיבלתי עזר לי לזהות את החוזקות האמיתיות שלי ולבנות מסלול קריירה שאני באמת אוהב. היום אני בתפקיד בכיר עם משכורת שהכפילה את עצמה. תודה ענקית!"</p>
+        </blockquote>
+        <footer class="growth-accelerator-landing-page-testimonials-section-attribution">
+          <strong>מיכל כהן</strong>
+          <span>סמנכ"לית תפעול, GlobalTrade Ltd</span>
+          <span class="growth-accelerator-landing-page-testimonials-section-context">ליווי אישי לקריירה</span>
+        </footer>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="growth-accelerator-landing-page-testimonials-section-card">
+        <div class="growth-accelerator-landing-page-testimonials-section-card-accent"></div>
+        <blockquote>
+          <p>"הגעתי לחושן הצלחה עם רעיון בלבד, ויצאתי עם תוכנית עסקית מנצחת, מיתוג מדויק ואסטרטגיית שיווק שמובילה לקוחות. הליווי הצמוד והמקצועיות יוצאי הדופן הפכו חלום למציאות רווחית תוך פחות משנה."</p>
+        </blockquote>
+        <footer class="growth-accelerator-landing-page-testimonials-section-attribution">
+          <strong>דוד אברהם</strong>
+          <span>יזם, Bloom Ventures</span>
+          <span class="growth-accelerator-landing-page-testimonials-section-context">ליווי סטארטאפים</span>
+        </footer>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="growth-accelerator-landing-page-cta-section" data-layout-spec="Growth Accelerator Landing Page-cta">
+  <div class="cta-panel">
+    <h2 class="cta-heading">המסע שלך להצלחה מתחיל כאן</h2>
+    <p class="cta-description">אנחנו בוחרים בקפידה את השותפים שלנו ומלווים כל לקוח בתהליך אישי ומעמיק. צרו קשר עוד היום וגלו כיצד נוכל לעזור לכם לממש את הפוטנציאל האמיתי שלכם.</p>
+    <a href="/contact" class="cta-button">קבעו פגישת ייעוץ</a>
+    <p class="cta-reassurance">ללא התחייבות • שיחת היכרות ראשונית</p>
+  </div>
+</section></main>
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="hsfaq-section" dir="rtl" lang="he" aria-labelledby="hsfaq-heading" id="hsfaq-section">
+  <div class="hsfaq-container">
+
+    <!-- Eyebrow + Heading -->
+    <div class="hsfaq-header">
+      <p><span class="hsfaq-eyebrow">שאלות נפוצות</span>
+      </p><h2 class="hsfaq-title" id="hsfaq-heading">כל מה שרצית לדעת</h2>
+      <p class="hsfaq-subtitle" >מצאנו את השאלות שהכי חוזרות על עצמן ענינו על הכל במקום אחד</p>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="hsfaq-list" role="list">
+
+      <!-- Q1 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="0">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-1" id="hsfaq-btn-1" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-hiruke297" data-native-element="true">
+          <span class="hsfaq-question-text">כמה זמן לוקח הקורס?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-1" role="region" aria-labelledby="hsfaq-btn-1" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            הקורס נמשך בין 3-6 חודשים בהתאם לקצב הלמידה שלך. אנחנו עובדים 4 פעמים בשבוע בלייב בזום, ועל פי ברוב המקרים תלמידים מתחילים לסחור בצורה עצמאית תוך 3 חודשים.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="1">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-2" id="hsfaq-btn-2" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-jlkslmue3" data-native-element="true">
+          <span class="hsfaq-question-text">כמה עולה הקורס?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-2" role="region" aria-labelledby="hsfaq-btn-2" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            המחיר משתנה לפי המסלול שתבחר. שוחח איתנו בוואטסאפ לקבלת מחיר מדויק ומותאם אישית. אנחנו מציעים גם תוכניות תשלום נוחות.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="2">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-3" id="hsfaq-btn-3" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-zlid7g2wv" data-native-element="true">
+          <span class="hsfaq-question-text">האם אני צריך ניסיון קודם במסחר?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-3" role="region" aria-labelledby="hsfaq-btn-3" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            לא! הקורס שלנו מתאים לחלוטין למתחילים. אנחנו מתחילים מהבסיס ובונים את הידע שלב אחר שלב. כל מה שצריך זה רצון ללמוד.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="3">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-4" id="hsfaq-btn-4" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-vz32hh38d" data-native-element="true">
+          <span class="hsfaq-question-text">מה זה מסחר בחוזים עתידיים?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-4" role="region" aria-labelledby="hsfaq-btn-4" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            חוזים עתידיים הם מכשיר פיננסי שמאפשר לסחור במדדים כמו NQ100 ו-ES500. הם מציעים נזילות גבוהה, שעות מסחר ברורות ויכולת לייצר רווח גם בירידות שוק.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="4">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-5" id="hsfaq-btn-5" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-j87t5ngh4" data-native-element="true">
+          <span class="hsfaq-question-text">כמה שעות ביום צריך להשקיע?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-5" role="region" aria-labelledby="hsfaq-btn-5" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            המסחר עצמו ממוקד לשעה אחת ביום — סשן ניו יורק 16:30-17:30 שעון ישראל. בנוסף, ישנם שיעורי זום ולמידה עצמאית. סה"כ 2-3 שעות ביום מספיקות.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="5">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-6" id="hsfaq-btn-6" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-cspiaqkhq" data-native-element="true">
+          <span class="hsfaq-question-text">האם אפשר לסחור מהבית?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-6" role="region" aria-labelledby="hsfaq-btn-6" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            כן! כל מה שצריך זה מחשב וחיבור לאינטרנט. הלייבים מתקיימים בזום ואתה יכול להצטרף מכל מקום בעולם.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="6">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-7" id="hsfaq-btn-7" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-7zcnnsg4e" data-native-element="true">
+          <span class="hsfaq-question-text">מה זה מסחר עם חברת נוסטרו?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-7" role="region" aria-labelledby="hsfaq-btn-7" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            חברות נוסטרו מספקות הון מסחר לסוחרים מוכשרים. לאחר הכשרה מוצלחת, תוכל לסחור עם הון של עשרות אלפי דולרים ולחלוק ברווחים — בלי לסכן כסף משלך.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="hsfaq-item" role="listitem" data-grid-item-index="7">
+        <button class="hsfaq-question" aria-expanded="false" aria-controls="hsfaq-answer-8" id="hsfaq-btn-8" style="cursor: pointer;" data-element-type="button" data-element-id="btn-1779717203343-5r1slxxqn" data-native-element="true">
+          <span class="hsfaq-question-text">איך מתחילים?</span>
+          <span class="hsfaq-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="hsfaq-answer" id="hsfaq-answer-8" role="region" aria-labelledby="hsfaq-btn-8" style="max-height: 0px; overflow: hidden; opacity: 0; padding-top: 0px; padding-bottom: 0px; transition: max-height 0.35s, opacity 0.25s, padding 0.25s;">
+          <div class="hsfaq-answer-inner">
+            פשוט מאוד! לחץ על כפתור הוואטסאפ, שלח הודעה ונקבע שיחת היכרות חינמית בזום. בשיחה נבין את הצרכים שלך ונמצא את המסלול המתאים ביותר.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.hsfaq-list -->
+
+    <!-- Bottom CTA -->
+    <div class="hsfaq-cta">
+      <p class="hsfaq-cta-text">עדיין יש לך שאלות? אנחנו כאן!</p>
+      <p class="zappy-editable"><a href="https://wa.me/972515533507" class="hsfaq-cta-btn" target="_blank" rel="noopener noreferrer" aria-label="שאל אותנו בוואטסאפ - פתיחה בחלון חדש" data-element-type="button" data-element-id="btn-1779717203343-5ptp2vo9w" data-native-element="true">
+        📲 שאל אותנו בוואטסאפ
+      </a>
+    </p></div>
+
+  </div><!-- /.hsfaq-container -->
+</section>
+
+
+
+
+
+<footer class="site-footer" dir="rtl">
+  <div class="footer-top">
+    <div class="footer-container">
+      <div class="footer-grid">
+
+        <!-- Column 1: Company Info -->
+        <div class="footer-col footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="/assets/hoshen-success-coaching-personal-development-consulting-logo.webp" alt="Hoshen Success" class="logo" data-element-type="image" data-element-id="img-1778071114577-ow31xqqcg" data-zappy-footer-image="true" >
+          </div>
+          <p class="footer-tagline">הצלחה אמיתית מתחילה כאן. אנחנו מלווים אנשים שאפתניים לפרוץ מגבלות, לבנות חזון ולהגיע לשיאים חדשים.</p>
+          <div class="footer-social">
+            <a href="https://facebook.com/people/%D7%A7%D7%95%D7%A8%D7%A1-%D7%9E%D7%A1%D7%97%D7%A8-%D7%91%D7%97%D7%95%D7%96%D7%99%D7%9D-%D7%A2%D7%AA%D7%99%D7%93%D7%99%D7%99%D7%9D-%D7%AA%D7%99%D7%A7%D7%99-%D7%A0%D7%95%D7%A1%D7%98%D7%A8%D7%95-Hoshen-Success/61583682081159" aria-label="Facebook" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com/hoshen_success_academy" aria-label="Instagram" class="social-link"><i class="fab fa-instagram" data-element-type="icon" data-element-id="icon-1778448714199-fgb833xpp" data-icon-type="fontawesome"></i></a>
+            <a href="https://wa.me/972515533507" aria-label="WhatsApp" class="social-link"><i class="fab fa-whatsapp" data-element-type="icon" data-element-id="icon-1778448714200-2z8ffq71j" data-icon-type="fontawesome"></i></a>
+          </div>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-col">
+          <h3 class="footer-heading"><span class="heading-accent"></span>ניווט מהיר</h3>
+          <ul class="footer-links" ><li><a href="/">בית</a></li><li><a href="/trading-education-programs">מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about">אודות</a></li><li><a href="/contact">צור קשר</a></li></ul>
+        </div>
+
+        <!-- Column 3: Contact Info -->
+        <div class="footer-col">
+          <h3 class="footer-heading"><span class="heading-accent"></span>יצירת קשר</h3>
+          <ul class="footer-contact">
+            <li>
+              <span class="contact-icon"><i class="fas fa-envelope" data-element-type="icon" data-element-id="icon-1778071114576-v7iukl5kb" data-icon-type="fontawesome"></i></span>
+              <span class="contact-text"><a href="mailto:academy@hoshen-success.com"><span>academy@hoshen-success.com</span></a></span>
+            </li>
+            <li>
+              <span class="contact-icon"><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1778071114576-x5o987xrh" data-icon-type="fontawesome"></i></span>
+              <span class="contact-text"><a href="tel:+972515533507" >050-8804568</a></span>
+            </li>
+            <li><a href="/"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+              <span class="contact-text">שדרות נים 2, קניון עזריאלי ראשונים { המשרד מיועד למנהלים בלבד. הכניסה בתיאום מראש בלבד}, ראשון לציון, מרכז, 7546302, ישראל</span></a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: CTA / Extra -->
+        <div class="footer-col footer-cta-col">
+          <h3 class="footer-heading"><span class="heading-accent"></span>מוכנים להתחיל?</h3>
+          <p class="footer-cta-text" >קבעו פגישת היכרות חינמית בזום!! אם המנטור הענק!! שלנו עמרי מאיר אורי וגלו איך Hoshen Success יכולים לשנות לכם את המסלול שלכם בחיים מקצה לקצה!!.</p>
+          <p style="text-align: center !important; display: flex !important; justify-content: center !important; align-items: flex-start !important; width: 100% !important;"><a href="https://wa.me/972515533507" class="footer-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-yclgf8hnx" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(46, 0, 173) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(255, 209, 102), rgb(245, 196, 81)) !important;" target="_blank" rel="noopener noreferrer" data-text-color="#2e00ad">לחץ לשיחה עכשיו בוואצאפ !</a>
+        </p></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="footer-divider-wrap">
+    <div class="footer-container">
+      <div class="footer-divider"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="footer-bottom">
+    <div class="footer-container">
+      <div class="footer-bottom-inner">
+        <p class="footer-copyright">© 2026 Hoshen Success. כל הזכויות שמורות.</p>
+        <div class="footer-legal">
+          <a href="/privacy" >מדיניות פרטיות</a>
+          <span class="legal-sep"></span>
+          <a href="/terms" >תנאי שימוש</a>
+          <span class="legal-sep"></span>
+          <a href="/accessibility" >נגישות</a>
+          <span class="legal-sep"></span>
+          <a href="https://zappy5.com" target="_blank" class="zappy-attribution" >נוצר באמצעות Hoshen Success</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+  
+  <a href="https://wa.me/972515533507" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+</body>
+</html>

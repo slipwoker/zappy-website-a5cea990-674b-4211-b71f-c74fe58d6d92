@@ -25,6 +25,10 @@ https://hoshen-success.pro/contact
 ### Page
 https://hoshen-success.pro/free-guide
 
+### Growth Accelerator Landing Page
+https://hoshen-success.pro/growth-accelerator
+Hoshen Success - Growth Accelerator Landing Page
+
 ## Legal & Policy
 
 ### Privacy Policy
@@ -59,7 +63,7 @@ Information about WCAG compliance and accessibility features.
   - `phone` (tel)
   - `callback_time` (select)
   - `topic` (text)
-  - `message` (textarea)
+  - `message` (textarea, required)
   - `privacy_consent` (checkbox, required)
 
 ---
