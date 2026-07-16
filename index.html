@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
+<!DOCTYPE html><html lang="he" dir="rtl"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
@@ -223,6 +221,377 @@
 })();
 </script>
 <!-- End Zappy Analytics -->
+<!-- Zappy Marketing Events -->
+<script>
+(function() {
+  'use strict';
+  if (window.zappyFireMarketingEvent) return;
+
+  var ECOM_MODE = "";
+  var IS_CATALOG = false;
+  var IS_FULL = false;
+
+  var ECOM_ALIAS = {
+    begin_checkout: 'checkout_started',
+    purchase: 'checkout_complete',
+    add_to_cart: 'add_to_cart',
+    view_product: 'view_product'
+  };
+
+  function pagePath() {
+    try {
+      if (window.ZAPPY_CONFIG && window.ZAPPY_CONFIG.currentPagePath) {
+        return window.ZAPPY_CONFIG.currentPagePath;
+      }
+    } catch (e) {}
+    try { return window.location.pathname || '/'; } catch (e2) { return '/'; }
+  }
+
+  function normalizeItems(meta) {
+    meta = meta || {};
+    var raw = meta.items || meta.cartItems || meta.cart_items || meta.lineItems || [];
+    if (!Array.isArray(raw)) raw = [];
+    var out = [];
+    for (var i = 0; i < raw.length; i++) {
+      var item = raw[i];
+      if (!item || typeof item !== 'object') continue;
+      var id = String(item.item_id || item.productId || item.product_id || item.id || '').trim();
+      var name = String(item.item_name || item.productName || item.product_name || item.name || '').trim();
+      var price = parseFloat(item.price != null ? item.price : (item.unitPrice != null ? item.unitPrice : 0)) || 0;
+      var quantity = Math.max(1, parseInt(item.quantity != null ? item.quantity : (item.qty != null ? item.qty : 1), 10) || 1);
+      if (!id && !name) continue;
+      out.push({ item_id: id || name, item_name: name || id, price: price, quantity: quantity });
+    }
+    return out;
+  }
+
+  function buildGa4Params(eventId, meta) {
+    meta = meta || {};
+    var items = normalizeItems(meta);
+    var value = parseFloat(meta.value != null ? meta.value : (meta.total != null ? meta.total : 0)) || 0;
+    var currency = String(meta.currency || 'USD').toUpperCase();
+
+    if (eventId === 'checkout_complete') {
+      return {
+        transaction_id: String(meta.transaction_id || meta.orderId || meta.order_id || meta.orderNumber || '') || undefined,
+        value: value,
+        currency: currency,
+        items: items
+      };
+    }
+    if (eventId === 'checkout_started') {
+      return { value: value, currency: currency, items: items };
+    }
+    if (eventId === 'add_to_cart') {
+      var atcItems = items.length ? items : [{
+        item_id: String(meta.productId || meta.product_id || ''),
+        item_name: String(meta.productName || meta.product_name || ''),
+        price: parseFloat(meta.value != null ? meta.value : (meta.price != null ? meta.price : 0)) || 0,
+        quantity: parseInt(meta.quantity != null ? meta.quantity : 1, 10) || 1
+      }].filter(function(x) { return x.item_id || x.item_name; });
+      return {
+        value: value || (atcItems[0] ? atcItems[0].price * atcItems[0].quantity : 0),
+        currency: currency,
+        items: atcItems
+      };
+    }
+    if (eventId === 'view_product') {
+      var vpItems = items.length ? items : [{
+        item_id: String(meta.productId || meta.product_id || ''),
+        item_name: String(meta.productName || meta.product_name || ''),
+        price: parseFloat(meta.price != null ? meta.price : (meta.value != null ? meta.value : 0)) || 0,
+        quantity: 1
+      }].filter(function(x) { return x.item_id || x.item_name; });
+      return {
+        currency: currency,
+        value: value || (vpItems[0] ? vpItems[0].price : 0),
+        items: vpItems
+      };
+    }
+    if (eventId === 'whatsapp_click' || eventId === 'phone_click') {
+      return { method: eventId === 'whatsapp_click' ? 'whatsapp' : 'phone', page_path: meta.pagePath || pagePath() };
+    }
+    if (eventId === 'contact_form_submitted' || eventId === 'product_inquiry') {
+      return { page_path: meta.pagePath || pagePath() };
+    }
+    return meta;
+  }
+
+  function buildMetaParams(eventId, meta) {
+    meta = meta || {};
+    var items = normalizeItems(meta);
+    var value = parseFloat(meta.value != null ? meta.value : (meta.total != null ? meta.total : 0)) || 0;
+    var currency = String(meta.currency || 'USD').toUpperCase();
+    var contentIds = [];
+    var numItems = 0;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].item_id) contentIds.push(items[i].item_id);
+      numItems += items[i].quantity || 1;
+    }
+
+    if (eventId === 'checkout_complete') {
+      return {
+        value: value,
+        currency: currency,
+        content_ids: contentIds.length ? contentIds : undefined,
+        content_type: 'product',
+        num_items: numItems || undefined,
+        order_id: String(meta.order_id || meta.orderId || meta.transaction_id || meta.orderNumber || '') || undefined
+      };
+    }
+    if (eventId === 'checkout_started') {
+      return {
+        value: value,
+        currency: currency,
+        content_ids: contentIds.length ? contentIds : undefined,
+        content_type: 'product',
+        num_items: numItems || parseInt(meta.itemCount != null ? meta.itemCount : 0, 10) || undefined
+      };
+    }
+    if (eventId === 'add_to_cart') {
+      var id = String(meta.productId || meta.product_id || contentIds[0] || '');
+      return {
+        value: value || (items[0] ? items[0].price * items[0].quantity : 0),
+        currency: currency,
+        content_ids: id ? [id] : (contentIds.length ? contentIds : undefined),
+        content_type: 'product',
+        content_name: meta.productName || meta.product_name || (items[0] && items[0].item_name),
+        num_items: parseInt(meta.quantity != null ? meta.quantity : (numItems || 1), 10) || 1
+      };
+    }
+    if (eventId === 'view_product') {
+      var vid = String(meta.productId || meta.product_id || contentIds[0] || '');
+      return {
+        value: value || parseFloat(meta.price != null ? meta.price : 0) || 0,
+        currency: currency,
+        content_ids: vid ? [vid] : (contentIds.length ? contentIds : undefined),
+        content_type: 'product',
+        content_name: meta.productName || meta.product_name || (items[0] && items[0].item_name)
+      };
+    }
+    if (eventId === 'whatsapp_click' || eventId === 'phone_click') {
+      return {
+        content_name: eventId === 'whatsapp_click' ? 'WhatsApp' : 'Phone',
+        content_category: 'contact'
+      };
+    }
+    if (eventId === 'contact_form_submitted' || eventId === 'product_inquiry') {
+      return {
+        content_name: eventId === 'product_inquiry' ? 'Product inquiry' : 'Contact form',
+        content_category: meta.productName || meta.product_name || undefined
+      };
+    }
+    return meta;
+  }
+
+  var PLATFORM = {
+    whatsapp_click: { ga4: 'contact', meta: 'Contact', gtm: 'whatsapp_click', ecom: false },
+    phone_click: { ga4: 'contact', meta: 'Contact', gtm: 'phone_click', ecom: false },
+    contact_form_submitted: { ga4: 'generate_lead', meta: 'Lead', gtm: 'contact_form_submitted', ecom: false },
+    checkout_started: { ga4: 'begin_checkout', meta: 'InitiateCheckout', gtm: 'begin_checkout', ecom: true },
+    checkout_complete: { ga4: 'purchase', meta: 'Purchase', gtm: 'purchase', ecom: true },
+    product_inquiry: { ga4: 'generate_lead', meta: 'Lead', gtm: 'product_inquiry', ecom: false },
+    add_to_cart: { ga4: 'add_to_cart', meta: 'AddToCart', gtm: 'add_to_cart', ecom: true },
+    view_product: { ga4: 'view_item', meta: 'ViewContent', gtm: 'view_item', ecom: true }
+  };
+
+  function purchaseDedupKey(orderId) {
+    return 'zappy_purchase_fired_' + String(orderId || '');
+  }
+
+  function alreadyFiredPurchase(orderId) {
+    if (!orderId) return false;
+    try {
+      return sessionStorage.getItem(purchaseDedupKey(orderId)) === '1';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function markPurchaseFired(orderId) {
+    if (!orderId) return;
+    try { sessionStorage.setItem(purchaseDedupKey(orderId), '1'); } catch (e) {}
+  }
+
+  /**
+   * Fire a marketing event to first-party analytics + GA4/GTM/Meta when present.
+   * @param {string} eventName marketing ID or ecommerce alias
+   * @param {object} [metadata]
+   * @param {{ skipFirstParty?: boolean }} [opts]
+   */
+  window.zappyFireMarketingEvent = function(eventName, metadata, opts) {
+    try {
+      opts = opts || {};
+      metadata = metadata || {};
+      var eventId = ECOM_ALIAS[eventName] || eventName;
+      var plat = PLATFORM[eventId];
+      if (!plat) return;
+
+      if (!metadata.pagePath && !metadata.page_path) {
+        metadata.pagePath = pagePath();
+      }
+
+      if (eventId === 'checkout_complete') {
+        var oid = String(metadata.orderId || metadata.order_id || metadata.transaction_id || '');
+        if (oid && alreadyFiredPurchase(oid)) return;
+        if (oid) markPurchaseFired(oid);
+      }
+
+      // First-party (skip when already tracked via zappyTrackEcomAnalytics path
+      // that opts out, or when caller already recorded under a different name)
+      if (!opts.skipFirstParty) {
+        try {
+          if (window.zappyAnalytics && typeof window.zappyAnalytics.track === 'function') {
+            window.zappyAnalytics.track(eventId, metadata);
+          }
+        } catch (e1) {}
+      }
+
+      // GTM / dataLayer — platform-standard ecommerce event names
+      try {
+        window.dataLayer = window.dataLayer || [];
+        if (plat.ecom) {
+          var ga4ForGtm = buildGa4Params(eventId, metadata);
+          var ecommerce = {};
+          if (ga4ForGtm.transaction_id) ecommerce.transaction_id = ga4ForGtm.transaction_id;
+          if (ga4ForGtm.value != null) ecommerce.value = ga4ForGtm.value;
+          if (ga4ForGtm.currency) ecommerce.currency = ga4ForGtm.currency;
+          if (ga4ForGtm.items) ecommerce.items = ga4ForGtm.items;
+          window.dataLayer.push({ event: plat.gtm, ecommerce: ecommerce });
+          // Secondary Zappy-specific trigger for merchants who want it
+          if (eventId === 'checkout_complete' || eventId === 'checkout_started') {
+            window.dataLayer.push({ event: eventId, ecommerce: ecommerce });
+          }
+        } else {
+          var dl = { event: plat.gtm };
+          for (var k in metadata) {
+            if (Object.prototype.hasOwnProperty.call(metadata, k)) dl[k] = metadata[k];
+          }
+          window.dataLayer.push(dl);
+        }
+      } catch (e2) {}
+
+      // GA4 gtag
+      try {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', plat.ga4, buildGa4Params(eventId, metadata));
+        }
+      } catch (e3) {}
+
+      // Meta Pixel (only when fbq is loaded — consent-gated lazy loader)
+      try {
+        if (typeof window.fbq === 'function') {
+          window.fbq('track', plat.meta, buildMetaParams(eventId, metadata));
+        }
+      } catch (e4) {}
+    } catch (err) {}
+  };
+
+  // ---- Click listeners (capture) ----
+  var recent = Object.create(null);
+  function dedupe(key) {
+    var now = Date.now();
+    if (recent[key] && now - recent[key] < 800) return true;
+    recent[key] = now;
+    return false;
+  }
+
+  function closest(el, selector) {
+    if (!el) return null;
+    if (el.closest) return el.closest(selector);
+    return null;
+  }
+
+  function findAnchor(el) {
+    var node = el;
+    while (node && node !== document) {
+      if (node.tagName === 'A') return node;
+      node = node.parentElement;
+    }
+    return null;
+  }
+
+  function isWhatsAppHref(href) {
+    if (!href) return false;
+    var h = String(href).toLowerCase();
+    return h.indexOf('wa.me/') !== -1 ||
+      h.indexOf('api.whatsapp.com') !== -1 ||
+      h.indexOf('whatsapp.com/send') !== -1 ||
+      h.indexOf('whatsapp:') === 0;
+  }
+
+  document.addEventListener('click', function(e) {
+    try {
+      var target = e.target;
+      if (!target) return;
+
+      // WhatsApp
+      var waFloat = closest(target, '.whatsapp-float, a.whatsapp-float, [data-zappy-whatsapp]');
+      var anchor = findAnchor(target);
+      var href = (anchor && anchor.href) || '';
+      if (waFloat || (anchor && isWhatsAppHref(href))) {
+        if (!dedupe('wa:' + href)) {
+          var waSource = waFloat ? 'float' : 'link';
+          window.zappyFireMarketingEvent('whatsapp_click', {
+            source: waSource,
+            href: href || null,
+            pagePath: pagePath()
+          });
+        }
+        return;
+      }
+
+      // Phone
+      var phoneBtn = closest(target, '.phone-header-btn, .nav-phone-btn, .call-btn, [data-zappy-phone]');
+      var telHref = '';
+      if (anchor && anchor.href && String(anchor.href).toLowerCase().indexOf('tel:') === 0) {
+        telHref = anchor.href;
+      } else if (phoneBtn && phoneBtn.href && String(phoneBtn.href).toLowerCase().indexOf('tel:') === 0) {
+        telHref = phoneBtn.href;
+      }
+      if (phoneBtn || telHref) {
+        var phone = '';
+        if (telHref) {
+          phone = String(telHref).replace(/^tel:/i, '').trim();
+        }
+        if (!dedupe('tel:' + (phone || (phoneBtn && phoneBtn.id) || 'btn'))) {
+          window.zappyFireMarketingEvent('phone_click', {
+            source: phoneBtn ? 'button' : 'link',
+            phone: phone || null,
+            href: telHref || null,
+            pagePath: pagePath()
+          });
+        }
+        return;
+      }
+
+      // Catalog / product inquiry
+      if (IS_CATALOG || IS_FULL) {
+        var inq = closest(target, '.card-inquiry-btn, #zappy-pdp-inquiry-btn, a.inquiry-btn');
+        if (inq) {
+          if (!dedupe('inq:' + (inq.id || inq.className))) {
+            var product = window.currentProduct || null;
+            var productId = (inq.getAttribute && inq.getAttribute('data-product-id')) ||
+              (product && product.id) || null;
+            var productName = (inq.getAttribute && inq.getAttribute('data-product-name')) ||
+              (product && product.name) || null;
+            var channel = 'contact_page';
+            var inqHref = (inq.tagName === 'A' && inq.href) ? inq.href : '';
+            if (inqHref && String(inqHref).toLowerCase().indexOf('mailto:') === 0) channel = 'mailto';
+            window.zappyFireMarketingEvent('product_inquiry', {
+              source: inq.id === 'zappy-pdp-inquiry-btn' ? 'pdp' : 'card',
+              productId: productId,
+              productName: productName,
+              channel: channel,
+              pagePath: pagePath()
+            });
+          }
+        }
+      }
+    } catch (err) {}
+  }, true);
+})();
+</script>
     <meta property="og:title" content="קורס מסחר בשוק ההון למתחילים — Hoshen Success">
     <meta property="og:description" content="הצטרף לאלפי אנשים שכבר שינו את חייהם עם Hoshen Success. קורס מסחר בשוק ההון למתחילים, אימון אישי ופיתוח עסקי שיוביל אותך להצלחה אמיתית. התחל היום!">
     <meta name="twitter:card" content="summary_large_image">
@@ -230,15 +599,77 @@
     <meta name="twitter:description" content="הצטרף לאלפי אנשים שכבר שינו את חייהם עם Hoshen Success. קורס מסחר בשוק ההון למתחילים, אימון אישי ופיתוח עסקי שיוביל אותך להצלחה אמיתית. התחל היום!">
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LocalBusiness","@id":"https://hoshen-success.pro#organization","name":"Hoshen Success","url":"https://hoshen-success.pro","description":"Hoshen Success is a coaching and personal development brand, likely offering guidance, mentorship, or training to help individuals achieve their goals. The brand name 'Hoshen' (a Hebrew word referring to a gemstone breastplate) suggests a rich, meaningful identity possibly rooted in Jewish or Israeli culture, with themes of strength, clarity, and achieving one's full potential.","address":{"@type":"PostalAddress","streetAddress":"שדרות נים 2, קניון עזריאלי ראשונים { המשרד מיועד למנהלים בלבד. הכניסה בתיאום מראש בלבד}, ראשון לציון, מרכז, 7546302, ישראל"},"contactPoint":[{"@type":"ContactPoint","contactType":"customer service","email":"academy@hoshen-success.com","telephone":"+972515533507"}]},{"@type":"WebSite","@id":"https://hoshen-success.pro#website","url":"https://hoshen-success.pro","name":"Hoshen Success","publisher":{"@id":"https://hoshen-success.pro#organization"}}]}</script>
     
-    <link rel="stylesheet" href="/styles.css">
+    <style id="zappy-critical-above-fold-css">
+html{box-sizing:border-box;-webkit-text-size-adjust:100%}*,*::before,*::after{box-sizing:inherit}body{margin:0;min-width:320px;overflow-x:clip}img,svg,video{max-width:100%;height:auto}main{display:block}.container{width:min(100% - 32px,1200px);margin-inline:auto}.navbar,nav.navbar,header .navbar,header[role="banner"]{position:relative;z-index:1000;width:100%}.nav-container,.navbar .container{display:flex;align-items:center;justify-content:space-between;min-height:64px}.logo,.logo-link img{display:block;width:35px;height:35px;object-fit:contain}.nav-menu,#navMenu{list-style:none;margin:0;padding:0}.navbar a,.nav-menu a,#navMenu a,.navbar .nav-links a{color:inherit;text-decoration:none}.navbar .sub-menu,.nav-menu .sub-menu,#navMenu .sub-menu{display:none}.fa,.fas,.far,.fab,.fa-solid,.fa-regular,.fa-brands{display:inline-block;min-width:1em;text-align:center}html:not(#zappy-noop)[data-zappy-site-type="ecommerce"] .phone-header-btn,html:not(#zappy-noop) .navbar:has(.nav-ecommerce-icons)>.phone-header-btn{display:none!important;visibility:hidden!important;width:0!important;height:0!important;pointer-events:none!important}.zappy-preview-empty-store-cta{display:none!important;visibility:hidden!important;height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important}.zappy-catalog-menu{background:var(--surface-color,var(--surface,linear-gradient(135deg,#f8f9fa 0%,#fff 100%)));border-bottom:1px solid var(--border-color,#e5e7eb);padding:0;position:sticky;top:0;z-index:90}.zappy-catalog-menu[dir=rtl],.zappy-catalog-menu.rtl{direction:rtl}.zappy-catalog-menu[dir=ltr],.zappy-catalog-menu.ltr{direction:ltr}.catalog-menu-container{max-width:1440px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:10px 24px;overflow:visible}.catalog-menu-categories,.catalog-menu-list{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:0;padding:0;list-style:none}.catalog-menu-item{display:inline-flex;align-items:center;padding:8px 16px;font-size:14px;font-weight:500;color:var(--text-color,var(--text,#374151));text-decoration:none;border-radius:20px;white-space:nowrap}.catalog-menu-all{background:var(--primary-color,var(--primary,#111));color:var(--text-light,#fff)!important}.catalog-menu-parent{position:relative;display:inline-flex;align-items:center}.catalog-menu-trigger{display:inline-flex;align-items:center;gap:6px}.catalog-menu-chevron{flex-shrink:0}.catalog-menu-parent>.sub-menu{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}.hero-section,.index-hero-section,section[class*="hero"]{position:relative;overflow:hidden;min-height:560px}.hero-bg-wrapper,.hero-bg-image,section[class*="hero"] [class*="hero-bg"]{position:absolute;inset:0;width:100%;height:100%}.hero-bg-wrapper img,.hero-bg-image img,section[class*="hero"] [data-hero-bg],section[class*="hero"] img[data-hero-background="true"]{width:100%!important;height:100%!important;object-fit:cover!important;display:block}.hero-content,section[class*="hero"] .container{position:relative;z-index:2}@media(max-width:768px){:root{--header-height:72px;--total-header-height:72px;--zappy-mobile-menu-top:72px}html[data-zappy-site-type="ecommerce"] body{padding-top:var(--total-header-height,72px)}html[data-zappy-site-type="ecommerce"] body>nav.navbar,html[data-zappy-site-type="ecommerce"] body>.navbar:not(.zappy-catalog-menu){position:fixed!important;top:0;left:0;right:0;z-index:100000;width:100%;margin-bottom:0}.zappy-catalog-menu{position:fixed;top:var(--header-height,72px);left:0;right:0;z-index:99999}.nav-container,.navbar .container{min-height:60px}.nav-menu,#navMenu{max-width:100vw;overflow-x:hidden}.hero-section,.index-hero-section,section[class*="hero"]{min-height:100svh}.hero-bg-wrapper,.hero-bg-image,.hero-scrim{min-height:100svh}}
+/* ZAPPY_CRITICAL_FIRST_PAINT_PARITY_V1 */
+
+/* ZAPPY_ANNOUNCEMENT_HEADER_OFFSET_CSS_V2 */
+:root {
+  --zappy-header-stack-height: calc(var(--zappy-announcement-height, 40px) + var(--header-height, 72px));
+}
+body:has(.zappy-announcement-bar) nav.navbar:not(.zappy-catalog-menu),
+body:has(.zappy-announcement-bar) header.navbar,
+body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-search-panel) {
+  top: var(--zappy-announcement-height, 40px) !important;
+}
+/* First-paint: pull fullscreen heroes behind the fixed announcement+nav so a
+   transparent --nav-bg does not flash the cream body strip (live FOUC that
+   preview never showed because preview injects the same underlap eagerly). */
+body:has(.zappy-announcement-bar) section[data-hero-type^="fullscreen"],
+body:has(.zappy-announcement-bar) .index-hero-section,
+body:has(.zappy-announcement-bar) main > section[class*="hero"]:first-of-type {
+  margin-top: calc(-1 * var(--zappy-header-stack-height)) !important;
+  padding-top: calc(var(--zappy-header-stack-height)) !important;
+}
+
+
+/* ZAPPY_CONTENT_ALIGNMENT_FIRST_PAINT_CSS_V1 */
+[data-zappy-content-align] {
+  display: flex !important;
+  flex-direction: column !important;
+}
+[data-zappy-content-align^="top-"] { justify-content: flex-start !important; }
+[data-zappy-content-align^="upper-"],
+[data-zappy-content-align^="center-"],
+[data-zappy-content-align^="lower-"] { justify-content: center !important; }
+[data-zappy-content-align^="bottom-"] { justify-content: flex-end !important; }
+[data-zappy-content-align$="-left"],
+[data-zappy-content-align$="-mid-left"] {
+  align-items: flex-start !important;
+  text-align: start !important;
+}
+[data-zappy-content-align$="-center"] {
+  align-items: center !important;
+  text-align: center !important;
+}
+[data-zappy-content-align$="-right"],
+[data-zappy-content-align$="-mid-right"] {
+  align-items: flex-end !important;
+  text-align: end !important;
+}
+[data-zappy-content-align] [data-zappy-align-target] {
+  margin-left: auto;
+  margin-right: auto;
+}
+[data-zappy-content-align$="-center"] [data-zappy-align-target],
+[data-zappy-content-align$="-center"] [data-zappy-align-target] > * {
+  text-align: center !important;
+}
+
+</style>
+    <link rel="preload" href="/styles.css" as="style">
+    <link rel="stylesheet" href="/styles.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/styles.css"></noscript>
+    
     <script>window.ZAPPY_WEBSITE_ID = "a5cea990-674b-4211-b71f-c74fe58d6d92"; window.ZAPPY_API_BASE = "https://api.zappy5.com";</script>
+    <link rel="preload" as="image" href="/assets/business-general-hero-upload-1778174286227.webp?t=1783269901653" fetchpriority="high">
 
     <style id="zappy-dropdown-submenu-styles">
       /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
       /* Base styles for dropdown submenus - parent must be positioned */
       .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
       /* Submenu base - hidden by default */
-      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
       /* CRITICAL: Desktop hover styles to show dropdown */
       .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
       /* Submenu item styling */
@@ -344,10 +775,68 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="קורס מסחר בשוק ההון למתחילים — Hoshen Success">
   <meta name="twitter:description" content="הצטרף לאלפי אנשים שכבר שינו את חייהם עם Hoshen Success. קורס מסחר בשוק ההון למתחילים, אימון אישי ופיתוח עסקי שיוביל אותך להצלחה אמיתית. התחל היום!">
-  <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style id="zappy-critical-above-fold-css">
+html{box-sizing:border-box;-webkit-text-size-adjust:100%}*,*::before,*::after{box-sizing:inherit}body{margin:0;min-width:320px;overflow-x:clip}img,svg,video{max-width:100%;height:auto}main{display:block}.container{width:min(100% - 32px,1200px);margin-inline:auto}.navbar,nav.navbar,header .navbar,header[role="banner"]{position:relative;z-index:1000;width:100%}.nav-container,.navbar .container{display:flex;align-items:center;justify-content:space-between;min-height:64px}.logo,.logo-link img{display:block;width:35px;height:35px;object-fit:contain}.nav-menu,#navMenu{list-style:none;margin:0;padding:0}.navbar a,.nav-menu a,#navMenu a,.navbar .nav-links a{color:inherit;text-decoration:none}.navbar .sub-menu,.nav-menu .sub-menu,#navMenu .sub-menu{display:none}.fa,.fas,.far,.fab,.fa-solid,.fa-regular,.fa-brands{display:inline-block;min-width:1em;text-align:center}html:not(#zappy-noop)[data-zappy-site-type="ecommerce"] .phone-header-btn,html:not(#zappy-noop) .navbar:has(.nav-ecommerce-icons)>.phone-header-btn{display:none!important;visibility:hidden!important;width:0!important;height:0!important;pointer-events:none!important}.zappy-preview-empty-store-cta{display:none!important;visibility:hidden!important;height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important}.zappy-catalog-menu{background:var(--surface-color,var(--surface,linear-gradient(135deg,#f8f9fa 0%,#fff 100%)));border-bottom:1px solid var(--border-color,#e5e7eb);padding:0;position:sticky;top:0;z-index:90}.zappy-catalog-menu[dir=rtl],.zappy-catalog-menu.rtl{direction:rtl}.zappy-catalog-menu[dir=ltr],.zappy-catalog-menu.ltr{direction:ltr}.catalog-menu-container{max-width:1440px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:10px 24px;overflow:visible}.catalog-menu-categories,.catalog-menu-list{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:0;padding:0;list-style:none}.catalog-menu-item{display:inline-flex;align-items:center;padding:8px 16px;font-size:14px;font-weight:500;color:var(--text-color,var(--text,#374151));text-decoration:none;border-radius:20px;white-space:nowrap}.catalog-menu-all{background:var(--primary-color,var(--primary,#111));color:var(--text-light,#fff)!important}.catalog-menu-parent{position:relative;display:inline-flex;align-items:center}.catalog-menu-trigger{display:inline-flex;align-items:center;gap:6px}.catalog-menu-chevron{flex-shrink:0}.catalog-menu-parent>.sub-menu{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}.hero-section,.index-hero-section,section[class*="hero"]{position:relative;overflow:hidden;min-height:560px}.hero-bg-wrapper,.hero-bg-image,section[class*="hero"] [class*="hero-bg"]{position:absolute;inset:0;width:100%;height:100%}.hero-bg-wrapper img,.hero-bg-image img,section[class*="hero"] [data-hero-bg],section[class*="hero"] img[data-hero-background="true"]{width:100%!important;height:100%!important;object-fit:cover!important;display:block}.hero-content,section[class*="hero"] .container{position:relative;z-index:2}@media(max-width:768px){:root{--header-height:72px;--total-header-height:72px;--zappy-mobile-menu-top:72px}html[data-zappy-site-type="ecommerce"] body{padding-top:var(--total-header-height,72px)}html[data-zappy-site-type="ecommerce"] body>nav.navbar,html[data-zappy-site-type="ecommerce"] body>.navbar:not(.zappy-catalog-menu){position:fixed!important;top:0;left:0;right:0;z-index:100000;width:100%;margin-bottom:0}.zappy-catalog-menu{position:fixed;top:var(--header-height,72px);left:0;right:0;z-index:99999}.nav-container,.navbar .container{min-height:60px}.nav-menu,#navMenu{max-width:100vw;overflow-x:hidden}.hero-section,.index-hero-section,section[class*="hero"]{min-height:100svh}.hero-bg-wrapper,.hero-bg-image,.hero-scrim{min-height:100svh}}
+/* ZAPPY_CRITICAL_FIRST_PAINT_PARITY_V1 */
 
-    <!-- Favicons -->
+/* ZAPPY_ANNOUNCEMENT_HEADER_OFFSET_CSS_V2 */
+:root {
+  --zappy-header-stack-height: calc(var(--zappy-announcement-height, 40px) + var(--header-height, 72px));
+}
+body:has(.zappy-announcement-bar) nav.navbar:not(.zappy-catalog-menu),
+body:has(.zappy-announcement-bar) header.navbar,
+body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-search-panel) {
+  top: var(--zappy-announcement-height, 40px) !important;
+}
+/* First-paint: pull fullscreen heroes behind the fixed announcement+nav so a
+   transparent --nav-bg does not flash the cream body strip (live FOUC that
+   preview never showed because preview injects the same underlap eagerly). */
+body:has(.zappy-announcement-bar) section[data-hero-type^="fullscreen"],
+body:has(.zappy-announcement-bar) .index-hero-section,
+body:has(.zappy-announcement-bar) main > section[class*="hero"]:first-of-type {
+  margin-top: calc(-1 * var(--zappy-header-stack-height)) !important;
+  padding-top: calc(var(--zappy-header-stack-height)) !important;
+}
+
+
+/* ZAPPY_CONTENT_ALIGNMENT_FIRST_PAINT_CSS_V1 */
+[data-zappy-content-align] {
+  display: flex !important;
+  flex-direction: column !important;
+}
+[data-zappy-content-align^="top-"] { justify-content: flex-start !important; }
+[data-zappy-content-align^="upper-"],
+[data-zappy-content-align^="center-"],
+[data-zappy-content-align^="lower-"] { justify-content: center !important; }
+[data-zappy-content-align^="bottom-"] { justify-content: flex-end !important; }
+[data-zappy-content-align$="-left"],
+[data-zappy-content-align$="-mid-left"] {
+  align-items: flex-start !important;
+  text-align: start !important;
+}
+[data-zappy-content-align$="-center"] {
+  align-items: center !important;
+  text-align: center !important;
+}
+[data-zappy-content-align$="-right"],
+[data-zappy-content-align$="-mid-right"] {
+  align-items: flex-end !important;
+  text-align: end !important;
+}
+[data-zappy-content-align] [data-zappy-align-target] {
+  margin-left: auto;
+  margin-right: auto;
+}
+[data-zappy-content-align$="-center"] [data-zappy-align-target],
+[data-zappy-content-align$="-center"] [data-zappy-align-target] > * {
+  text-align: center !important;
+}
+
+</style>
+    <link rel="preload" href="/styles.css" as="style">
+    <link rel="stylesheet" href="/styles.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/styles.css"></noscript>
+  <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
@@ -357,16 +846,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
     <!-- Cookie Consent -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    
     <!-- Mickidum Accessibility Toolbar -->
-    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    
 
 
   <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NK8JGF39" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
   <nav class="navbar" dir="rtl" style="background-color: transparent !important; box-shadow: none;">
-  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu" data-element-type="button" data-element-id="btn-1778071114571-68lly8dcn" data-native-element="true" >
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu" data-element-type="button" data-element-id="btn-1778071114571-68lly8dcn" data-native-element="true" style="">
     <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="width: 24px !important; height: 24px !important; display: block !important;">
       <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
     </svg>
@@ -375,7 +864,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </svg>
   </button>
 
-  <button class="phone-header-btn" data-phone="+972515533507" aria-label="Call" data-element-type="button" data-element-id="btn-1778071114571-rxcyjnu32" data-native-element="true" >
+  <button class="phone-header-btn" data-phone="+972515533507" aria-label="Call" data-element-type="button" data-element-id="btn-1778071114571-rxcyjnu32" data-native-element="true" style="">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="width: 24px; height: 24px;">
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
     </svg>
@@ -383,10 +872,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div class="nav-container">
     <div class="nav-right-group"><div class="nav-brand" style="display: flex; justify-content: center; align-items: center">
-      <a href="/" class="logo-link" >
-        <img src="/assets/hoshen-success-coaching-personal-development-consulting-logo.webp" alt="Hoshen Success" class="logo" data-image-type="logo" >
+      <a href="/" class="logo-link" style="">
+        <img src="/assets/hoshen-success-coaching-personal-development-consulting-logo.webp" alt="Hoshen Success" class="logo" data-image-type="logo" style="" decoding="async" width="35" height="35">
       </a>
-    </div><ul class="nav-menu" id="navMenu"><li><a href="/" >בית</a></li><li><a href="/trading-education-programs" >מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about" >אודות</a></li><li><a href="/contact" >צור קשר</a></li></ul></div>
+    </div><ul class="nav-menu" id="navMenu"><li><a href="/" style="">בית</a></li><li><a href="/trading-education-programs" style="">מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about" style="">אודות</a></li><li><a href="/contact" style="">צור קשר</a></li></ul></div>
 
     
 
@@ -795,7 +1284,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
   
   <main>
-    <section class="index-hero-section" data-layout-spec="בית-hero" dir="rtl" data-hero-type="fullscreen-scrim" id="index-hero-section" style="position: relative; overflow: hidden; --zappy-bg-overlay: rgba(0, 0, 0, 0.7)" data-zappy-bg-color="" data-zappy-bg-overlay-color="#000000" data-zappy-bg-overlay-opacity="70" data-zappy-bg-video-type="generated" data-zappy-bg-video-url="assets/hero-video-1783270237478.mp4" data-element-id="zappy-hero-bg-index-hero-section" data-element-type="background-image" data-zappy-bg-position="50% 50%" data-zappy-bg-zoom="1" data-zappy-bg-image="" data-zappy-bg-preview-active="true" data-zappy-bg-orig-bgcolor="" data-zappy-bg-orig-bgimage="" data-zappy-bg-orig-bgsize="" data-zappy-bg-orig-bgposition="" data-zappy-bg-orig-bgrepeat="" data-zappy-bg-orig-overlay-var="" data-zappy-bg-orig-image-var="" data-zappy-bg-orig-size-var="" data-zappy-bg-orig-position-var="" data-zappy-bg-orig-bgtype="video" data-zappy-bg-type="video"><div class="zappy-section-video-bg" style="position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;"><div class="zappy-section-video-overlay" style="position:absolute;inset:0;z-index:1;background:rgba(0, 0, 0, 0.7);pointer-events:none;"></div><video class="zappy-section-video" autoplay="" muted="" loop="" playsinline="" style="position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;transform:translate(-50%, -50%);object-fit:cover;z-index:0;">
+    <section class="index-hero-section" data-layout-spec="בית-hero" dir="rtl" data-hero-type="fullscreen-scrim" id="index-hero-section" style="position: relative; overflow: hidden; --zappy-bg-overlay: rgba(0, 0, 0, 0.7); margin-top: -73px !important; padding-top: 73px !important; min-height: 2175.29px !important;" data-zappy-bg-color="" data-zappy-bg-overlay-color="#000000" data-zappy-bg-overlay-opacity="70" data-zappy-bg-video-type="generated" data-zappy-bg-video-url="assets/hero-video-1783270237478.mp4" data-element-id="zappy-hero-bg-index-hero-section" data-element-type="background-image" data-zappy-bg-position="50% 50%" data-zappy-bg-zoom="1" data-zappy-bg-image="" data-zappy-bg-preview-active="true" data-zappy-bg-orig-bgcolor="" data-zappy-bg-orig-bgimage="" data-zappy-bg-orig-bgsize="" data-zappy-bg-orig-bgposition="" data-zappy-bg-orig-bgrepeat="" data-zappy-bg-orig-overlay-var="" data-zappy-bg-orig-image-var="" data-zappy-bg-orig-size-var="" data-zappy-bg-orig-position-var="" data-zappy-bg-orig-bgtype="video" data-zappy-bg-type="video" data-zappy-content-align="top-center"><div class="zappy-section-video-bg" style="position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;"><div class="zappy-section-video-overlay" style="position:absolute;inset:0;z-index:1;background:rgba(0, 0, 0, 0.7);pointer-events:none;"></div><video class="zappy-section-video" autoplay="" muted="" loop="" playsinline="" style="position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;transform:translate(-50%, -50%);object-fit:cover;z-index:0;">
   <source src="/assets/hero-video-1783270237478.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video></div><div class="zappy-hero-overlay" style="position: absolute; inset: 0px; z-index: 1; background: rgba(0, 0, 0, 0.5); pointer-events: none; display: none" data-zappy-original-bg="hidden"></div><div data-zappy-preview-video="true" style="position: absolute; inset: 0px; z-index: 0; overflow: hidden; pointer-events: none"><div style="position: absolute; inset: 0px; z-index: 1; background: rgba(0, 0, 0, 0.5);"></div><video autoplay="true" muted="true" loop="true" playsinline="true" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; transform: translate(-50%, -50%); object-fit: cover; z-index: 0;"><source src="/assets/hero-video-1783270237478.mp4" type="video/mp4"></video></div>
@@ -805,7 +1294,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <source src="/assets/hero-video-1783270237478.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
-  <img class="hero-video-fallback" src="/assets/business-general-hero-upload-1778174286227.webp?t=1783269901653" alt="Hero background" loading="lazy">
+  <img loading="eager" fetchpriority="high" class="hero-video-fallback" src="/assets/business-general-hero-upload-1778174286227.webp?t=1783269901653" alt="Hero background" decoding="async">
 </div>
 
   <!-- Background Image -->
@@ -837,20 +1326,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="index-hero-glow-orb" aria-hidden="true" style="position: relative; z-index: 2"></div>
 
   <!-- Content Overlay -->
-  <div class="index-hero-content-wrapper" style="position: relative; z-index: 2">
+  <div class="index-hero-content-wrapper" style="position: relative; z-index: 2;" data-zappy-align-target="true">
     <div class="index-hero-content">
 
       <!-- Label -->
       <div class="index-hero-label">
         <span class="index-hero-gold-rule" aria-hidden="true"></span>
-        <span class="index-hero-label-text" >מנטור פרמיום זהב &amp; פיתוח אישי</span>
+        <span class="index-hero-label-text" style="">מנטור פרמיום זהב &amp; פיתוח אישי</span>
       </div>
 
       <!-- H1 -->
-      <h1 class="index-hero-h1" ></h1><h1 ></h1><h2 >להפוך את המסחר למקצוע<br>שמכניס כסף בצורה אמיתית</h2><h1><span class="index-hero-h1-accent" style="color: rgb(17, 19, 21) !important;">לצמוח, להצליח, להוביל</span></h1>
+      <h1 class="index-hero-h1" style=""></h1><h1 style=""></h1><h2 style="">להפוך את המסחר למקצוע<br>שמכניס כסף בצורה אמיתית</h2><h1><span class="index-hero-h1-accent" style="color: rgb(17, 19, 21) !important;">לצמוח, להצליח, להוביל</span></h1>
 
       <!-- H3 Subtitle -->
-      <h3 class="index-hero-subtitle" >קורס מסחר בחוזים עתידיים בשוק ההון.<br><br>ליווי מקצועי בלייב בזום בקבוצות קטנות של עד 15 תלמידים בלבד 
+      <h3 class="index-hero-subtitle" style="">קורס מסחר בחוזים עתידיים בשוק ההון.<br><br>ליווי מקצועי בלייב בזום בקבוצות קטנות של עד 15 תלמידים בלבד 
 
 בלייב בזום.<br><br>ויש גם אפשרות של 
 
@@ -977,11 +1466,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <div class="iss-gold-rule" aria-hidden="true"></div>
 
       <p class="iss-eyebrow">השירותים שלנו</p>
-      <h2 class="iss-heading" >מסלולי לימוד&nbsp;<span class="iss-heading-accent" style="color: rgb(17, 19, 21) !important;">וליווי במסחר</span></h2>
-      <p class="iss-intro" ><b>בחרו את המסלול שמתאים לכם<br>מלימוד בסיסי ועד מסחר מתקדם בלייב בזום עם ליווי אישי.</b></p>
+      <h2 class="iss-heading" style="">מסלולי לימוד&nbsp;<span class="iss-heading-accent" style="color: rgb(17, 19, 21) !important;">וליווי במסחר</span></h2>
+      <p class="iss-intro" style=""><b>בחרו את המסלול שמתאים לכם<br>מלימוד בסיסי ועד מסחר מתקדם בלייב בזום עם ליווי אישי.</b></p>
 
       <!-- Service pillars list -->
-      <ul class="iss-pillars" ><li class="iss-pillar zappy-grid-item-nested-grid zappy-preserve-css-grid" data-original-gap="16px" style="display: grid; align-items: stretch !important;" data-grid-item-index="0">
+      <ul class="iss-pillars" style=""><li class="iss-pillar zappy-grid-item-nested-grid zappy-preserve-css-grid" data-original-gap="16px" style="display: grid; align-items: stretch !important;" data-grid-item-index="0">
           
 <div class="iss-pillar-icon" aria-hidden="true">
   <svg width="23" height="23" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-element-type="icon" data-element-id="icon-1778254652484-2wol5cd1y" data-icon-type="svg" style="color: rgb(201, 168, 76); width: 23px !important; height: 23px !important; cursor: pointer;" data-size-adjusted="true">
@@ -992,9 +1481,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </svg>
 </div>
 
-          <div class="iss-pillar-content"  data-grid-item-index="1">
-            <h3 class="iss-pillar-title" >מסלול - CLASS ROOM LIVE<br>קורס מסחר מקצועי בחוזים עתידיים<br>בלייב בזום אחד על 15 תלמידים</h3>
-            <p class="iss-pillar-desc" >לימוד מסחר בצורה מקצועית בקבוצות קטנות של עד 15 תלמידים בלבד.<br>כולל לייבים בזמן אמת, ניתוח שוק, ניהול סיכונים ועבודה עם חברות נוסטרו.&nbsp;&nbsp;</p>
+          <div class="iss-pillar-content" style="" data-grid-item-index="1">
+            <h3 class="iss-pillar-title" style="">מסלול - CLASS ROOM LIVE<br>קורס מסחר מקצועי בחוזים עתידיים<br>בלייב בזום אחד על 15 תלמידים</h3>
+            <p class="iss-pillar-desc" style="">לימוד מסחר בצורה מקצועית בקבוצות קטנות של עד 15 תלמידים בלבד.<br>כולל לייבים בזמן אמת, ניתוח שוק, ניהול סיכונים ועבודה עם חברות נוסטרו.&nbsp;&nbsp;</p>
           </div>
         </li><li class="iss-pillar zappy-grid-item-nested-grid zappy-preserve-css-grid" data-original-gap="16px" style="display: grid; align-items: stretch !important;" data-grid-item-index="1">
           <div class="iss-pillar-icon" aria-hidden="true">
@@ -1004,14 +1493,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </svg>
           </div>
           <div class="iss-pillar-content" data-grid-item-index="1">
-            <h3 class="iss-pillar-title" >מסלול -&nbsp;
+            <h3 class="iss-pillar-title" style="">מסלול -&nbsp;
 
 ELITE LIVE
 
 <br>קורס מסחר מקצועי בחוזים עתידיים בלייב בזום
 
  <br>ליווי אישי אחד על אחד</h3>
-            <p class="iss-pillar-desc" >
+            <p class="iss-pillar-desc" style="">
 
 ליווי אישי וממוקד לסוחרים שרוצים להתקדם מהר יותר עם תוכנית עבודה מקצועית ותמיכה מלאה.
 
@@ -1026,8 +1515,8 @@ ELITE LIVE
             </svg>
           </div>
           <div class="iss-pillar-content" data-grid-item-index="1">
-            <h3 class="iss-pillar-title" >&nbsp;מסלול -  Basic Live<br>קורס מסחר בסיסי מקצועי בחוזים עתידיים בזום&nbsp; &nbsp;&nbsp;</h3>
-            <p class="iss-pillar-desc" >
+            <h3 class="iss-pillar-title" style="">&nbsp;מסלול -  Basic Live<br>קורס מסחר בסיסי מקצועי בחוזים עתידיים בזום&nbsp; &nbsp;&nbsp;</h3>
+            <p class="iss-pillar-desc" style="">
 
 לימוד מסחר בסיסי מקצועי בשוק האמריקאי החל מהבסיס ועד עבודה עם אסטרטגיות מתקדמות ולייבים בזמן אמת.<br><br><br><br></p>
           </div>
@@ -1045,11 +1534,11 @@ ELITE LIVE
       <article class="iss-card iss-card--large">
         <div class="iss-card-inner">
           <div class="iss-card-img-wrap">
-            <div data-zappy-zoom-wrapper="true" data-element-id="img-1778068017150-a6dk7qwsz" data-element-type="image" data-zappy-zoom-wrapper-width="520px" data-zappy-zoom-wrapper-height="204px" data-zappy-zoom-wrapper-width-mode="px" data-zappy-zoom-wrapper-align="center" style="position: relative !important; overflow: hidden !important; width: 520px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 204px !important; display: block !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true" data-zappy-card-slot-fill="1"><img data-placeholder="index-services-image-1" data-context="Premium executive coaching session — a confident professional in a modern high-rise office, dramatic cinematic lighting with dark tones and gold accents, Israeli business setting, luxury atmosphere, coaching and mentorship, strategic discussion" width="520" height="280" src="/assets/site-index-services-image-1-1778068225079-cxhz0z.webp?v=1778068227182" alt="אימון אישי למנהלים בכירים — הושן סאקסס" data-element-type="image" data-element-id="img-1778068017150-a6dk7qwsz" style="object-position: 50% 33% !important; margin: 0px !important; left: 0% !important; top: 0% !important; width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; display: block !important; object-fit: cover !important; position: absolute !important;" data-zappy-zoom="1" data-zappy-original-width="520" data-zappy-original-height="204" data-zappy-object-position="50% 33%"></div><div class="zappy-inserted-element" id="zappy-element-1778070315434-2pdulj8hl" data-element-id="zappy-element-1778070315434-2pdulj8hl" data-element-type="h2" style="width: 100%; color: #C9A84C; background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 40%, #F5D98A 60%, #C9A84C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text"><h2 class="font-bold" data-element-type="h2" data-element-id="zappy-element-1778070315434-2pdulj8hl" id="zappy-element-1778070315434-2pdulj8hl" ></h2><h3 style="color: rgb(17, 19, 21) !important;"><p ><b>Hoshen Success - משנים סדרי עולם......</b></p></h3></div>
+            <div data-zappy-zoom-wrapper="true" data-element-id="img-1778068017150-a6dk7qwsz" data-element-type="image" data-zappy-zoom-wrapper-width="520px" data-zappy-zoom-wrapper-height="204px" data-zappy-zoom-wrapper-width-mode="px" data-zappy-zoom-wrapper-align="center" style="position: relative !important; overflow: hidden !important; width: 520px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 204px !important; display: block !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true" data-zappy-card-slot-fill="1"><img data-placeholder="index-services-image-1" data-context="Premium executive coaching session — a confident professional in a modern high-rise office, dramatic cinematic lighting with dark tones and gold accents, Israeli business setting, luxury atmosphere, coaching and mentorship, strategic discussion" width="520" height="280" src="/assets/site-index-services-image-1-1778068225079-cxhz0z.webp?v=1778068227182" alt="אימון אישי למנהלים בכירים — הושן סאקסס" data-element-type="image" data-element-id="img-1778068017150-a6dk7qwsz" style="object-position: 50% 33% !important; margin: 0px !important; left: 0% !important; top: 0% !important; width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; display: block !important; object-fit: cover !important; position: absolute !important;" data-zappy-zoom="1" data-zappy-original-width="520" data-zappy-original-height="204" data-zappy-object-position="50% 33%" loading="lazy" decoding="async" fetchpriority="low"></div><div class="zappy-inserted-element" id="zappy-element-1778070315434-2pdulj8hl" data-element-id="zappy-element-1778070315434-2pdulj8hl" data-element-type="h2" style="width: 100%; color: #C9A84C; background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 40%, #F5D98A 60%, #C9A84C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text"><h2 class="font-bold" data-element-type="h2" data-element-id="zappy-element-1778070315434-2pdulj8hl" id="zappy-element-1778070315434-2pdulj8hl" style=""></h2><h3 style="color: rgb(17, 19, 21) !important;"><p style=""><b>Hoshen Success - משנים סדרי עולם......</b></p></h3></div>
           </div>
           <div class="iss-card-body">
-            <h3 class="iss-card-title" >Hoshen Success Academy</h3>
-            <p class="iss-card-text" >אקדמיית מסחר מקצועית המתמחה בלימוד מסחר בחוזים עתידיים, ניתוח שוק בזמן אמת וליווי אישי לסוחרים מתחילים ומתקדמים.</p>
+            <h3 class="iss-card-title" style="">Hoshen Success Academy</h3>
+            <p class="iss-card-text" style="">אקדמיית מסחר מקצועית המתמחה בלימוד מסחר בחוזים עתידיים, ניתוח שוק בזמן אמת וליווי אישי לסוחרים מתחילים ומתקדמים.</p>
             <p><a href="https://wa.me/972515533507" class="iss-card-link btn btn-ghost" data-native-element="true" data-element-id="btn-1778071209199-3cyunxxn1" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד <span aria-hidden="true">←</span></a>
           </p></div>
         </div>
@@ -1059,9 +1548,9 @@ ELITE LIVE
       <article class="iss-card iss-card--mid">
         <div class="iss-card-inner">
           <div class="iss-card-body">
-            <h2 ><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#C9A84C"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></p></h2><p data-element-id="move-1778255189290-hjis9xus"><span class="iss-card-tag iss-card-tag--cyan">שוק ההון</span>
-            </p><h3 class="iss-card-title" >&nbsp; בניית תוכנית מסחר אישית&nbsp;&nbsp;</h3>
-            <p class="iss-card-text" >תהליך ליווי אישי וממוקד הכולל בניית תוכנית עבודה מקצועית, ניהול סיכונים נכון והתאמה מלאה לסגנון המסחר שלך.</p>
+            <h2 style=""><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#C9A84C"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></p></h2><p data-element-id="move-1778255189290-hjis9xus"><span class="iss-card-tag iss-card-tag--cyan">שוק ההון</span>
+            </p><h3 class="iss-card-title" style="">&nbsp; בניית תוכנית מסחר אישית&nbsp;&nbsp;</h3>
+            <p class="iss-card-text" style="">תהליך ליווי אישי וממוקד הכולל בניית תוכנית עבודה מקצועית, ניהול סיכונים נכון והתאמה מלאה לסגנון המסחר שלך.</p>
             <p><a href="https://wa.me/972515533507" class="iss-card-link btn btn-ghost" data-native-element="true" data-element-id="btn-1778071299922-pnpseszid" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד <span aria-hidden="true">←</span></a>
           </p></div>
         </div>
@@ -1071,8 +1560,8 @@ ELITE LIVE
       <article class="iss-card iss-card--small">
         <div class="iss-card-inner">
           <div class="iss-card-body">
-            <h3 class="iss-card-title" >הערך המוסף שלנו!!  מסחר לייב בזום<br><br><br><br></h3>
-            <p class="iss-card-text" >4 מפגשי לייב בשבוע בזמן אמת עם ניתוחים, עסקאות והסברים מקצועיים תוך כדי תנועה בשוק.  <br><br>🔥 4 מפגשי לייב בשבוע בזמן אמת<br>🔥 ניתוח שוק + עסקאות בלייב<br>🔥 עבודה בזמן אמת מול השוק האמריקאי</p>
+            <h3 class="iss-card-title" style="">הערך המוסף שלנו!!  מסחר לייב בזום<br><br><br><br></h3>
+            <p class="iss-card-text" style="">4 מפגשי לייב בשבוע בזמן אמת עם ניתוחים, עסקאות והסברים מקצועיים תוך כדי תנועה בשוק.  <br><br>🔥 4 מפגשי לייב בשבוע בזמן אמת<br>🔥 ניתוח שוק + עסקאות בלייב<br>🔥 עבודה בזמן אמת מול השוק האמריקאי</p>
             <p><a href="https://wa.me/972515533507" class="iss-card-link btn btn-ghost" data-native-element="true" data-element-id="btn-1778071306533-xsln4qjw0" data-element-type="button" style="outline: none; color: rgb(232, 201, 106) !important; border-color: transparent !important; background-color: transparent !important; background-image: none !important;" target="_blank" rel="noopener noreferrer">גלה עוד <span aria-hidden="true">←</span></a>
           </p></div>
         </div>
@@ -1098,8 +1587,8 @@ ELITE LIVE
     <!-- Centered intro block -->
     <header class="about-values-header">
       <div class="about-values-rule" aria-hidden="true"></div>
-      <h2 class="about-values-title" >הערכים שמנחים אותנו</h2>
-      <p class="about-values-subtitle" >אצלנו ב- Hoshen Success, כל תהליך מלווה בעקרונות ברורים ובלתי מתפשרים. אלה לא רק מילים הם הבסיס לכל שיחה, לכל החלטה, ולכל הצלחה שאנחנו בונים יחד.</p>
+      <h2 class="about-values-title" style="">הערכים שמנחים אותנו</h2>
+      <p class="about-values-subtitle" style="">אצלנו ב- Hoshen Success, כל תהליך מלווה בעקרונות ברורים ובלתי מתפשרים. אלה לא רק מילים הם הבסיס לכל שיחה, לכל החלטה, ולכל הצלחה שאנחנו בונים יחד.</p>
     </header>
 
     <!-- Decorative mid-line -->
@@ -1113,11 +1602,11 @@ ELITE LIVE
       <!-- Stat 1 -->
       <article class="index-stats-section__card" data-grid-item-index="0">
         <div class="index-stats-section__card-accent index-stats-section__card-accent--gold" aria-hidden="true"></div>
-        <div class="index-stats-section__figure-wrap" >
-          <span class="index-stats-section__figure" >+8</span>
+        <div class="index-stats-section__figure-wrap" style="">
+          <span class="index-stats-section__figure" style="">+8</span>
           <span class="index-stats-section__figure-unit" style="color: rgb(17, 19, 21) !important;">שנות ניסיון</span>
         </div>
-        <h3 class="index-stats-section__card-title" >
+        <h3 class="index-stats-section__card-title" style="">
 
 ניסיון אמיתי בשוק ההון
 
@@ -1129,12 +1618,12 @@ ELITE LIVE
       <article class="index-stats-section__card" data-grid-item-index="1">
         <div class="index-stats-section__card-accent index-stats-section__card-accent--cyan" aria-hidden="true"></div>
         <div class="index-stats-section__figure-wrap">
-          <span class="index-stats-section__figure" >192+</span>
+          <span class="index-stats-section__figure" style="">192+</span>
           <span class="index-stats-section__figure-unit" style="color: rgb(17, 19, 21) !important;">
 
 שעות מסחר בלייב בשנה</span>
         </div>
-        <h3 class="index-stats-section__card-title" >
+        <h3 class="index-stats-section__card-title" style="">
 
 מסחר בזמן אמת</h3>
         <p class="index-stats-section__card-desc" style="color: rgb(17, 19, 21) !important;">&nbsp; 4 מפגשי לייב בכל שבוע מול השוק האמריקאי עם ניתוחים מקצועיים, עסקאות בזמן אמת וליווי צמוד.&nbsp;&nbsp;</p>
@@ -1144,14 +1633,14 @@ ELITE LIVE
       <article class="index-stats-section__card" data-grid-item-index="2">
         <div class="index-stats-section__card-accent index-stats-section__card-accent--gold" aria-hidden="true"></div>
         <div class="index-stats-section__figure-wrap">
-          <span class="index-stats-section__figure" >10,000+</span>
+          <span class="index-stats-section__figure" style="">10,000+</span>
           <span class="index-stats-section__figure-unit" style="color: rgb(17, 19, 21) !important;">
 
 MARKET MOVES
 
 </span>
         </div>
-        <h3 class="index-stats-section__card-title" >
+        <h3 class="index-stats-section__card-title" style="">
 
 
 
@@ -1163,12 +1652,12 @@ MARKET MOVES
       <article class="index-stats-section__card" data-grid-item-index="3">
         <div class="index-stats-section__card-accent index-stats-section__card-accent--cyan" aria-hidden="true"></div>
         <div class="index-stats-section__figure-wrap">
-          <span class="index-stats-section__figure" >98%</span>
+          <span class="index-stats-section__figure" style="">98%</span>
           <span class="index-stats-section__figure-unit" style="color: rgb(17, 19, 21) !important;">
 
 שביעות רצון תלמידים<br>+ קהילת סוחרים</span>
         </div>
-        <h3 class="index-stats-section__card-title" >&nbsp;קהילת סוחרים חזקה&nbsp;&nbsp;<br>תוצאות שמרגישים</h3>
+        <h3 class="index-stats-section__card-title" style="">&nbsp;קהילת סוחרים חזקה&nbsp;&nbsp;<br>תוצאות שמרגישים</h3>
         <p class="index-stats-section__card-desc" style="color: rgb(17, 19, 21) !important;">התלמידים שלנו נהנים מליווי מקצועי, מסחר בלייב, יחס אישי ותמיכה מלאה לאורך כל הדרך<br>כולל 
 
 חוויית לימוד מקצועית
@@ -1223,12 +1712,12 @@ MARKET MOVES
     <!-- Section Header -->
     <div class="its-header">
       <div class="its-header-inner">
-        <p><span class="its-label" >
+        <p><span class="its-label" style="">
 
 המלצות תלמידים</span>
         </p><div class="its-gold-rule" aria-hidden="true"></div>
-        <h2 class="its-heading" >&nbsp; סוחרים אמיתיים תוצאות אמיתיות.&nbsp;&nbsp;</h2>
-        <p class="its-subtext" >
+        <h2 class="its-heading" style="">&nbsp; סוחרים אמיתיים תוצאות אמיתיות.&nbsp;&nbsp;</h2>
+        <p class="its-subtext" style="">
 
 תלמידים של Hoshen Success משתפים מהחוויה שלהם בלייבים, בליווי האישי ובדרך שלהם לעולם המסחר.
 
@@ -1249,18 +1738,18 @@ MARKET MOVES
           </svg>
         </div>
         <blockquote class="its-quote">
-          <p >&nbsp;"לפני הקורס הייתי מפחד להיכנס לעסקאות.<br>היום אני מבין את השוק הרבה יותר טוב, עובד עם אסטרטגיה מסודרת ומרגיש הרבה יותר ביטחון במסחר."&nbsp;&nbsp;</p>
+          <p style="">&nbsp;"לפני הקורס הייתי מפחד להיכנס לעסקאות.<br>היום אני מבין את השוק הרבה יותר טוב, עובד עם אסטרטגיה מסודרת ומרגיש הרבה יותר ביטחון במסחר."&nbsp;&nbsp;</p>
         </blockquote>
         <footer class="its-card-footer">
           <div class="its-avatar-ring">
-            <div class="its-avatar-initials" >תלמיד</div>
+            <div class="its-avatar-initials" style="">תלמיד</div>
           </div>
-          <div class="its-person" >
+          <div class="its-person" style="">
             <strong class="its-name">אבירן נאמן</strong>
-            <span class="its-role" >
+            <span class="its-role" style="">
 
 תלמיד בקורס לייב בזום 1X1</span>
-            <span class="its-outcome" >
+            <span class="its-outcome" style="">
 
 
 
@@ -1271,7 +1760,7 @@ MARKET MOVES
 </span>
           </div>
         </footer>
-      </article><article class="its-card its-card--tall" data-grid-item-index="1" >
+      </article><article class="its-card its-card--tall" data-grid-item-index="1" style="">
         <div class="its-card-glass-edge" aria-hidden="true"></div>
         <div class="its-quote-icon" aria-hidden="true">
           <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-no-icon-edit="true" aria-hidden="true">
@@ -1279,16 +1768,16 @@ MARKET MOVES
           </svg>
         </div>
         <blockquote class="its-quote">
-          <p >"אחרי שנים של ייאוש, בלבול ותחושה שכבר סגרנו את הדלת לעולם שוק ההון קיבלנו המלצה חמה מיונתן וויס על עמרי מאיר אורי, ואין ספק שזו הייתה אחת ההחלטות הכי טובות שעשינו.<br><br>מהרגע הראשון קיבלנו ליווי מקצועי, יחס אישי, בהירות, סדר וכלים מעשיים ופשוטים להבנה שעזרו לנו סוף סוף להבין איך באמת לנתח את השוק בצורה נכונה.<br><br>הדבר הכי מרגש מבחינתנו הוא שכבר במהלך הלימודים הצלחנו להרוויח בעסקאות אפילו בחשבון דמו וזה נתן לנו ביטחון ואמונה שאפשר באמת להתקדם ולהצליח בתחום הזה.<br><br>אחד הדברים שהכי אהבנו בקורס הוא שהמסחר ממוקד לשעה אחת בלבד ביום, בסשן ניו יורק שמתחיל בשעה 16:30 שעון ישראל דבר שמאפשר לשלב את זה בצורה נוחה גם בחיי היום יום.<br><br>תודה ענקית לעמרי על הסבלנות, המקצועיות והאמונה בנו לאורך כל הדרך."</p>
+          <p style="">"אחרי שנים של ייאוש, בלבול ותחושה שכבר סגרנו את הדלת לעולם שוק ההון קיבלנו המלצה חמה מיונתן וויס על עמרי מאיר אורי, ואין ספק שזו הייתה אחת ההחלטות הכי טובות שעשינו.<br><br>מהרגע הראשון קיבלנו ליווי מקצועי, יחס אישי, בהירות, סדר וכלים מעשיים ופשוטים להבנה שעזרו לנו סוף סוף להבין איך באמת לנתח את השוק בצורה נכונה.<br><br>הדבר הכי מרגש מבחינתנו הוא שכבר במהלך הלימודים הצלחנו להרוויח בעסקאות אפילו בחשבון דמו וזה נתן לנו ביטחון ואמונה שאפשר באמת להתקדם ולהצליח בתחום הזה.<br><br>אחד הדברים שהכי אהבנו בקורס הוא שהמסחר ממוקד לשעה אחת בלבד ביום, בסשן ניו יורק שמתחיל בשעה 16:30 שעון ישראל דבר שמאפשר לשלב את זה בצורה נוחה גם בחיי היום יום.<br><br>תודה ענקית לעמרי על הסבלנות, המקצועיות והאמונה בנו לאורך כל הדרך."</p>
         </blockquote>
         <footer class="its-card-footer">
           <div class="its-avatar-ring">
-            <div class="its-avatar-initials" >תלמיד</div>
+            <div class="its-avatar-initials" style="">תלמיד</div>
           </div>
-          <div class="its-person" >
+          <div class="its-person" style="">
             <strong class="its-name">ריזאל ומשה פרנבך</strong>
-            <span class="its-role" >זוג בעל ואישה תלמידים בקורס לייב בזום 1X1</span>
-            <span class="its-outcome" >
+            <span class="its-role" style="">זוג בעל ואישה תלמידים בקורס לייב בזום 1X1</span>
+            <span class="its-outcome" style="">
 
 
 
@@ -1307,20 +1796,20 @@ MARKET MOVES
           </svg>
         </div>
         <blockquote class="its-quote">
-          <p >"עומרי תודה רבה לך על הקורס ועל הליווי האישי<br>אתה אדם טוב, חיובי ומקצועי שנלחם באמת בשביל ההצלחה של התלמידים שלו. היחס האישי, הסבלנות וההשקעה שלך מורגשים בכל שיעור ובכל לייב.<br><br>הקורס נתן לי הרבה יותר מהבנה במסחר הוא נתן לי ביטחון, סדר ודרך נכונה להסתכל על השוק בצורה מקצועית אין עליך "</p>
+          <p style="cursor: text;">"עומרי תודה רבה לך על הקורס ועל הליווי האישי<br>אתה אדם טוב, חיובי ומקצועי שנלחם באמת בשביל ההצלחה של התלמידים שלו. היחס האישי, הסבלנות וההשקעה שלך מורגשים בכל שיעור ובכל לייב.<br><br>הקורס נתן לי הרבה יותר מהבנה במסחר הוא נתן לי ביטחון, סדר ודרך נכונה להסתכל על השוק בצורה מקצועית אין עליך "</p>
         </blockquote>
         <footer class="its-card-footer">
           <div class="its-avatar-ring">
-            <div class="its-avatar-initials" >תלמיד</div>
+            <div class="its-avatar-initials" style="cursor: text;">תלמיד</div>
           </div>
-          <div class="its-person" >
+          <div class="its-person" style="cursor: text;">
             <strong class="its-name">ולאדיסלב שאולוב</strong>
-            <span class="its-role" >
+            <span class="its-role" style="cursor: text;">
 
 תלמיד בקורס לייב בזום 1X1
 
 </span>
-            <span class="its-outcome" >
+            <span class="its-outcome" style="cursor: text;">
 
 📊 קורס מסחר מקצועי
 
@@ -1335,20 +1824,20 @@ MARKET MOVES
           </svg>
         </div>
         <blockquote class="its-quote">
-          <p >"לפני שנכנסתי לקהילה של מכללת Hoshen Success הייתי מאוד מבולבל מכל עולם המסחר ולא באמת ידעתי ממי ללמוד ואיך לעבוד נכון מול השוק מהרגע שהכרתי את עמרי מאיר אורי הכול התחיל להשתנות.<br><br>מדובר במנטור הכי גבר שהכרתי אי פעם מקצועי, סבלני, חיובי ואחד שבאמת נלחם בשביל שהתלמידים שלו יצליחו.<br><br>הלייבים והקהילה ברמה גבוהה מאוד, עם ניתוחים מקצועיים בזמן אמת, הסברים ברורים והמון יחס אישי שלא רואים בכל מקום.<br><br>הדבר שהכי חיזק לי את הביטחון היה לראות איך עובדים באמת מול השוק האמריקאי בלייב ולא רק ללמוד תאוריה.<br><br>הקהילה עצמה מלאה באנרגיות טובות, תמיכה ומוטיבציה, ואני שמח מאוד שנכנסתי לעולם הזה דרך מכללת Hoshen Success "</p>
+          <p style="cursor: text;">"לפני שנכנסתי לקהילה של מכללת Hoshen Success הייתי מאוד מבולבל מכל עולם המסחר ולא באמת ידעתי ממי ללמוד ואיך לעבוד נכון מול השוק מהרגע שהכרתי את עמרי מאיר אורי הכול התחיל להשתנות.<br><br>מדובר במנטור הכי גבר שהכרתי אי פעם מקצועי, סבלני, חיובי ואחד שבאמת נלחם בשביל שהתלמידים שלו יצליחו.<br><br>הלייבים והקהילה ברמה גבוהה מאוד, עם ניתוחים מקצועיים בזמן אמת, הסברים ברורים והמון יחס אישי שלא רואים בכל מקום.<br><br>הדבר שהכי חיזק לי את הביטחון היה לראות איך עובדים באמת מול השוק האמריקאי בלייב ולא רק ללמוד תאוריה.<br><br>הקהילה עצמה מלאה באנרגיות טובות, תמיכה ומוטיבציה, ואני שמח מאוד שנכנסתי לעולם הזה דרך מכללת Hoshen Success "</p>
         </blockquote>
         <footer class="its-card-footer">
           <div class="its-avatar-ring">
-            <div class="its-avatar-initials" >תלמיד</div>
+            <div class="its-avatar-initials" style="cursor: text;">תלמיד</div>
           </div>
-          <div class="its-person" >
+          <div class="its-person" style="cursor: text;">
             <strong class="its-name">&nbsp; אושר דוד&nbsp;&nbsp;</strong>
-            <span class="its-role" >
+            <span class="its-role" style="cursor: text;">
 
 תלמיד בקורס לייב בזום 1X1
 
 </span>
-            <span class="its-outcome" >
+            <span class="its-outcome" style="cursor: text;">
 
 
 
@@ -1365,20 +1854,20 @@ MARKET MOVES
           </svg>
         </div>
         <blockquote class="its-quote">
-          <p >"אני נמצא כבר תקופה בקבוצת הוואטסאפ ובלייבים של עמרי מאיר אורי המדהים והמוכשר!! ממכללת: Hoshen Success, ובאמת שלא נתקלתי בקהילה כזאת מקצועית ומסודרת.<br><br>מהרגע שנכנסתי הרגשתי שיש פה יחס אישי, אהבת חינם, סבלנות והמון רצון אמיתי לעזור לאנשים להבין את השוק ולהצליח במסחר.<br><br>הלייבים ברמה גבוהה מאוד, עם ניתוחים מקצועיים בזמן אמת והסברים ברורים שעוזרים להבין באמת מה קורה בשוק ולא רק להיכנס לעסקאות בלי להבין למה.<br><br>הכי חזק מבחינתי זה שגם הצלחתי להרוויח יחד עם עמרי בכמה עסקאות לייב, וזה נתן לי הרבה יותר ביטחון ואמונה בדרך.<br><br>קהילה חזקה, אנרגיות טובות והמון מקצועיות<br>שמח מאוד שנכנסתי לזה"</p>
+          <p style="cursor: text;">"אני נמצא כבר תקופה בקבוצת הוואטסאפ ובלייבים של עמרי מאיר אורי המדהים והמוכשר!! ממכללת: Hoshen Success, ובאמת שלא נתקלתי בקהילה כזאת מקצועית ומסודרת.<br><br>מהרגע שנכנסתי הרגשתי שיש פה יחס אישי, אהבת חינם, סבלנות והמון רצון אמיתי לעזור לאנשים להבין את השוק ולהצליח במסחר.<br><br>הלייבים ברמה גבוהה מאוד, עם ניתוחים מקצועיים בזמן אמת והסברים ברורים שעוזרים להבין באמת מה קורה בשוק ולא רק להיכנס לעסקאות בלי להבין למה.<br><br>הכי חזק מבחינתי זה שגם הצלחתי להרוויח יחד עם עמרי בכמה עסקאות לייב, וזה נתן לי הרבה יותר ביטחון ואמונה בדרך.<br><br>קהילה חזקה, אנרגיות טובות והמון מקצועיות<br>שמח מאוד שנכנסתי לזה"</p>
         </blockquote>
         <footer class="its-card-footer">
           <div class="its-avatar-ring">
-            <div class="its-avatar-initials" >קהילה</div>
+            <div class="its-avatar-initials" style="cursor: text;">קהילה</div>
           </div>
-          <div class="its-person" >
+          <div class="its-person" style="cursor: text;">
             <strong class="its-name">&nbsp; איציק פרידמן&nbsp;&nbsp;</strong>
-            <span class="its-role" >
+            <span class="its-role" style="cursor: text;">
 
 איציק פרידמן
 
 </span>
-            <span class="its-outcome" >חבר קהילת סוחרים - Hoshen Success </span>
+            <span class="its-outcome" style="cursor: text;">חבר קהילת סוחרים - Hoshen Success </span>
           </div>
         </footer>
       </article>
@@ -1394,7 +1883,7 @@ MARKET MOVES
 
     <!-- Trust indicators -->
     <div class="its-trust-row">
-      <div class="its-trust-item" >
+      <div class="its-trust-item" style="">
         <span class="its-trust-number" style="color: rgb(17, 19, 21) !important;">98%</span>
         <span class="its-trust-label">שביעות רצון תלמידים וקהילת סוחרים</span>
       </div>
@@ -1405,7 +1894,7 @@ MARKET MOVES
 192+
 
 </span>
-        <span class="its-trust-label" >
+        <span class="its-trust-label" style="">
 
 שעות מסחר בלייב בשנה
 
@@ -1464,7 +1953,7 @@ MARKET MOVES
 
       <div class="index-cta-content">
         <h2 class="index-cta-heading">מוכנים להתחיל את המסע שלכם?</h2>
-        <p class="index-cta-body" >בין אם אתם מחפשים ליווי אישי למנהלים בכירים, ייעוץ קריירה למשנה כיוון מקצועי, או רוצים להעמיק את הידע שלכם בשוק ההון אנחנו כאן כדי להוביל אתכם קדימה. הצעד הראשון מתחיל בשיחה אחת.</p>
+        <p class="index-cta-body" style="">בין אם אתם מחפשים ליווי אישי למנהלים בכירים, ייעוץ קריירה למשנה כיוון מקצועי, או רוצים להעמיק את הידע שלכם בשוק ההון אנחנו כאן כדי להוביל אתכם קדימה. הצעד הראשון מתחיל בשיחה אחת.</p>
 
         <div class="index-cta-actions">
           <a href="https://wa.me/972515533507" class="index-cta-btn-primary" data-element-type="button" data-element-id="btn-1778071114571-0jqjcxlzp" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(17, 19, 21) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(212, 181, 92), rgb(240, 212, 122)) !important;" target="_blank" rel="noopener noreferrer">צרו קשר עכשיו</a>
@@ -1565,21 +2054,21 @@ MARKET MOVES
     <!-- Badge -->
     <div class="hoshen-hero__badge" role="img" aria-label="האקדמיה מספר אחת למסחר בחוזים עתידיים בישראל">
       <span class="hoshen-hero__badge-icon">🏆</span>
-      <span class="hoshen-hero__badge-text" >האקדמיה מספר 1 למסחר בחוזים עתידיים בישראל</span>
+      <span class="hoshen-hero__badge-text" style="">האקדמיה מספר 1 למסחר בחוזים עתידיים בישראל</span>
     </div>
 
     <!-- Headline -->
-    <h1 class="hoshen-hero__h1" >
+    <h1 class="hoshen-hero__h1" style="">
       תרצה לסחור בשוק ההון<br class="hoshen-hero__br-desktop"><span class="hoshen-hero__h1-highlight" style="color: rgb(17, 19, 21) !important;">כמו מקצוען?</span>
     </h1>
 
     <!-- Subheadline -->
-    <h2 class="hoshen-hero__h2" >
+    <h2 class="hoshen-hero__h2" style="">
       קורס מסחר מקצועי בחוזים<br>עתידיים ליווי אישי בלייב בזום
     </h2>
 
     <!-- Body text -->
-    <p class="hoshen-hero__body" >
+    <p class="hoshen-hero__body" style="">
       למד לנתח שוק, לזהות עסקאות איכותיות ולעבוד בצורה מקצועית.<br><strong>&nbsp;הלימודים&nbsp; עם המנטור אחד על 15 תלמידים /&nbsp; או אחד על אחד בלבד אונליין בזום!!</strong><strong>.<br></strong>4 לייבים של מסחר אונליין בזום בשבוע מול השוק האמריקאי.
     </p>
 
@@ -1648,7 +2137,7 @@ MARKET MOVES
         <div class="pain-card__glow" aria-hidden="true"></div>
         <div class="pain-card__icon" aria-hidden="true">😤</div>
         <div class="pain-card__border-accent" aria-hidden="true"></div>
-        <p class="pain-card__text" >
+        <p class="pain-card__text" style="">
           ניסית להבין מסחר לבד ויצאת <strong>יותר מבולבל</strong> ממה שנכנסת.</p>
       </article>
 
@@ -1657,7 +2146,7 @@ MARKET MOVES
         <div class="pain-card__glow pain-card__glow--gold" aria-hidden="true"></div>
         <div class="pain-card__icon" aria-hidden="true">💸</div>
         <div class="pain-card__border-accent" aria-hidden="true"></div>
-        <p class="pain-card__text" >
+        <p class="pain-card__text" style="">
           ראית אנשים <strong>מרוויחים בשוק ההון</strong> ותהית למה לא אני?</p>
       </article>
 
@@ -1666,7 +2155,7 @@ MARKET MOVES
         <div class="pain-card__glow" aria-hidden="true"></div>
         <div class="pain-card__icon" aria-hidden="true">😰</div>
         <div class="pain-card__border-accent" aria-hidden="true"></div>
-        <p class="pain-card__text" >
+        <p class="pain-card__text" style="">
           פחדת להיכנס לעסקה כי <strong>לא ידעת מה אתה עושה.</strong></p>
       </article>
 
@@ -1688,7 +2177,7 @@ MARKET MOVES
         <span class="pain-section__cta-icon" aria-hidden="true">📲</span>
         <span class="pain-section__cta-text">רוצה לשנות את זה? שוחח איתנו עכשיו</span>
       </a>
-      </p><p class="pain-section__cta-sub" >פגישת הכרות בזום ללא עלות · ללא התחייבות · תגובה תוך דקות</p>
+      </p><p class="pain-section__cta-sub" style="">פגישת הכרות בזום ללא עלות · ללא התחייבות · תגובה תוך דקות</p>
     </div>
 
   </div>
@@ -1724,7 +2213,7 @@ MARKET MOVES
     <div class="hsfaq-header">
       <p><span class="hsfaq-eyebrow">שאלות נפוצות</span>
       </p><h2 class="hsfaq-title" id="hsfaq-heading">כל מה שרצית לדעת</h2>
-      <p class="hsfaq-subtitle" >מצאנו את השאלות שהכי חוזרות על עצמן ענינו על הכל במקום אחד</p>
+      <p class="hsfaq-subtitle" style="">מצאנו את השאלות שהכי חוזרות על עצמן ענינו על הכל במקום אחד</p>
     </div>
 
     <!-- FAQ Accordion -->
@@ -1891,7 +2380,7 @@ MARKET MOVES
         <!-- Column 1: Company Info -->
         <div class="footer-col footer-brand">
           <div class="footer-logo-wrap">
-            <img src="/assets/hoshen-success-coaching-personal-development-consulting-logo.webp" alt="Hoshen Success" class="logo" data-element-type="image" data-element-id="img-1778071114577-ow31xqqcg" data-zappy-footer-image="true" >
+            <img src="/assets/hoshen-success-coaching-personal-development-consulting-logo.webp" alt="Hoshen Success" class="logo" data-element-type="image" data-element-id="img-1778071114577-ow31xqqcg" data-zappy-footer-image="true" style="" decoding="async" width="35" height="35">
           </div>
           <p class="footer-tagline">הצלחה אמיתית מתחילה כאן. אנחנו מלווים אנשים שאפתניים לפרוץ מגבלות, לבנות חזון ולהגיע לשיאים חדשים.</p>
           <div class="footer-social">
@@ -1904,7 +2393,7 @@ MARKET MOVES
         <!-- Column 2: Quick Links -->
         <div class="footer-col">
           <h3 class="footer-heading"><span class="heading-accent"></span>ניווט מהיר</h3>
-          <ul class="footer-links" ><li><a href="/">בית</a></li><li><a href="/trading-education-programs">מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about">אודות</a></li><li><a href="/contact">צור קשר</a></li></ul>
+          <ul class="footer-links" style=""><li><a href="/">בית</a></li><li><a href="/trading-education-programs">מסלולי הלימוד שלנו וליווי אישי במסחר</a></li><li><a href="/about">אודות</a></li><li><a href="/contact">צור קשר</a></li></ul>
         </div>
 
         <!-- Column 3: Contact Info -->
@@ -1917,7 +2406,7 @@ MARKET MOVES
             </li>
             <li>
               <span class="contact-icon"><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1778071114576-x5o987xrh" data-icon-type="fontawesome"></i></span>
-              <span class="contact-text"><a href="tel:+972515533507" >050-8804568</a></span>
+              <span class="contact-text"><a href="tel:+972515533507" style="">050-8804568</a></span>
             </li>
             <li><a href="https://www.google.com/maps/search/?api=1&amp;query=%D7%A9%D7%93%D7%A8%D7%95%D7%AA%20%D7%A0%D7%99%D7%9D%202%2C%20%D7%A7%D7%A0%D7%99%D7%95%D7%9F%20%D7%A2%D7%96%D7%A8%D7%99%D7%90%D7%9C%D7%99%20%D7%A8%D7%90%D7%A9%D7%95%D7%A0%D7%99%D7%9D%20%7B%20%D7%94%D7%9E%D7%A9%D7%A8%D7%93%20%D7%9E%D7%99%D7%95%D7%A2%D7%93%20%D7%9C%D7%9E%D7%A0%D7%94%D7%9C%D7%99%D7%9D%20%D7%91%D7%9C%D7%91%D7%93.%20%D7%94%D7%9B%D7%A0%D7%99%D7%A1%D7%94%20%D7%91%D7%AA%D7%99%D7%90%D7%95%D7%9D%20%D7%9E%D7%A8%D7%90%D7%A9%20%D7%91%D7%9C%D7%91%D7%93%7D%2C%20%D7%A8%D7%90%D7%A9%D7%95%D7%9F%20%D7%9C%D7%A6%D7%99%D7%95%D7%9F%2C%20%D7%9E%D7%A8%D7%9B%D7%96%2C%207546302%2C%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C" target="_blank" rel="noopener noreferrer"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
               <span class="contact-text">שדרות נים 2, קניון עזריאלי ראשונים { המשרד מיועד למנהלים בלבד. הכניסה בתיאום מראש בלבד}, ראשון לציון, מרכז, 7546302, ישראל</span></a></li>
@@ -1927,7 +2416,7 @@ MARKET MOVES
         <!-- Column 4: CTA / Extra -->
         <div class="footer-col footer-cta-col">
           <h3 class="footer-heading"><span class="heading-accent"></span>מוכנים להתחיל?</h3>
-          <p class="footer-cta-text" >קבעו פגישת היכרות חינמית בזום!! אם המנטור הענק!! שלנו עמרי מאיר אורי וגלו איך Hoshen Success יכולים לשנות לכם את המסלול שלכם בחיים מקצה לקצה!!.</p>
+          <p class="footer-cta-text" style="">קבעו פגישת היכרות חינמית בזום!! אם המנטור הענק!! שלנו עמרי מאיר אורי וגלו איך Hoshen Success יכולים לשנות לכם את המסלול שלכם בחיים מקצה לקצה!!.</p>
           <p style="text-align: center !important; display: flex !important; justify-content: center !important; align-items: flex-start !important; width: 100% !important;"><a href="https://wa.me/972515533507" class="footer-cta-btn" data-element-type="button" data-element-id="btn-1778071114571-yclgf8hnx" data-native-element="true" style="outline: none; border-color: transparent !important; color: rgb(46, 0, 173) !important; background-color: transparent !important; background-image: linear-gradient(135deg, rgb(255, 209, 102), rgb(245, 196, 81)) !important;" target="_blank" rel="noopener noreferrer" data-text-color="#2e00ad">לחץ לשיחה עכשיו בוואצאפ !</a>
         </p></div>
 
@@ -1948,13 +2437,13 @@ MARKET MOVES
       <div class="footer-bottom-inner">
         <p class="footer-copyright">© 2026 Hoshen Success. כל הזכויות שמורות.</p>
         <div class="footer-legal">
-          <a href="/privacy" >מדיניות פרטיות</a>
+          <a href="/privacy" style="">מדיניות פרטיות</a>
           <span class="legal-sep"></span>
-          <a href="/terms" >תנאי שימוש</a>
+          <a href="/terms" style="">תנאי שימוש</a>
           <span class="legal-sep"></span>
-          <a href="/accessibility" >נגישות</a>
+          <a href="/accessibility" style="">נגישות</a>
           <span class="legal-sep"></span>
-          <a href="https://zappy5.com" target="_blank" class="zappy-attribution" >נוצר באמצעות Hoshen Success</a>
+          <a href="https://zappy5.com" target="_blank" class="zappy-attribution" style="">נוצר באמצעות Hoshen Success</a>
         </div>
       </div>
     </div>
@@ -1970,6 +2459,10 @@ MARKET MOVES
     <div data-integration="accessibility:toolbar"></div>
 
     <script src="/script.js"></script>
+
+    <script id="zappy-font-awesome-loader">
+(function(){if(window.__zappyFontAwesomeLoader)return;window.__zappyFontAwesomeLoader=true;var href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';function load(){if(document.querySelector('link[href*="font-awesome"][href*="all.min.css"]'))return;var l=document.createElement('link');l.rel='stylesheet';l.href=href;l.crossOrigin='anonymous';l.referrerPolicy='no-referrer';document.head.appendChild(l);}function schedule(){if('requestIdleCallback'in window){requestIdleCallback(load,{timeout:5000});}else{setTimeout(load,3500);}}['pointerdown','keydown','touchstart','mouseover'].forEach(function(evt){window.addEventListener(evt,load,{once:true,passive:true});});schedule();})();
+</script>
 
     <script id="zappy-mobile-submenu-script">
     (function() {
@@ -2163,5 +2656,4 @@ MARKET MOVES
       else setTimeout(init,50);
     })();
     </script>
-</body>
-</html>
+</body></html>
