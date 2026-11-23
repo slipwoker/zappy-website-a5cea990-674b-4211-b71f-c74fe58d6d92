@@ -7,36 +7,36 @@
 ## Pages
 
 ### בית
-https://hoshen-success.pro
+https://zappy-site-a5cea990-674b-4211-b71f.onrender.com
 הצטרף לאלפי אנשים שכבר שינו את חייהם עם Hoshen Success. קורס מסחר בשוק ההון למתחילים, אימון אישי ופיתוח עסקי שיוביל אותך להצלחה אמיתית. התחל היום!
 
 ### מסלולי הלימוד שלנו וליווי אישי במסחר
-https://hoshen-success.pro/trading-education-programs
+https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/trading-education-programs
 מקורס מסחר בחוזים עתידיים ועד אימון אישי למנהלים בכירים — התוכניות שלנו בנויות להצלחה מדידה. בחר את המסלול שמתאים לך ותתחיל לצמוח כבר עכשיו!
 
 ### אודות
-https://hoshen-success.pro/about
+https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/about
 Hoshen Success נולדה מתוך שליחות עמוקה לעזור לאנשים לממש את יכולותיהם המלאות. גלה מי אנחנו, מה מניע אותנו, וכיצד ייעוץ קריירה ופיתוח אישי הפכו לשפה שלנו. הכירו אותנו!
 
 ### צור קשר
-https://hoshen-success.pro/contact
+https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/contact
 מוכן לשנות כיוון ולהתחיל לצמוח? צור קשר עם המומחים של Hoshen Success לייעוץ קריירה אישי, אימון עסקי ליזמים, או קורס מסחר בשוק ההון. אנחנו כאן בשבילך — דבר איתנו עכשיו!
 
 ### Page
-https://hoshen-success.pro/free-guide
+https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/free-guide
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://hoshen-success.pro/privacy
+https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://hoshen-success.pro/terms
+https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://hoshen-success.pro/accessibility
+https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
@@ -49,8 +49,8 @@ Information about WCAG compliance and accessibility features.
 - Address: שדרות נים 2, קניון עזריאלי ראשונים { המשרד מיועד למנהלים בלבד. הכניסה בתיאום מראש בלבד}, ראשון לציון, מרכז, 7546302, ישראל
 
 ### Contact form
-- URL: https://hoshen-success.pro/contact
-- Endpoint: https://hoshen-success.pro/api/email/contact-form
+- URL: https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/contact
+- Endpoint: https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/api/email/contact-form
 - Method: POST
 - Content-Type: application/json
 - Fields:
@@ -86,6 +86,6 @@ coaching / personal development / consulting
 
 # Machine-readable feeds
 
-- Sitemap (XML): https://hoshen-success.pro/sitemap.xml
-- Robots: https://hoshen-success.pro/robots.txt
-- Flattened page text (for LLMs): https://hoshen-success.pro/llms-full.txt
+- Sitemap (XML): https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/sitemap.xml
+- Robots: https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/robots.txt
+- Flattened page text (for LLMs): https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/llms-full.txt

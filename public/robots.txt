@@ -50,4 +50,4 @@ Allow: /
 User-agent: MistralAI-User
 Allow: /
 
-Sitemap: https://hoshen-success.pro/sitemap.xml
+Sitemap: https://zappy-site-a5cea990-674b-4211-b71f.onrender.com/sitemap.xml
